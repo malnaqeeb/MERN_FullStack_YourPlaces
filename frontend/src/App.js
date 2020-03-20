@@ -1,24 +1,14 @@
-import React, { Suspense } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect
-} from "react-router-dom";
-import MainNavigation from "./shared/component/Navigation/MainNavigation";
-// import Users from "./users/pages/Users";
-// import NewPlace from "./places/pages/NewPlace";
-// import UserPlaces from "./places/pages/UserPlaces";
-// import UpdatePlace from "./places/pages/UpdatePlace";
-// import Auth from "./users/pages/Auth";
-import { AuthContext } from "./shared/context/auth-context";
-import { useAuth } from "./shared/hooks/auth-hook";
-import LoadingSpinner from "./shared/component/UIElements/LoadingSpinner";
-const Users = React.lazy(() => import("./users/pages/Users"));
-const NewPlace = React.lazy(() => import("./places/pages/NewPlace"));
-const UserPlaces = React.lazy(() => import("./places/pages/UserPlaces"));
-const UpdatePlace = React.lazy(() => import("./places/pages/UpdatePlace"));
-const Auth = React.lazy(() => import("./users/pages/Auth"));
+import React, { Suspense } from 'react';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import MainNavigation from './shared/component/Navigation/MainNavigation';
+import { AuthContext } from './shared/context/auth-context';
+import { useAuth } from './shared/hooks/auth-hook';
+import LoadingSpinner from './shared/component/UIElements/LoadingSpinner';
+const Users = React.lazy(() => import('./users/pages/Users'));
+const NewPlace = React.lazy(() => import('./places/pages/NewPlace'));
+const UserPlaces = React.lazy(() => import('./places/pages/UserPlaces'));
+const UpdatePlace = React.lazy(() => import('./places/pages/UpdatePlace'));
+const Auth = React.lazy(() => import('./users/pages/Auth'));
 const App = () => {
   const { token, login, logout, userId } = useAuth();
 
@@ -53,6 +43,12 @@ const App = () => {
         <Route path='/auth'>
           <Auth />
         </Route>
+        <Route path='/api/users/google'>
+          <h1>Google</h1>
+        </Route>
+        <Route path='/api/users/google/redirect'>
+          <h1>Google redirected</h1>
+        </Route>
         <Redirect to='/auth' />
       </Switch>
     );
@@ -64,7 +60,7 @@ const App = () => {
         token,
         login,
         logout,
-        userId
+        userId,
       }}
     >
       <Router>
