@@ -2,7 +2,7 @@ import React from "react";
 import UserItem from "./UserItem";
 import Card from "../../shared/component/UIElements/Card";
 import "./UsersList.css";
-const UsersList = ({ items }) => {
+const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
   if (items.length === 0) {
     return (
       <div className='center'>
@@ -15,7 +15,13 @@ const UsersList = ({ items }) => {
   return (
     <ul className='users-list'>
       {items.map(user => (
-        <UserItem user={user} key={user.id} />
+        <UserItem
+          user={user}
+          auth={auth}
+          userData={userData}
+          sendFriendRequestHandler={sendFriendRequestHandler}
+          key={user.id}
+        />
       ))}
     </ul>
   );

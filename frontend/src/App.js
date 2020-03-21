@@ -14,6 +14,7 @@ import MainNavigation from "./shared/component/Navigation/MainNavigation";
 import { AuthContext } from "./shared/context/auth-context";
 import { useAuth } from "./shared/hooks/auth-hook";
 import LoadingSpinner from "./shared/component/UIElements/LoadingSpinner";
+const Friends = React.lazy(() => import('./friends/pages/Friends'));
 const Users = React.lazy(() => import("./users/pages/Users"));
 const NewPlace = React.lazy(() => import("./places/pages/NewPlace"));
 const UserPlaces = React.lazy(() => import("./places/pages/UserPlaces"));
@@ -29,6 +30,9 @@ const App = () => {
       <Switch>
         <Route path='/' exact>
           <Users />
+        </Route>
+        <Route path="/friends" exact>
+          <Friends />
         </Route>
         <Route path='/:userId/places' exact>
           <UserPlaces />
