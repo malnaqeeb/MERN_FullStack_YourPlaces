@@ -63,14 +63,16 @@ const PlaceItem = ({ place, onDeletePlace }) => {
         const data = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/users`
         );
-
-        setUsers(data.users[0]);
+        console.log(data)
+        setUsers(data.users);
       } catch (error) {}
     };
     getUsers();
   }, [sendRequest]);
+
   const checkAdded = users => {
-    const nonUniqueArray = users.bucketList.filter(item => {
+    const currentUser = users.find(item=>item._id === auth.userId)
+    const nonUniqueArray = currentUser.bucketList.filter(item => {
       return item.id === id;
     });
     if (nonUniqueArray.length === 0) {
