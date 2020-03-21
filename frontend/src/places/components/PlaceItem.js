@@ -36,18 +36,16 @@ const PlaceItem = ({ place, onDeletePlace }) => {
     if (auth.isLoggedIn) {
       try {
         const newData = { likes: auth.userId };
-        const res = await fetch(
+        const data = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/places/like/${id}`,
+          "POST",
+          JSON.stringify(newData),
           {
-            method: "POST",
-            headers: {
-              Authorization: "Bearer " + auth.token,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(newData)
+            Authorization: "Bearer " + auth.token,
+            "Content-Type": "application/json"
           }
         );
-        const data = await res.json();
+
         setAddLikes(data);
       } catch (error) {}
     } else {
@@ -59,18 +57,18 @@ const PlaceItem = ({ place, onDeletePlace }) => {
     if (auth.isLoggedIn) {
       try {
         const newData = { disLike: auth.userId };
-        const res = await fetch(
+        const data = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/places/dislike/${id}`,
+
+          "POST",
+
+          JSON.stringify(newData),
           {
-            method: "POST",
-            headers: {
-              Authorization: "Bearer " + auth.token,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(newData)
+            Authorization: "Bearer " + auth.token,
+            "Content-Type": "application/json"
           }
         );
-        const data = await res.json();
+
         setAddDislike(data);
       } catch (error) {}
     } else {
