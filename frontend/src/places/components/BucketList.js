@@ -92,14 +92,12 @@ const BucketList = () => {
           {places &&
             places.map((bucket, index) => {
               return (
-                <React.Fragment>
                   <BucketListItem
                     bucket={bucket}
                     key={index}
                     index={index}
                     deleteBucket={deleteFromBucketList}
                   />
-                </React.Fragment>
               );
             })}
         </div>
