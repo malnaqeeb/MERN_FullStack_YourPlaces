@@ -10,7 +10,7 @@ import { Link, useParams } from "react-router-dom";
 
 const BucketListItem = ({ bucket, deleteBucket }) => {
   const [showDetails, setShowDetails] = useState(false);
-  const [visited, setVisited] = useState(false);
+  const [visited, setVisited] = useState(bucket.isVisited);
   const auth = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const { id } = bucket;
@@ -42,7 +42,7 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
         `${process.env.REACT_APP_BACKEND_URL}/places/user/${auth.userId}/mybucketlist`,
         "PATCH",
         JSON.stringify({
-          isVisited: visited,
+          isVisited: !visited,
           placeId: bucket.id._id
         }),
         {
@@ -50,6 +50,7 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
           Authorization: "Bearer " + auth.token
         }
       );
+      setVisited(!bucket.isVisited)
     } catch (error) {}
   };
 
@@ -108,7 +109,6 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
         <Button
           inverse
           onClick={() => {
-            setVisited(!visited);
             visitedPlace();
           }}
         >
