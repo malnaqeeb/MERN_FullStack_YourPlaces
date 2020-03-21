@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const HttpError = require("../model/http-error");
 const uniqueValidator = require("mongoose-unique-validator");
 const Schema = mongoose.Schema;
+const { ObjectId, Date, String, Boolean } = mongoose.Schema.Types
 
 const userSchema = new Schema({
   name: {
@@ -31,7 +32,9 @@ const userSchema = new Schema({
       required: true,
       ref: "Place"
     }
-  ]
+  ],
+  friends: [{ type: ObjectId, ref: "User" }],
+  friendRequests: [{ user: { type: ObjectId, ref: "User" }, date: Date, isSent: Boolean }]
 });
 // I created my own method to handle the login process
 userSchema.statics.findBuCredantials = async (email, password) => {
@@ -48,7 +51,7 @@ userSchema.statics.findBuCredantials = async (email, password) => {
 };
 
 // Hash the plain text password before saveing
-userSchema.pre("save", async function(next) {
+userSchema.pre("save", async function (next) {
   const user = this;
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8);

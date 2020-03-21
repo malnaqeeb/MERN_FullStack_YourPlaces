@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const placesRoute = require("./routes/places-route");
 const usersRoute = require("./routes/users-route");
+const friendsRoutes = require("./routes/friend-route");
 const HttpError = require("./model/http-error");
 const connectDB = require("./config/db");
 const app = express();
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
 
 app.use("/api/places", placesRoute);
 app.use("/api/users", usersRoute);
+app.use("/api/friends", friendsRoutes);
 
 app.use((req, res, next) => {
   res.sendFile(path.resolve(__dirname, "public", "index.html"));
