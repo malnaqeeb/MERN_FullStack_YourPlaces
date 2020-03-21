@@ -22,6 +22,7 @@ const BucketList = () => {
           `${process.env.REACT_APP_BACKEND_URL}/places/user/${userId}/mybucketlist`
         );
         setPlaces(data.userWithBucketList);
+        
       } catch (err) {}
     };
     getBucketList();

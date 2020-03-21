@@ -71,6 +71,9 @@ const PlaceItem = ({ place, onDeletePlace }) => {
   }, [sendRequest]);
 
   const checkAdded = users => {
+    if(!auth.userId){
+      return false;
+    }
     const currentUser = users.find(item=>item._id === auth.userId)
     const nonUniqueArray = currentUser.bucketList.filter(item => {
       return item.id === id;
@@ -150,7 +153,7 @@ const PlaceItem = ({ place, onDeletePlace }) => {
                 !checkAdded(users) && (
                   <Button onClick={addBucketList}>ADD TO BUCKET LIST</Button>
                 )}
-              {checkAdded(users) && (
+              {checkAdded(users) && auth.userId && (
                 <span className="animated">Already in you bucket &#9989; </span>
               )}
               {showTick && (

@@ -171,6 +171,7 @@ const deleteFromBucketList = async (req, res, next) => {
   return next(new Error('You are not authorized to delete this place', 401));
   }
 
+}
 
 const visitedPlace = async (req, res, next) => {
   const userId = req.userData.userId;
@@ -183,6 +184,7 @@ const visitedPlace = async (req, res, next) => {
     const currentItem = currentBucket.find(item => item.id == placeId);
     currentItem.isVisited = req.body.isVisited;
     await currentUser.save();
+    console.log(currentItem)
   } catch (error) {
     return next(error);
   }
@@ -296,7 +298,7 @@ const deletePlaceById = async (req, res, next) => {
       new HttpError("Something went wrong, could not delete place.", 500)
     );
   }
-
+  
   if (!place)
     return next(new HttpError("Could not find a place for the id.", 404));
 
@@ -311,17 +313,18 @@ const deletePlaceById = async (req, res, next) => {
     if (error)
       throw new HttpError("Something went wrong, could not delete image.", 500);
   });
+  
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
     await place.remove({ session: sess });
-    place.creator.places.pull(place);
-
+    place.creator.places.pull(place);    
     await place.creator.save({ session: sess });
+    await User.updateMany({"bucketList.id":placeId},{ $pull: { bucketList: { id: placeId } }}) 
     await sess.commitTransaction();
   } catch (error) {
     return next(
-      new HttpError("Something went wrong, could not delete place.", 500)
+      new HttpError(`${error}`, 500)
     );
   }
 
@@ -338,4 +341,4 @@ module.exports = {
   createPlace,
   updatePlaceById,
   deletePlaceById
-};
+}

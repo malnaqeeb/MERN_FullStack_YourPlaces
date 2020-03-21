@@ -14,7 +14,7 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
   const auth = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const { id } = bucket;
-  const {userId} = useParams();
+  const { userId } = useParams();
   const openDetailsHandler = () => {
     setShowDetails(true);
   };
@@ -37,7 +37,6 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
   };
 
   const visitedPlace = async () => {
-    setVisited(!visited);
     try {
       await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/places/user/${auth.userId}/mybucketlist`,
@@ -106,9 +105,16 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
 
       <Button onClick={() => openDetailsHandler()}>Show Details</Button>
       {userId == auth.userId && (
-        <Button inverse onClick={() => visitedPlace()}>
+        <Button
+          inverse
+          onClick={() => {
+            setVisited(!visited);
+            visitedPlace();
+          }}
+        >
           {visited ? "Not Visited" : "Visited"}
         </Button>
+
       )}
     </div>
   );
