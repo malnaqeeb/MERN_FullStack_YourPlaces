@@ -13,6 +13,8 @@ const PlaceItem = ({ place, onDeletePlace }) => {
   const auth = useContext(AuthContext);
   const [showMap, setShowMap] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showTravelWishButton, setShowTravelWishButton] = useState(true);
+  const [showTick, setShowTick] = useState(false);
   const openMapHandler = () => setShowMap(true);
   const closeMapHandler = () => setShowMap(false);
   const { id, image, name, title, address, description, location } = place;
@@ -23,6 +25,7 @@ const PlaceItem = ({ place, onDeletePlace }) => {
   const cancelDeleteHandler = () => {
     setShowConfirmModal(false);
   };
+
   const confirmDeleteHandler = async () => {
     setShowConfirmModal(false);
     try {
@@ -37,6 +40,22 @@ const PlaceItem = ({ place, onDeletePlace }) => {
       onDeletePlace(id);
     } catch (error) {}
   };
+  const addBucketList = async () => {
+    try {
+      setShowTravelWishButton(false);
+      await sendRequest(
+        `${process.env.REACT_APP_BACKEND_URL}/places/user/${id}`,
+        "PATCH",
+        null,
+        {
+          Authorization: "Bearer " + auth.token
+        }
+      );
+      setShowTick(true);
+    } catch (error) {
+      setShowTravelWishButton(true);
+    }
+  };
 
   return (
     <Fragment>
@@ -45,11 +64,11 @@ const PlaceItem = ({ place, onDeletePlace }) => {
         show={showMap}
         onCancel={closeMapHandler}
         header={address}
-        contentClass='place-item__modal-content'
-        footerClass='place-item__actions'
+        contentClass="place-item__modal-content"
+        footerClass="place-item__actions"
         footer={<Button onClick={closeMapHandler}>Close</Button>}
       >
-        <div className='map-container'>
+        <div className="map-container">
           <h2>THE MAP!</h2>
           <Map center={location} zoom={16} />
         </div>
@@ -57,8 +76,8 @@ const PlaceItem = ({ place, onDeletePlace }) => {
       <Modal
         show={showConfirmModal}
         onCancel={cancelDeleteHandler}
-        header='Are you sure?'
-        className='place-item__modal-actions'
+        header="Are you sure?"
+        className="place-item__modal-actions"
         footer={
           <Fragment>
             <Button inverse onClick={cancelDeleteHandler}>
@@ -75,18 +94,18 @@ const PlaceItem = ({ place, onDeletePlace }) => {
           undone thereafter.
         </p>
       </Modal>
-      <li className='place-item'>
-        <Card className='place-item__content'>
+      <li className="place-item">
+        <Card className="place-item__content">
           {isLoading && <LoadingSpinner asOverlay />}
-          <div className='place-item__image'>
+          <div className="place-item__image">
             <img src={image.imageUrl} alt={name} />
           </div>
-          <div className='place-item__info'>
+          <div className="place-item__info">
             <h2>{title}</h2>
             <h3>{address}</h3>
             <p>{description}</p>
           </div>
-          <div className='place-item__actions'>
+          <div className="place-item__actions">
             <Button inverse onClick={openMapHandler}>
               VIEW ON MAP
             </Button>
@@ -97,6 +116,12 @@ const PlaceItem = ({ place, onDeletePlace }) => {
               <Button danger onClick={showDeleteWaringHandler}>
                 DELETE
               </Button>
+            )}
+            {auth.token && place.creator !== auth.userId && showTravelWishButton && (
+              <Button onClick={addBucketList}>ADD TO BUCKET LIST</Button>
+            )}
+            {showTick && (
+              <span className="fadeOut animated">Added &#9989; </span>
             )}
           </div>
         </Card>

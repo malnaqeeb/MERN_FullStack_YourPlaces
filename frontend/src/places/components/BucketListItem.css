@@ -1,0 +1,24 @@
+.bucket-list-item {
+    position: relative;
+    list-style: none;
+    margin: 8px auto;
+    padding: 1rem;
+    width: 90%;
+    max-width: 40rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+    border-radius: 6px;
+    background: white;
+}  
+
+.detail-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bucket-info{
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    text-align: center;
+}

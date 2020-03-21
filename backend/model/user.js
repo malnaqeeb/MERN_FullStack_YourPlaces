@@ -31,6 +31,15 @@ const userSchema = new Schema({
       required: true,
       ref: "Place"
     }
+  ],
+  bucketList: [
+    {
+      id:{ type: mongoose.Types.ObjectId, required: true, ref: "Place" },
+      _id:false,
+      createdBy: {type:String},
+      isVisited:  {type:Boolean, required:true}
+
+    }
   ]
 });
 // I created my own method to handle the login process

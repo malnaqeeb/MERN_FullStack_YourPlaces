@@ -10,6 +10,19 @@ const UserPlaces = () => {
   const [places, setPlaces] = useState();
   const userId = useParams().userId;
 
+  const [user, setUser] = useState()
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const data = await sendRequest(
+          `${process.env.REACT_APP_BACKEND_URL}/users/${userId}/`
+        );
+        setUser(data);
+      } catch (err) {}
+    };
+    getUser();
+  }, [sendRequest, userId]);
+
   useEffect(() => {
     const getPlaces = async () => {
       try {
@@ -28,16 +41,19 @@ const UserPlaces = () => {
   };
   return (
     <Fragment>
+      <h2 className="center yellow-text">Places of <span className="pink-text"> { user &&  user.user.name}</span> </h2>
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && (
-        <div className='center'>
+        <div className="center">
           {" "}
           <LoadingSpinner />
         </div>
       )}
+      {(error || !places) && !isLoading && <h2 className="center yellow-text">There is no place shared by this user</h2>}
       {!isLoading && places && (
         <PlaceList items={places} onDeletePlace={placeDeleteHandler} />
       )}
+
     </Fragment>
   );
 };

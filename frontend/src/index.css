@@ -40,6 +40,13 @@ body {
   justify-content: center;
   align-items: center;
 }
+.yellow-text{
+  color:#F8DF00
+}
+.pink-text{
+  color: #FF0055;
+  margin-left: 1%;
+}
 .m-1 {
   margin: 1rem;
 }
