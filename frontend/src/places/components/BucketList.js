@@ -38,7 +38,6 @@ const BucketList = () => {
     };
     getUser();
   }, [sendRequest, userId]);
-
   if (isLoading)
     return (
       <div className="center">
@@ -74,7 +73,7 @@ const BucketList = () => {
           <span className="pink-text"> {user && user.user.name}</span>{" "}
         </h2>
 
-        {!isLoading && userId === auth.userId && (error || !places) && (
+        {!isLoading && userId === auth.userId && !places && (
           <h2
             className="center yellow-text"
             style={{ flexDirection: "column" }}
@@ -93,12 +92,14 @@ const BucketList = () => {
           {places &&
             places.map((bucket, index) => {
               return (
-                <BucketListItem
-                  bucket={bucket}
-                  key={index}
-                  index={index}
-                  deleteBucket={deleteFromBucketList}
-                />
+                <React.Fragment>
+                  <BucketListItem
+                    bucket={bucket}
+                    key={index}
+                    index={index}
+                    deleteBucket={deleteFromBucketList}
+                  />
+                </React.Fragment>
               );
             })}
         </div>

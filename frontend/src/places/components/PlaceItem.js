@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useContext } from "react";
+import React, { useState, Fragment, useContext, useEffect } from "react";
 import "./PlaceItem.css";
 import Card from "../../shared/component/UIElements/Card";
 import Button from "../../shared/component/formElements/Button";
@@ -56,6 +56,29 @@ const PlaceItem = ({ place, onDeletePlace }) => {
       setShowTravelWishButton(true);
     }
   };
+  const [users, setUsers] = useState();
+  useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const data = await sendRequest(
+          `${process.env.REACT_APP_BACKEND_URL}/users`
+        );
+
+        setUsers(data.users[0]);
+      } catch (error) {}
+    };
+    getUsers();
+  }, [sendRequest]);
+  const checkAdded = users => {
+    const nonUniqueArray = users.bucketList.filter(item => {
+      return item.id === id;
+    });
+    if (nonUniqueArray.length === 0) {
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   return (
     <Fragment>
@@ -94,38 +117,47 @@ const PlaceItem = ({ place, onDeletePlace }) => {
           undone thereafter.
         </p>
       </Modal>
-      <li className="place-item">
-        <Card className="place-item__content">
-          {isLoading && <LoadingSpinner asOverlay />}
-          <div className="place-item__image">
-            <img src={image.imageUrl} alt={name} />
-          </div>
-          <div className="place-item__info">
-            <h2>{title}</h2>
-            <h3>{address}</h3>
-            <p>{description}</p>
-          </div>
-          <div className="place-item__actions">
-            <Button inverse onClick={openMapHandler}>
-              VIEW ON MAP
-            </Button>
-            {place.creator === auth.userId && (
-              <Button to={`/places/${id}`}>EDIT</Button>
-            )}
-            {place.creator === auth.userId && (
-              <Button danger onClick={showDeleteWaringHandler}>
-                DELETE
+      {users && (
+        <li className="place-item">
+          <Card className="place-item__content">
+            {isLoading && <LoadingSpinner asOverlay />}
+            <div className="place-item__image">
+              <img src={image.imageUrl} alt={name} />
+            </div>
+            <div className="place-item__info">
+              <p>{JSON.stringify()}</p>
+              <h2>{title}</h2>
+              <h3>{address}</h3>
+              <p>{description}</p>
+            </div>
+            <div className="place-item__actions">
+              <Button inverse onClick={openMapHandler}>
+                VIEW ON MAP
               </Button>
-            )}
-            {auth.token && place.creator !== auth.userId && showTravelWishButton && (
-              <Button onClick={addBucketList}>ADD TO BUCKET LIST</Button>
-            )}
-            {showTick && (
-              <span className="fadeOut animated">Added &#9989; </span>
-            )}
-          </div>
-        </Card>
-      </li>
+              {place.creator === auth.userId && (
+                <Button to={`/places/${id}`}>EDIT</Button>
+              )}
+              {place.creator === auth.userId && (
+                <Button danger onClick={showDeleteWaringHandler}>
+                  DELETE
+                </Button>
+              )}
+              {auth.token &&
+                place.creator !== auth.userId &&
+                showTravelWishButton &&
+                !checkAdded(users) && (
+                  <Button onClick={addBucketList}>ADD TO BUCKET LIST</Button>
+                )}
+              {checkAdded(users) && (
+                <span className="animated">Already in you bucket &#9989; </span>
+              )}
+              {showTick && (
+                <span className="fadeOut animated">Added &#9989; </span>
+              )}
+            </div>
+          </Card>
+        </li>
+      )}
     </Fragment>
   );
 };

@@ -1,17 +1,15 @@
 .bucket-list-item {
     position: relative;
     list-style: none;
-    margin: 8px auto;
+    margin: 0.5em auto;
     padding: 1rem;
     width: 90%;
-    max-width: 40rem;
+    max-width: 30rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
     border-radius: 6px;
     background: white;
 }  
-bucket-info-title{
-    font-size:1.75em;
-}
+
 .detail-item{
     display: flex;
     align-items: center;
