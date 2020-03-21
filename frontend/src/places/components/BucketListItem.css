@@ -9,16 +9,28 @@
     border-radius: 6px;
     background: white;
 }  
-
-.detail-content{
+bucket-info-title{
+    font-size:1.75em;
+}
+.detail-item{
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+.bucket-creator a{
+   text-decoration: none;
+   font-size: 1em;
+}
+
 .bucket-info{
+    width: 60%;
     display: flex;
     flex-direction: column;
     padding: 1em;
     text-align: center;
+}
+
+.bucket-image{
+    width: 35%;
 }

@@ -72,13 +72,16 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
         footerClass="place-item__actions"
         footer={<Button onClick={closeDetailsHandler}>Close</Button>}
       >
-        <div className="detail-content">
-          <img style={{ width: "30%" }} src={id.image.imageUrl}></img>
+        <div className="detail-item">
+          <div className="bucket-image">
+          <img style={{ width: "100%" }} src={id.image.imageUrl}></img>
+          </div>
 
           <div className="bucket-info">
+            <p style={{fontSize:"1.5em"}}>{id.title}</p>
             <p>{id.description}</p>
-            <p>{id.address}</p>
-            <p>
+            <p>Address: {id.address}</p>
+            <p className="bucket-creator">
               {" "}
               <strong>Shared by:</strong>{" "}
               <Link to={`/${id.creator}/places`}>{bucket.createdBy}</Link>
