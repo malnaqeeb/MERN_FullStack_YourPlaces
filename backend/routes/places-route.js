@@ -39,5 +39,5 @@ route.patch(
 route.post("/like/:id", placessControllers.likeThePlace);
 route.post("/disLike/:id", placessControllers.disLikeThePlace);
 ​
-route.delete("/like/:pid", placessControllers.deletePlaceById);
+route.delete("/:pid", placessControllers.deletePlaceById);
 module.exports = route;
