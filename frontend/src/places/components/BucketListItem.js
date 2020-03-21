@@ -6,7 +6,7 @@ import useHttpClient from "../../shared/hooks/http-hook";
 import "./BucketListItem.css";
 import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
 import ErrorModal from "../../shared/component/UIElements/ErrorModal";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const BucketListItem = ({ bucket, deleteBucket }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -14,6 +14,7 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
   const auth = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const { id } = bucket;
+  const {userId} = useParams();
   const openDetailsHandler = () => {
     setShowDetails(true);
   };
@@ -74,11 +75,11 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
       >
         <div className="detail-item">
           <div className="bucket-image">
-          <img style={{ width: "100%" }} src={id.image.imageUrl}></img>
+            <img style={{ width: "100%" }} src={id.image.imageUrl}></img>
           </div>
 
           <div className="bucket-info">
-            <p style={{fontSize:"1.5em"}}>{id.title}</p>
+            <p style={{ fontSize: "1.5em" }}>{id.title}</p>
             <p>{id.description}</p>
             <p>Address: {id.address}</p>
             <p className="bucket-creator">
@@ -92,18 +93,23 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
       <p style={{ textDecoration: visited ? "line-through" : "none" }}>
         {bucket && bucket.id.title}
       </p>
-      <Button
-        danger
-        onClick={() => {
-          deleteFromBucketList();
-        }}
-      >
-        Delete
-      </Button>
+      {userId == auth.userId && (
+        <Button
+          danger
+          onClick={() => {
+            deleteFromBucketList();
+          }}
+        >
+          Delete
+        </Button>
+      )}
+
       <Button onClick={() => openDetailsHandler()}>Show Details</Button>
-      <Button inverse onClick={() => visitedPlace()}>
-        {visited ? "Not Visited" : "Visited"}
-      </Button>
+      {userId == auth.userId && (
+        <Button inverse onClick={() => visitedPlace()}>
+          {visited ? "Not Visited" : "Visited"}
+        </Button>
+      )}
     </div>
   );
 };

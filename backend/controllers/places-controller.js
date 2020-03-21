@@ -158,7 +158,8 @@ const addToBucketList = async (req, res, next) => {
 const deleteFromBucketList = async (req, res, next) => {
   const placeId = req.params.pid;
   const userId = req.userData.userId;
-  try {
+  if(req.userData.userId == userId){
+      try {
     currentUser = await User.findById(userId);
     await currentUser.bucketList.pull({ id: placeId });
     await currentUser.save();
@@ -166,7 +167,10 @@ const deleteFromBucketList = async (req, res, next) => {
     return next(new HttpError(`${error}`, 500));
   }
   res.status(200).json({ message: "place deleted from bucket list" });
-};
+  } else {
+  return next(new Error('You are not authorized to delete this place', 401));
+  }
+
 
 const visitedPlace = async (req, res, next) => {
   const userId = req.userData.userId;
