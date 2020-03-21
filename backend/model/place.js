@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-​
+
 const Schema = mongoose.Schema;
-​
+
 const placeSchema = new Schema({
   title: {
     type: String,
@@ -47,5 +47,5 @@ const placeSchema = new Schema({
   likes: { type: Array },
   disLike: { type: Array }
 });
-​
+
 module.exports = mongoose.model("Place", placeSchema);
