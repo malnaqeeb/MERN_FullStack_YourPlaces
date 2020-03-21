@@ -47,25 +47,27 @@ const BucketList = () => {
 
   return (
     <div>
-      <div className="share-box">
-        <div className="share-button">
-          <a
-            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-              `${herokuLink}/${userId}/mybucketlist`
-            )}&text=My%2C+Travel%2C+Bucket%2C+List.&hashtags=travelling,wanderlust,yourplacesapp`}
-          >
-            <i className="fab fa-twitter-square"></i>
-          </a>
-          <a
-            href={`https://www.facebook.com/sharer.php?u=${encodeURIComponent(
-              `${herokuLink}/${userId}/mybucketlist`
-            )}`}
-          >
-            <i className="fab fa-facebook-square"></i>
-          </a>
+      {userId === auth.userId && (
+        <div className="share-box">
+          <div className="share-button">
+            <a
+              href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
+                `${herokuLink}/${userId}/mybucketlist`
+              )}&text=My%2C+Travel%2C+Bucket%2C+List.&hashtags=travelling,wanderlust,yourplacesapp`}
+            >
+              <i className="fab fa-twitter-square"></i>
+            </a>
+            <a
+              href={`https://www.facebook.com/sharer.php?u=${encodeURIComponent(
+                `${herokuLink}/${userId}/mybucketlist`
+              )}`}
+            >
+              <i className="fab fa-facebook-square"></i>
+            </a>
+          </div>
+          <p>SHARE</p>
         </div>
-        <p>SHARE</p>
-      </div>
+      )}
       <React.Fragment>
         {isLoading && <LoadingSpinner asOverlay />}
         <h2 className="center yellow-text">
@@ -92,12 +94,12 @@ const BucketList = () => {
           {places &&
             places.map((bucket, index) => {
               return (
-                  <BucketListItem
-                    bucket={bucket}
-                    key={index}
-                    index={index}
-                    deleteBucket={deleteFromBucketList}
-                  />
+                <BucketListItem
+                  bucket={bucket}
+                  key={index}
+                  index={index}
+                  deleteBucket={deleteFromBucketList}
+                />
               );
             })}
         </div>
