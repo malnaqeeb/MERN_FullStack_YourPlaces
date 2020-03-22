@@ -14,7 +14,7 @@ const getPlaceById = async (req, res, next) => {
 
     res.json({ place: place.toObject({ getters: true }) });
   } catch (error) {
-    return next(new HttpError('Somthing went wrong, could not find a place.', 500));
+    return next(new HttpError('Something went wrong, could not find a place.', 500));
   }
 };
 

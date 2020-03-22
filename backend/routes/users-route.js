@@ -29,23 +29,33 @@ route.post('/login', usersControllers.login);
 route.get(
   '/google',
   passport.authenticate('google', {
+    session: false,
     scope: ['profile', 'email'],
+    accessType: 'offline',
+    approvalPrompt: 'force',
   }),
 );
 
 // callback route for google to redirect to
-route.get('/google/redirect', passport.authenticate('google'), (req, res) => {
-  res.redirect('/');
+route.get('/google/redirect', passport.authenticate('google', { session: false }), (req, res) => {
+  usersControllers.signJwt(req, res);
 });
 
 // auth with Facebook
 route.get(
   '/facebook',
   passport.authenticate('facebook', {
+    session: false,
     scope: ['email'],
   }),
 );
 // Callback route to redirect to
-route.get('/facebook/redirect', passport.authenticate('facebook'), (req, res) => res.redirect('/'));
-
+route.get(
+  '/facebook/redirect',
+  passport.authenticate('facebook', { session: false }),
+  (req, res) => {
+    usersControllers.signJwt(req, res);
+  },
+);
+// { failureRedirect: '/' }
 module.exports = route;

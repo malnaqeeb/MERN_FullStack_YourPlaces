@@ -4,6 +4,7 @@ import MainNavigation from './shared/component/Navigation/MainNavigation';
 import { AuthContext } from './shared/context/auth-context';
 import { useAuth } from './shared/hooks/auth-hook';
 import LoadingSpinner from './shared/component/UIElements/LoadingSpinner';
+import Social from './users/pages/Social';
 const Users = React.lazy(() => import('./users/pages/Users'));
 const NewPlace = React.lazy(() => import('./places/pages/NewPlace'));
 const UserPlaces = React.lazy(() => import('./places/pages/UserPlaces'));
@@ -43,11 +44,8 @@ const App = () => {
         <Route path='/auth'>
           <Auth />
         </Route>
-        <Route path='/api/users/google'>
-          <h1>Google</h1>
-        </Route>
-        <Route path='/api/users/google/redirect'>
-          <h1>Google redirected</h1>
+        <Route path='/social'>
+          <Social />
         </Route>
         <Redirect to='/auth' />
       </Switch>

@@ -36,6 +36,7 @@ const signup = async (req, res, next) => {
       email,
       image: result.url,
       password,
+      social: {},
       places: [],
     });
 
@@ -74,4 +75,17 @@ const login = async (req, res, next) => {
   res.status(201).json({ userId: existingUser.id, email: existingUser.email, token });
 };
 
-module.exports = { getUsers, signup, login };
+const signJwt = async (req, res, next) => {
+  console.log(req.user);
+  let token;
+  try {
+    token = jwt.sign({ userId: req.user._id, email: req.user.email }, jwtKey, {
+      expiresIn: '1h',
+    });
+  } catch (error) {
+    return next(new HttpError('Logging in failed, please try again later', 500));
+  }
+  res.status(201).redirect(`http://localhost:3000/social?userId=${req.user._id}&token=${token}`);
+};
+
+module.exports = { getUsers, signup, login, signJwt };

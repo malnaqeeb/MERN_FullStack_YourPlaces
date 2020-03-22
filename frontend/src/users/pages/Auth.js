@@ -113,7 +113,7 @@ const Auth = () => {
         <form onSubmit={authSubmitHandler}>
           {/* social login */}
           {socialLogin && (
-            <Fragment>
+            <div>
               <h3>Log in with</h3>
               <a className='socialBtn' href='http://localhost:5000/api/users/facebook'>
                 <FaFacebookF />
@@ -125,7 +125,7 @@ const Auth = () => {
                 <span className='socialName'>Google</span>
               </a>
               <h3>______or______</h3>
-            </Fragment>
+            </div>
           )}
           {!isLoginMod && (
             <Input

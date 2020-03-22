@@ -1,14 +1,15 @@
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const HttpError = require('../model/http-error');
+
 const config = require('config');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('../model/user');
 
-const checkAndCreateUser = async (accessToken, refreshToken, profile, done, account) => {
-
+const findOrCreateUser = async (accessToken, refreshToken, profile, done, account) => {
   const {
     id: socialId,
     displayName: name,
@@ -16,41 +17,35 @@ const checkAndCreateUser = async (accessToken, refreshToken, profile, done, acco
     photos: [{ value: image }],
   } = profile;
 
+  let user;
   try {
-    //  if user exists
-    let user = await User.findOne({ email });
+    user = await User.findOne({ email });
+  } catch (error) {
+    return done(error);
+  }
 
-    //if user does not exist create and save user
+  try {
     if (!user) {
       const password = name + socialId; // Password is required
+      const hashedPassword = await bcrypt.hash(password, 12); // Encrypt password
 
-    
       user = new User({
         name,
         email,
-        password,
         image,
+        password: hashedPassword,
         social: {
           [account]: socialId,
         },
         places: [],
       });
+      await user.save();
     }
-
-    await user.save().then(() => {
-      console.log(user);
-    });
-
-
-    let token;
-  try {
-    token = jwt.sign({ userId: user.id, email: user.email, token }, jwtKey, {
-      expiresIn: '1h',
-    });
   } catch (error) {
-    return next(new HttpError('Logging in failed, please try again later', 500));
+    return done(error);
   }
-  res.status(201).json({ userId: user.id, email: user.email, token });
+
+  return done(null, user);
 };
 
 // Google Strategy
@@ -62,7 +57,7 @@ passport.use(
       callbackURL: '/api/users/google/redirect',
     },
     (accessToken, refreshToken, profile, done) =>
-      checkAndCreateUser(accessToken, refreshToken, profile, done, 'google'),
+      findOrCreateUser(accessToken, refreshToken, profile, done, 'google'),
   ),
 );
 
@@ -73,8 +68,9 @@ passport.use(
       clientID: config.get('facebook.clientId'),
       clientSecret: config.get('facebook.secret'),
       callbackURL: '/api/users/facebook/redirect',
+      profileFields: ['id', 'displayName', 'photos', 'email'],
     },
     (accessToken, refreshToken, profile, done) =>
-      checkAndCreateUser(accessToken, refreshToken, profile, done, 'facebook'),
+      findOrCreateUser(accessToken, refreshToken, profile, done, 'facebook'),
   ),
-)
+);

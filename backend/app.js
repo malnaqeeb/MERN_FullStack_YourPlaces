@@ -28,6 +28,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(passport.initialize());
 app.use('/api/places', placesRoute);
 app.use('/api/users', usersRoute);
 
