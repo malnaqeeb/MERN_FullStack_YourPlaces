@@ -44,7 +44,7 @@ const BucketList = () => {
     };
     getUser();
   }, [sendRequest, userId]);
-  const getError = () => {
+  const getError = err => {
     if (userId === auth.userId && !places && !isLoading) {
       return (
         <h2
@@ -63,6 +63,12 @@ const BucketList = () => {
           This user does not have any places in their bucket list
         </h2>
       );
+    }else{
+      return (
+        <h2 className="center yellow-text fade-in">
+          {err}
+        </h2>
+      )
     }
   };
   const goHome = () => {
@@ -71,7 +77,7 @@ const BucketList = () => {
   };
 
   if (error) {
-    return <ErrorModal error={getError()} onClear={goHome} header={`Hey!`}/>;
+    return <ErrorModal error={getError(error)} onClear={goHome} header={`Hey!`} />;
   }
   if (isLoading)
     return (
