@@ -3,8 +3,10 @@ const passport = require('passport');
 const { check } = require('express-validator');
 const route = express.Router();
 
-const usersControllers = require('../controllers/users-controllers');
-const fileUpload = require('../middleware/file-upload');
+const checkAuth = require("../middleware/check-auth");
+const usersControllers = require("../controllers/users-controllers");
+const fileUpload = require("../middleware/file-upload");
+
 
 route.get('/', usersControllers.getUsers);
 
@@ -24,6 +26,15 @@ route.post(
 );
 
 route.post('/login', usersControllers.login);
+
+route.get("/:userId", usersControllers.getUser);
+
+route.use(checkAuth);
+
+route.patch("/:userId",
+  fileUpload.single("image"), 
+  usersControllers.updateUser);
+
 
 // auth with Google+
 route.get(
@@ -57,4 +68,7 @@ route.get(
     usersControllers.signJwt(req, res);
   },
 );
+
+
 module.exports = route;
+

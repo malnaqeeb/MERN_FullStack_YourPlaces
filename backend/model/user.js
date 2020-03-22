@@ -33,9 +33,20 @@ const userSchema = new Schema({
     {
       type: mongoose.Types.ObjectId,
       required: true,
-      ref: 'Place',
-    },
+
+      ref: "Place"
+    }
   ],
+  bucketList: [
+    {
+      id:{ type: mongoose.Types.ObjectId, required: true, ref: "Place" },
+      _id:false,
+      createdBy: {type:String},
+      isVisited:  {type:Boolean}
+
+    }
+  ]
+
 });
 // I created my own method to handle the login process
 userSchema.statics.findByCredentials = async (email, password) => {

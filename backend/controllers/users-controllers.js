@@ -42,7 +42,11 @@ const signup = async (req, res, next) => {
 
     await createdUser.save();
   } catch (error) {
-    return next(new HttpError('Signing up  failed, please try again later.', 500));
+
+    return next(
+      new HttpError(`${error}`, 500)
+    );
+
   }
   let token;
   try {
@@ -88,4 +92,56 @@ const signJwt = async (req, res, next) => {
   res.status(201).redirect(`http://localhost:3000/social?userId=${req.user._id}&token=${token}`);
 };
 
-module.exports = { getUsers, signup, login, signJwt };
+
+const getUser = async (req, res, next) => {
+  let user;
+
+  try {
+    user = await User.findById(req.params.userId, "name image");
+  } catch (error) {
+    return next(
+      new HttpError("Fetching user failed, please try again later.", 500)
+    );
+  }
+  res
+    .status(200)
+    .json({ user: user.toObject({ getters: true })});
+};
+
+const updateUser = async (req, res, next) => {
+  let user;
+  let url;
+
+  if(req.params.userId !== req.userData.userId){
+    return next(
+      new HttpError("Not authorized.", 401)
+    );
+  }
+
+  if(req.file){
+    try{
+      const result = await cloudinary.uploader.upload(req.file.path);
+      url = result.url;
+    } catch {
+      return next(
+        new HttpError("Updating user failed, please try again later.", 500)
+      );
+    }
+  }
+
+  try {
+    user = await User.findById(req.params.userId);
+    user.name = req.body.name || user.name;
+    user.image = url || user.image;
+    await user.save();
+  } catch {
+    return next(
+      new HttpError("Updating user failed, please try again later.", 500)
+    );
+  }
+  res
+    .status(200)
+    .json({ user: {name: user.name, image: user.image}});
+};
+
+module.exports = { getUsers, signup, login, getUser, updateUser, signJwt  };
