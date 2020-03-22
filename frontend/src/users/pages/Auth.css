@@ -13,3 +13,31 @@
 .authentication form {
   margin-bottom: 1rem;
 }
+
+.socialBtn {
+  border: 1px solid #ff0055;
+  border-radius: 6px;
+  padding: 3%;
+  margin: 3% auto;
+  font-size: 1rem;
+  /* width: 80%; */
+}
+.socialBtn:hover {
+  color: white;
+  box-shadow: 1px 1px gray;
+  cursor: pointer;
+}
+.socialBtn:nth-child(2):hover {
+  background: #3b5998;
+}
+.socialBtn:nth-child(3):hover {
+  background: #db4437;
+}
+
+.socialName {
+  font-family: 'fantasy';
+  margin-left: '10%';
+  letter-spacing: '1.5px';
+  /* width: 100%; */
+  padding: 10%;
+}
