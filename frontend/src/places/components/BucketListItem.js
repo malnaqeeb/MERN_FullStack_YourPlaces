@@ -1,4 +1,5 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, Fragment } from "react";
+import { useHistory } from "react-router-dom";
 import Button from "../../shared/component/formElements/Button";
 import Modal from "../../shared/component/UIElements/Modal";
 import { AuthContext } from "../../shared/context/auth-context";
@@ -11,6 +12,7 @@ import { Link, useParams } from "react-router-dom";
 const BucketListItem = ({ bucket, deleteBucket }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [visited, setVisited] = useState(bucket.isVisited);
+  const [visitStyle, setVisitStyle] = useState(bucket.isVisited);
   const auth = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const { id } = bucket;
@@ -50,73 +52,68 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
           Authorization: "Bearer " + auth.token
         }
       );
-      setVisited(!bucket.isVisited)
+      setVisited(!bucket.isVisited);
     } catch (error) {}
   };
 
-  if (error) {
-    return <ErrorModal error={error} onClear={clearError} />;
-  }
-  if (isLoading)
-    return (
-      <div className="center">
-        <LoadingSpinner asOverlay />
-      </div>
-    );
   return (
-    <div className="bucket-list-item">
-      <Modal
-        show={showDetails}
-        onCancel={closeDetailsHandler}
-        header={bucket.name}
-        contentClass="place-item__modal-content"
-        footerClass="place-item__actions"
-        footer={<Button onClick={closeDetailsHandler}>Close</Button>}
-      >
-        <div className="detail-item">
-          <div className="bucket-image">
-            <img style={{ width: "100%" }} src={id.image.imageUrl}></img>
-          </div>
+    <Fragment>
+      {isLoading && <LoadingSpinner asOverlay />}
 
-          <div className="bucket-info">
-            <p style={{ fontSize: "1.5em" }}>{id.title}</p>
-            <p>{id.description}</p>
-            <p>Address: {id.address}</p>
-            <p className="bucket-creator">
-              {" "}
-              <strong>Shared by:</strong>{" "}
-              <Link to={`/${id.creator}/places`}>{bucket.createdBy}</Link>
-            </p>
-          </div>
-        </div>
-      </Modal>
-      <p style={{ textDecoration: visited ? "line-through" : "none" }}>
-        {bucket && bucket.id.title}
-      </p>
-      {userId == auth.userId && (
-        <Button
-          danger
-          onClick={() => {
-            deleteFromBucketList();
-          }}
+      <div className="bucket-list-item">
+        <Modal
+          show={showDetails}
+          onCancel={closeDetailsHandler}
+          header={bucket.name}
+          contentClass="place-item__modal-content"
+          footerClass="place-item__actions"
+          footer={<Button onClick={closeDetailsHandler}>Close</Button>}
         >
-          Delete
-        </Button>
-      )}
+          <div className="detail-item">
+            <div className="bucket-image">
+              <img style={{ width: "100%" }} src={id.image.imageUrl}></img>
+            </div>
 
-      <Button onClick={() => openDetailsHandler()}>Show Details</Button>
-      {userId == auth.userId && (
-        <Button
-          inverse
-          onClick={() => {
-            visitedPlace();
-          }}
-        >
-          {visited ? "Not Visited" : "Visited"}
-        </Button>
+            <div className="bucket-info">
+              <p style={{ fontSize: "1.5em" }}>{id.title}</p>
+              <p>{id.description}</p>
+              <p>Address: {id.address}</p>
+              <p className="bucket-creator">
+                {" "}
+                <strong>Shared by:</strong>{" "}
+                <Link to={`/${id.creator}/places`}>{bucket.createdBy}</Link>
+              </p>
+            </div>
+          </div>
+        </Modal>
+        <p style={{ textDecoration: visitStyle ? "line-through" : "none" }}>
+          {bucket && bucket.id.title}
+        </p>
+        {userId == auth.userId && (
+          <Button
+            danger
+            onClick={() => {
+              deleteFromBucketList();
+            }}
+          >
+            Delete
+          </Button>
+        )}
 
-      )}
-    </div>
+        <Button onClick={() => openDetailsHandler()}>Show Details</Button>
+        {userId == auth.userId && (
+          <Button
+            inverse
+            onClick={() => {
+              setVisitStyle(!visitStyle);
+              visitedPlace();
+            }}
+          >
+            {visitStyle ? "Not Visited" : "Visited"}
+          </Button>
+        )}
+      </div>
+    </Fragment>
   );
 };
 export default BucketListItem;

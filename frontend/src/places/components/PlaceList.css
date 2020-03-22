@@ -6,10 +6,9 @@
   max-width: 40rem;
 }
 
-
 .animated {
-  animation-duration: 5s;
-  -webkit-animation-duration: 5s;
+  animation-duration: 4s;
+  -webkit-animation-duration: 4s;
   animation-fill-mode: both;
   -webkit-animation-fill-mode: both;
 }

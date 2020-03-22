@@ -63,7 +63,6 @@ const PlaceItem = ({ place, onDeletePlace }) => {
         const data = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/users`
         );
-        console.log(data)
         setUsers(data.users);
       } catch (error) {}
     };
@@ -71,10 +70,10 @@ const PlaceItem = ({ place, onDeletePlace }) => {
   }, [sendRequest]);
 
   const checkAdded = users => {
-    if(!auth.userId){
+    if (!auth.userId) {
       return false;
     }
-    const currentUser = users.find(item=>item._id === auth.userId)
+    const currentUser = users.find(item => item._id === auth.userId);
     const nonUniqueArray = currentUser.bucketList.filter(item => {
       return item.id === id;
     });
@@ -84,7 +83,12 @@ const PlaceItem = ({ place, onDeletePlace }) => {
       return true;
     }
   };
-
+  if (isLoading)
+    return (
+      <div className="center">
+        <LoadingSpinner />
+      </div>
+    );
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
@@ -154,7 +158,9 @@ const PlaceItem = ({ place, onDeletePlace }) => {
                   <Button onClick={addBucketList}>ADD TO BUCKET LIST</Button>
                 )}
               {checkAdded(users) && auth.userId && (
-                <span className="animated">Already in you bucket &#9989; </span>
+                <span className="animated">
+                  Already in your bucket &#9989;{" "}
+                </span>
               )}
               {showTick && (
                 <span className="fadeOut animated">Added &#9989; </span>

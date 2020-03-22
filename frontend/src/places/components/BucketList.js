@@ -1,28 +1,33 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import BucketListItem from "./BucketListItem";
 import useHttpClient from "../../shared/hooks/http-hook";
 import "./BucketList.css";
 import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
 import { AuthContext } from "../../shared/context/auth-context";
+import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 
 let herokuLink = "";
 const BucketList = () => {
-  const { isLoading, error, sendRequest } = useHttpClient();
+  const [placesLoading, setPlacesLoading] = useState(false);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const history = useHistory();
   const [places, setPlaces] = useState();
   const { userId } = useParams();
   const auth = useContext(AuthContext);
   const deleteFromBucketList = id => {
     setPlaces(prevPlaces => prevPlaces.filter(place => place.id._id !== id));
+    history.push(`/`);
   };
   useEffect(() => {
+    setPlacesLoading(true);
     const getBucketList = async () => {
       try {
         const data = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/places/user/${userId}/mybucketlist`
         );
         setPlaces(data.userWithBucketList);
-        
+        setPlacesLoading(false);
       } catch (err) {}
     };
     getBucketList();
@@ -39,6 +44,35 @@ const BucketList = () => {
     };
     getUser();
   }, [sendRequest, userId]);
+  const getError = () => {
+    if (userId === auth.userId && !places && !isLoading) {
+      return (
+        <h2
+          className="center yellow-text fade-in"
+          style={{ flexDirection: "column" }}
+        >
+          You don't have any places in your bucket list. Maybe check some
+          places?
+          <Link to="/"> Go to home</Link>
+        </h2>
+      );
+    }
+    if (userId !== auth.userId && !places && !isLoading) {
+      return (
+        <h2 className="center yellow-text fade-in">
+          This user does not have any places in their bucket list
+        </h2>
+      );
+    }
+  };
+  const goHome = () => {
+    clearError();
+    history.push("/");
+  };
+
+  if (error) {
+    return <ErrorModal error={getError()} onClear={goHome} header={`Hey!`}/>;
+  }
   if (isLoading)
     return (
       <div className="center">
@@ -70,27 +104,11 @@ const BucketList = () => {
         </div>
       )}
       <React.Fragment>
-        {isLoading && <LoadingSpinner asOverlay />}
         <h2 className="center yellow-text">
           Bucket List of{" "}
           <span className="pink-text"> {user && user.user.name}</span>{" "}
         </h2>
 
-        {!isLoading && userId === auth.userId && !places && (
-          <h2
-            className="center yellow-text"
-            style={{ flexDirection: "column" }}
-          >
-            You don't have any places in your bucket list. Maybe check some
-            places?
-            <Link to="/"> Go to home</Link>
-          </h2>
-        )}
-        {userId !== auth.userId && (error || !places) && (
-          <h2 className="center yellow-text">
-            This user does not have any places in their bucket list
-          </h2>
-        )}
         <div className="bucket-list-content">
           {places &&
             places.map((bucket, index) => {
