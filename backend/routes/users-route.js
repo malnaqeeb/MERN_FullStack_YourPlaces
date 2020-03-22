@@ -57,5 +57,4 @@ route.get(
     usersControllers.signJwt(req, res);
   },
 );
-// { failureRedirect: '/' }
 module.exports = route;

@@ -115,12 +115,12 @@ const Auth = () => {
           {socialLogin && (
             <div>
               <h3>Log in with</h3>
-              <a className='socialBtn' href='http://localhost:5000/api/users/facebook'>
+              <a className='socialBtn' href={`${process.env.REACT_APP_BACKEND_URL}/users/facebook`}>
                 <FaFacebookF />
                 <span className='socialName'>Facebook</span>
               </a>
               {/*  */}
-              <a className='socialBtn' href='http://localhost:5000/api/users/google'>
+              <a className='socialBtn' href={`${process.env.REACT_APP_BACKEND_URL}/users/google`}>
                 <FaGoogle />
                 <span className='socialName'>Google</span>
               </a>

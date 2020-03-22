@@ -23,7 +23,6 @@ module.exports = (req, res, next) => {
     return next();
   }
   try {
-    console.log('hello');
     const token = req.headers.authorization.split(' ')[1];
     if (!token) {
       throw new Error('Authentication failed!');
