@@ -40,11 +40,11 @@ body {
   justify-content: center;
   align-items: center;
 }
-.yellow-text{
-  color:#F8DF00
+.yellow-text {
+  color: #f8df00;
 }
-.pink-text{
-  color: #FF0055;
+.pink-text {
+  color: #ff0055;
   margin-left: 0.75%;
 }
 .m-1 {
@@ -68,48 +68,47 @@ body {
   -ms-animation: fadeIn ease 5s;
 }
 
-
-@keyframes fadeIn{
+@keyframes fadeIn {
   0% {
-    opacity:0;
+    opacity: 0;
   }
   100% {
-    opacity:1;
+    opacity: 1;
   }
 }
 
 @-moz-keyframes fadeIn {
   0% {
-    opacity:0;
+    opacity: 0;
   }
   100% {
-    opacity:1;
+    opacity: 1;
   }
 }
 
 @-webkit-keyframes fadeIn {
   0% {
-    opacity:0;
+    opacity: 0;
   }
   100% {
-    opacity:1;
+    opacity: 1;
   }
 }
 
 @-o-keyframes fadeIn {
   0% {
-    opacity:0;
+    opacity: 0;
   }
   100% {
-    opacity:1;
+    opacity: 1;
   }
 }
 
 @-ms-keyframes fadeIn {
   0% {
-    opacity:0;
+    opacity: 0;
   }
   100% {
-    opacity:1;
+    opacity: 1;
   }
 }

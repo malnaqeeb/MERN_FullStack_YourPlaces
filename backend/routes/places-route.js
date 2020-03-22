@@ -7,9 +7,9 @@ const placessControllers = require("../controllers/places-controller");
 
 route.get("/:pid", placessControllers.getPlaceById);
 route.get("/user/:uid", placessControllers.getPlacesByUserId);
-route.get("/user/:uid/mybucketlist", placessControllers.getBucketListByUserId);
+route.get("/:uid/mybucketlist", placessControllers.getBucketListByUserId);
 route.use(checkAuth);
-route.patch("/user/:pid/", placessControllers.addToBucketList);
+route.patch("/:uid/mybucketlist/:pid/", placessControllers.addToBucketList);
 route.post(
   "/",
   fileUpload.single("image"),
@@ -35,7 +35,7 @@ route.patch(
   ],
   placessControllers.updatePlaceById
 );
-route.patch("/user/:uid/mybucketlist", placessControllers.visitedPlace)
+route.patch("/:uid/mybucketlist", placessControllers.visitedPlace)
 route.delete("/:pid", placessControllers.deletePlaceById);
-route.delete("/user/:pid/", placessControllers.deleteFromBucketList)
+route.delete("/:uid/mybucketlist/:pid/", placessControllers.deleteFromBucketList)
 module.exports = route;

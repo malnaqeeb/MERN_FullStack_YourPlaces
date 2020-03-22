@@ -24,7 +24,7 @@ const BucketList = () => {
     const getBucketList = async () => {
       try {
         const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/places/user/${userId}/mybucketlist`
+          `${process.env.REACT_APP_BACKEND_URL}/places/${userId}/mybucketlist`
         );
         setPlaces(data.userWithBucketList);
         setPlacesLoading(false);

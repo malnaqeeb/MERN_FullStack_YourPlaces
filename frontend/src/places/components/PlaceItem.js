@@ -44,7 +44,7 @@ const PlaceItem = ({ place, onDeletePlace }) => {
     try {
       setShowTravelWishButton(false);
       await sendRequest(
-        `${process.env.REACT_APP_BACKEND_URL}/places/user/${id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/places/${auth.userId}/mybucketlist/${id}`,
         "PATCH",
         null,
         {
