@@ -7,7 +7,7 @@ import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
 import { AuthContext } from "../../shared/context/auth-context";
 import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 
-let herokuLink = "https://sharing-place.herokuapp.com/";
+let herokuLink = process.env.PUBLIC_URL;
 const BucketList = () => {
   const [placesLoading, setPlacesLoading] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
