@@ -8,21 +8,21 @@ const commentsControllers = require('../controllers/comments-controller');
 
 
 route.get("/:pid", placessControllers.getPlaceById);
-router.get("/:pid/comments", commentsControllers.getComments);
+route.get("/:pid/comments", commentsControllers.getComments);
 route.get("/user/:uid", placessControllers.getPlacesByUserId);
 route.get("/:uid/mybucketlist", placessControllers.getBucketListByUserId);
 
 route.use(checkAuth);
 
-router.post("/:pid/comments", 
+route.post("/:pid/comments", 
   [check('comment').not().isEmpty()], 
   commentsControllers.createComment);
 
-router.patch("/:pid/comments/:cid", 
+route.patch("/:pid/comments/:cid", 
   [check('comment').not().isEmpty()], 
   commentsControllers.updateComment);
 
-router.delete("/:pid/comments/:cid", commentsControllers.deleteComment);
+route.delete("/:pid/comments/:cid", commentsControllers.deleteComment);
 
 route.patch("/:uid/mybucketlist/:pid/", placessControllers.addToBucketList);
 route.post(
