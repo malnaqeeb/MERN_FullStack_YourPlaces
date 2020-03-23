@@ -8,8 +8,8 @@ const commentsControllers = require('../controllers/comments-controller');
 
 
 route.get("/:pid", placessControllers.getPlaceById);
-route.get("/:pid/comments", commentsControllers.getComments);
 route.get("/user/:uid", placessControllers.getPlacesByUserId);
+route.get("/:pid/comments", commentsControllers.getComments);
 route.get("/:uid/mybucketlist", placessControllers.getBucketListByUserId);
 
 route.use(checkAuth);
