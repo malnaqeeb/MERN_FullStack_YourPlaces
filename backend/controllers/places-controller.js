@@ -307,6 +307,79 @@ const deletePlaceById = async (req, res, next) => {
   res.status(200).json({ message: 'Place deleted' });
 };
 
+const likeThePlace = async (req, res, next) => {
+  const placeId = req.params.id;
+  const place = await Place.findById({ _id: placeId });
+  if (!place) {
+    return next(new HttpError("Could not like this place!", 404));
+  }
+
+  try {
+    const clicked = place.likes.includes(req.body.likes);
+    const newDisLike = place.disLike.filter(user => user !== req.body.likes);
+
+    if (clicked) {
+      const newLike = place.likes.filter(user => user !== req.body.likes);
+      place.likes = newLike;
+      place.save();
+    } else {
+      place.disLike = newDisLike;
+      place.likes = [...place.likes, req.body.likes];
+
+      place.save();
+    }
+    res.send({ place: place.toObject({ getters: true }) });
+  } catch (error) {
+    new HttpError("Something went wrong, could not like place.", 500);
+  }
+};
+
+const disLikeThePlace = async (req, res, next) => {
+  const placeId = req.params.id;
+  const place = await Place.findById({ _id: placeId });
+
+  if (!place) {
+    return next(new HttpError("Could not dislike this place!", 404));
+  }
+  try {
+    const disLiked = place.disLike.includes(req.body.disLike);
+    const newLike = place.likes.filter(user => user !== req.body.disLike);
+
+    if (disLiked) {
+      const newDisLike = place.disLike.filter(
+        user => user !== req.body.disLike
+      );
+      place.disLike = newDisLike;
+      place.save();
+    } else {
+      place.likes = newLike;
+      place.disLike = [...place.disLike, req.body.disLike];
+      place.save();
+    }
+    res.json({ place: place.toObject({ getters: true }) });
+  } catch (error) {
+    new HttpError("Something went wrong, could not dislike place.", 500);
+  }
+};
+
+const placeEvaluation = async (req, res, next) => {
+  const placeId = req.params.id;
+  try {
+    const place = await Place.findById(placeId);
+
+    if (!place)
+      return next(
+        new HttpError("Could not find a place for the provided id.", 404)
+      );
+
+    res.json({ place: place.toObject({ getters: true }) });
+  } catch (error) {
+    return next(
+      new HttpError("Somthing went wrong, could not find a place.", 500)
+    );
+  }
+};
+
 module.exports = {
   addToBucketList,
   getBucketListByUserId,
@@ -317,4 +390,7 @@ module.exports = {
   createPlace,
   updatePlaceById,
   deletePlaceById,
+  likeThePlace,
+  disLikeThePlace,
+  placeEvaluation
 };
