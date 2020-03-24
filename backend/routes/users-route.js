@@ -29,13 +29,6 @@ route.post('/login', usersControllers.login);
 
 route.get("/:userId", usersControllers.getUser);
 
-route.use(checkAuth);
-
-route.patch("/:userId",
-  fileUpload.single("image"), 
-  usersControllers.updateUser);
-
-
 // auth with Google+
 route.get(
   '/google',
@@ -69,6 +62,11 @@ route.get(
   },
 );
 
+route.use(checkAuth);
+
+route.patch("/:userId",
+  fileUpload.single("image"), 
+  usersControllers.updateUser);
 
 module.exports = route;
 
