@@ -69,20 +69,4 @@ route.get(
   },
 );
 
-route.get("/messages", 
-  usersControllers.getUserCorresponders);
-
-route.get("/messages/:corresponderId", 
-  usersControllers.getMessagesFromCorresponder);
-
-route.post("/messages/:corresponderId",
-  [check('message').not().isEmpty()],
-  usersControllers.sendMessageToCorresponder);
-
-route.delete("/messages/:corresponderId", 
-  usersControllers.deleteAllToCorresponder);
-
-route.delete("/messages/:corresponderId/:messageId", 
-  usersControllers.deleteMessagetoCorresponderById);
-
 module.exports = route;
