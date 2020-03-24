@@ -10,6 +10,8 @@ import { AuthContext } from "./shared/context/auth-context";
 import { useAuth } from "./shared/hooks/auth-hook";
 import LoadingSpinner from "./shared/component/UIElements/LoadingSpinner";
 import Social from "./users/pages/Social";
+
+const Friends = React.lazy(() => import('./friends/pages/Friends'));
 const BucketList = React.lazy(() => import("./places/components/BucketList"));
 const Users = React.lazy(() => import("./users/pages/Users"));
 const NewPlace = React.lazy(() => import("./places/pages/NewPlace"));
@@ -27,6 +29,9 @@ const App = () => {
       <Switch>
         <Route path="/" exact>
           <Users />
+        </Route>
+        <Route path="/friends" exact>
+          <Friends />
         </Route>
         <Route path="/:userId/places" exact>
           <UserPlaces />

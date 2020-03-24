@@ -82,7 +82,7 @@ const Auth = () => {
             'Content-Type': 'application/json',
           },
         );
-        auth.login(res.userId, res.token);
+        auth.login(res.userId, res.token, null, res.friendStatus);
       } catch (error) {}
     } else {
       try {
