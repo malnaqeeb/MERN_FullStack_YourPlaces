@@ -52,6 +52,8 @@
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
+  position:relative;
+  z-index: 10;
 }
 .evaluation > div {
   margin: 10px 5px 0;
