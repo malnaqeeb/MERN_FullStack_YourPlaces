@@ -1,9 +1,16 @@
 {
-  
-  "mongoURI": "mongodb+srv://malnaqeeb:Razan@9291853@cluster0-y3ksy.mongodb.net/mern?retryWrites=true&w=majority",
-  "MAPBOX_API_KEY": "pk.eyJ1IjoibWFsbmFxZWViIiwiYSI6ImNrODFuYXdlMDBhMGMzcG93Y3Y0ZHZnaDQifQ.3VUpsn1J77ec9qlTP-MPUQ",
-  "JWT_KEY": "supersecret_dont_share",
-  "CLOUD_NAME": "dmpaffwjo",
-  "CLOUDINARY_API_KEY": "115532682766116",
-  "CLOUDINARY_API_SECRET": "dSVbQdaBpLk8vW4nc7NHyWYkX5s"
+  "mongoURI": "",
+  "MAPBOX_API_KEY": "",
+  "JWT_KEY": "",
+  "CLOUD_NAME": "",
+  "CLOUDINARY_API_KEY": "",
+  "CLOUDINARY_API_SECRET": "",
+  "google": {
+    "clientId": "",
+    "secret": ""
+  },
+  "facebook": {
+    "clientId": "",
+    "secret": ""
+  }
 }

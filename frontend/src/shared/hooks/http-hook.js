@@ -1,39 +1,36 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect } from 'react';
 const useHttpClient = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
 
   const activeHttpRequests = useRef([]);
 
-  const sendRequest = useCallback(
-    async (url, method = "GET", body = null, headers = {}) => {
-      setIsLoading(true);
-      const httpAbortCtrll = new AbortController();
-      activeHttpRequests.current.push(httpAbortCtrll);
-      try {
-        const res = await fetch(url, {
-          method,
-          body,
-          headers,
-          signal: httpAbortCtrll.signal
-        });
-        const data = await res.json();
-        activeHttpRequests.current = activeHttpRequests.current.filter(
-          reqCtrl => reqCtrl !== httpAbortCtrll
-        );
-        if (!res.ok) {
-          throw new Error(data.message);
-        }
-        setIsLoading(false);
-        return data;
-      } catch (error) {
-        setError(error.message || "Somthing went wrong, pleace try again.");
-        setIsLoading(false);
-        throw error;
+  const sendRequest = useCallback(async (url, method = 'GET', body = null, headers = {}) => {
+    setIsLoading(true);
+    const httpAbortCtrl = new AbortController();
+    activeHttpRequests.current.push(httpAbortCtrl);
+    try {
+      const res = await fetch(url, {
+        method,
+        body,
+        headers,
+        signal: httpAbortCtrl.signal,
+      });
+      const data = await res.json();
+      activeHttpRequests.current = activeHttpRequests.current.filter(
+        reqCtrl => reqCtrl !== httpAbortCtrl,
+      );
+      if (!res.ok) {
+        throw new Error(data.message);
       }
-    },
-    []
-  );
+      setIsLoading(false);
+      return data;
+    } catch (error) {
+      setError(error.message || 'Something went wrong, please try again.');
+      setIsLoading(false);
+      throw error;
+    }
+  }, []);
   const clearError = () => {
     setError(null);
   };

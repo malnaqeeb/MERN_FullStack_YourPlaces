@@ -1,9 +1,10 @@
-import React, { useEffect, useState, Fragment, useContext } from "react";
-import UsersList from "../components/UsersList";
-import ErrorModal from "../../shared/component/UIElements/ErrorModal";
-import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
-import useHttpClient from "../../shared/hooks/http-hook";
-import {AuthContext} from "../../shared/context/auth-context";
+import React, { useEffect, useState, Fragment, useContext } from 'react';
+import UsersList from '../components/UsersList';
+import ErrorModal from '../../shared/component/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/component/UIElements/LoadingSpinner';
+import useHttpClient from '../../shared/hooks/http-hook';
+import {AuthContext} from '../../shared/context/auth-context';
+
 const Users = () => {
   const [users, setUsers] = useState();
   const [user, setUser] = useState();
