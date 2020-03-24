@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const placesRoute = require('./routes/places-route');
 const usersRoute = require('./routes/users-route');
+const userRoute = require('./routes/user-route');
 const HttpError = require('./model/http-error');
 const connectDB = require('./config/db');
 const passport = require('passport');
@@ -31,6 +32,7 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use('/api/places', placesRoute);
 app.use('/api/users', usersRoute);
+app.use('/api/user', userRoute);
 
 app.use((req, res, next) => {
   res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
