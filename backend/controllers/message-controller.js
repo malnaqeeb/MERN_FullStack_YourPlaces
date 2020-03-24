@@ -29,7 +29,6 @@ const getMessagesFromCorresponder = async (req, res, next) => {
 
 const sendMessageToCorresponder = async (req, res, next) => {
   const error = validationResult(req);
-  console.log(req.userData.userId);
 
   if (!error.isEmpty()){
     return next(new Error('Invalid input passed, please check your data.', 422));
@@ -48,7 +47,6 @@ const sendMessageToCorresponder = async (req, res, next) => {
     ).exec();
     res.json({message: "Message Sent!"});
   } catch (error) {
-    console.log(error);
     return next(new HttpError('Failed to send message, please try again later.', 500));
   }
 };
