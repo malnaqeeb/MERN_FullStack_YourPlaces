@@ -7,7 +7,6 @@ const checkAuth = require("../middleware/check-auth");
 const usersControllers = require("../controllers/users-controllers");
 const fileUpload = require("../middleware/file-upload");
 
-
 route.get('/', usersControllers.getUsers);
 
 route.post(
@@ -26,8 +25,6 @@ route.post(
 );
 
 route.post('/login', usersControllers.login);
-
-route.get("/:userId", usersControllers.getUser);
 
 // auth with Google+
 route.get(
@@ -61,6 +58,8 @@ route.get(
     usersControllers.signJwt(req, res);
   },
 );
+
+route.get("/:userId", usersControllers.getUser);
 
 route.use(checkAuth);
 
