@@ -59,9 +59,6 @@ route.get(
   },
 );
 
-<<<<<<< HEAD
-module.exports = route;
-=======
 route.get("/:userId", usersControllers.getUser);
 
 route.use(checkAuth);
@@ -71,5 +68,3 @@ route.patch("/:userId",
   usersControllers.updateUser);
 
 module.exports = route;
-
->>>>>>> development
