@@ -82,7 +82,7 @@ const createFriendRequest = async (req, res, next) => {
       { $addToSet: { friendRequests: receivedRequest } }
     );
 
-    res.status(200).send('Friend request created successfully!');
+    res.status(200).json({ message: 'Friend request created successfully!' });
   } catch (err) {
     throw new HttpError("Could not update user information, try again later", 500);
   }
@@ -102,13 +102,9 @@ const checkRequestById = async (acceptingUserId, requestId) => {
       .populate({ path: 'friends', model: User })
       .populate({ path: 'friendRequests.user', model: User });
 
-    // console.log({ acceptingUser })
+  
 
     let friendRequest = acceptingUser.friendRequests.find(request => {
-    //   console.log({ request })
-    //   console.log({ id: request.id })
-    //   console.log({ _id: request._id })
-    //   console.log({ requestId })
       return ObjectId(request.id).equals(requestId)
     });
 

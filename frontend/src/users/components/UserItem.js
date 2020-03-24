@@ -1,57 +1,57 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import Avatar from "../../shared/component/UIElements/Avatar";
-import Card from "../../shared/component/UIElements/Card";
-import "./UserItem.css";
-import useHttpClient from "../../shared/hooks/http-hook";
-import ErrorModal from "../../shared/component/UIElements/ErrorModal";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Avatar from '../../shared/component/UIElements/Avatar';
+import Card from '../../shared/component/UIElements/Card';
+import './UserItem.css';
+import useHttpClient from '../../shared/hooks/http-hook';
+import ErrorModal from '../../shared/component/UIElements/ErrorModal';
+import Button from '@material-ui/core/Button'
+// import Card1 from '@material-ui/core/Card';
+import FriendshipLable from './FriendshipLable'
 
 const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const { id, image, name, places } = user;
-  const Button = () => {
-    const isFriend = userData.friends.filter(friend => friend.id === id);
-    const isReceived = userData.friendRequests.filter(req => req.user.id === id && !req.isSent);
-    const isSent = userData.friendRequests.filter(sendReq => sendReq.user.id === id && sendReq.isSent);
-    const sendFriendRequest = async () => {
+  const Button1 = () => {
+    const isFriend = userData.friends ? userData.friends.filter(friend => {
+      return friend.id === id;
+    }) : [];
+    const hasRequest = userData.friendRequests ? userData.friendRequests.filter(req => req.user.id === id) : [];
+
+    const sendFriendRequest = async (id) => {
       try {
-        const user = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/friends`,
+        await sendRequest(
+          `${process.env.REACT_APP_BACKEND_URL}/friends/`,
           'POST',
-          JSON.stringify({friendId: id}),
+          JSON.stringify({
+            friendId: id
+          }),
           {
             Authorization: 'Bearer ' + auth.token,
-            'Content-type': 'application/json'
+            'Content-Type': 'application/json',
           },
         );
         sendFriendRequestHandler(id);
-      } catch (error) {}
+      } catch (error) { console.error(error) }
     };
 
     if (auth.isLoggedIn) {
       if (isFriend.length > 0) {
         return (
-          <p className="text-primary my-1">
-            <i className="fas fa-user-friends"></i>
-          </p>
+            <FriendshipLable variant="contained" color="secondary" >FRIEND</FriendshipLable>
         );
       }
 
-      if (isReceived.length > 0) {
-        return (
-          <p className="text-primary my-1">
-            <i className="fab fa-get-pocket"></i>
-          </p>
-        );
-      }
-
-      if (isSent.length > 0) {
-        return (
-          <p className="text-primary my-1">
-            {' '}
-            <i className="fas fa-clock"></i>
-          </p>
-        );
+      if (hasRequest.length > 0) {
+        if (hasRequest[0].isSent) {
+          return (
+            <FriendshipLable>Wait for response</FriendshipLable>
+          );
+        } else {
+          return (
+            <FriendshipLable variant="contained" color="secondary" >Asked to be friend</FriendshipLable>
+          );
+        }
       }
 
       if (id === userData.userId) {
@@ -59,9 +59,7 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
       }
 
       return (
-        <button className="btn btn-success" onClick={() => sendFriendRequest(id)}>
-          <i className="fas fa-user-plus"></i>Add
-        </button>
+        <Button variant="contained" color="primary" onClick={() => sendFriendRequest(id)}>Add Friend</Button>
       );
     }
     return <></>;
@@ -83,8 +81,8 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
               </h3>
             </div>
           </Link>
-          {!isLoading && userData && <Button />}
         </Card>
+        {!isLoading && userData && <Button1 />}
       </li>
     </>
   );
