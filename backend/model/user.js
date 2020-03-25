@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const crypto = require("crypto");
 const HttpError = require('../model/http-error');
 const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
 
-const {ObjectId, Date, String, Boolean} = mongoose.Schema.Types;
+const {ObjectId} = mongoose.Schema.Types;
 
 const userSchema = new Schema({
   name: {
@@ -59,7 +60,10 @@ const userSchema = new Schema({
       createdBy: {type: String},
       isVisited: {type: Boolean}
     }
-  ]
+  ],
+  resetPasswordToken: String, // used for after password reset is submitted
+  resetPasswordExpires: Date,
+  notifications: {type:Boolean, default:true}
 });
 // I created my own method to handle the login process
 userSchema.statics.findByCredentials = async (email, password) => {
@@ -84,6 +88,10 @@ userSchema.pre('save', async function (next) {
 
   next();
 });
+userSchema.methods.generatePasswordReset = function() {
+  this.resetPasswordToken = crypto.randomBytes(20).toString("hex");
+  this.resetPasswordExpires = Date.now() + 3600000; //expires in an hour
+};
 userSchema.plugin(uniqueValidator);
 const User = mongoose.model('User', userSchema);
 

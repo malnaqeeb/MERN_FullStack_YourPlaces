@@ -3,7 +3,6 @@ import UserItem from './UserItem';
 import Card from '../../shared/component/UIElements/Card';
 import './UsersList.css';
 import './UserItem.css';
-import Avatar from '../../shared/component/UIElements/Avatar';
 
 const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
 
