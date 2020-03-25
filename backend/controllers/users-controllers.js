@@ -112,7 +112,6 @@ const login = async (req, res, next) => {
 };
 
 const signJwt = async (req, res, next) => {
-  console.log(req.user);
   let token;
   try {
     token = jwt.sign({ userId: req.user._id, email: req.user.email }, JWT_KEY, {
@@ -130,7 +129,7 @@ const getUser = async (req, res, next) => {
   try {
     user = await User.findById(req.params.userId, "name image");
   } catch (error) {
-    return next(new HttpError('Loggin in failed, please try agein later', 500));
+    return next(new HttpError('Failed to get the user, please try again later.', 500));
   }
   res.status(201).json({user});
 };

@@ -48,15 +48,12 @@ const Friends = () => {
 
   return (
     <Fragment>
-      <Fragment>
         <ErrorModal error={error} onClear={clearError} />
         {!isLoading && friends && (
           <FriendList
             friends={friends}
           />
         )}
-      </Fragment>
-      <Fragment>
         <ErrorModal error={error} onClear={clearError} />
         {!isLoading && friendRequests && (
           <FriendRequestList
@@ -66,7 +63,6 @@ const Friends = () => {
             cancelFriendHandler={processFriendRequest}
           />
         )}
-      </Fragment>
     </Fragment>
   );
 };

@@ -8,13 +8,13 @@ const getBucketList = async (req, res, next) => {
   let userWithBucketList;
   try {
     userWithBucketList = await User.findById(userId).populate("bucketList.id");
-    if (!userWithBucketList || userWithBucketList.bucketList.length === 0)
-      return next(
-        new HttpError(
-          "Could not find a bucket list for the provided user id.",
-          404
-        )
-      );
+    // if (!userWithBucketList || userWithBucketList.bucketList.length === 0)
+    //   return next(
+    //     new HttpError(
+    //       "Could not find a bucket list for the provided user id.",
+    //       404
+    //     )
+    //   );
 
     res.json({
       userWithBucketList: userWithBucketList.bucketList.toObject({

@@ -16,8 +16,8 @@ const ReceivedFriendRequestItem = ({
   const acceptFriendRequest = async userID => {
     try {
       await sendRequest(
-        `${process.env.REACT_APP_BACKEND_URL}/user/friends/requests/${requestId}/accept`,
-        'GET',
+        `${process.env.REACT_APP_BACKEND_URL}/user/friends/requests/${requestId}`,
+        'PUT',
         null,
         {
           Authorization: 'Bearer ' + auth.token,
@@ -29,8 +29,8 @@ const ReceivedFriendRequestItem = ({
   const cancelFriendRequest = async userID => {
     try {
       await sendRequest(
-        `${process.env.REACT_APP_BACKEND_URL}/user/friends/requests/${requestId}/cancel`,
-        'GET',
+        `${process.env.REACT_APP_BACKEND_URL}/user/friends/requests/${requestId}`,
+        'DELETE',
         null,
         {
           Authorization: 'Bearer ' + auth.token,

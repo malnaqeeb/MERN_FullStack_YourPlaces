@@ -11,7 +11,7 @@ import FriendshipLable from './FriendshipLable'
 const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const { id, image, name, places } = user;
-  const Button1 = () => {
+  const FriendButton = () => {
     const isFriend = userData.friends ? userData.friends.filter(friend => {
       return friend.id === id;
     }) : [];
@@ -81,7 +81,7 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
             </div>
           </Link>
         </Card>
-        {!isLoading && userData && <Button1 />}
+        {!isLoading && userData && id!==auth.userId && <FriendButton />}
       </li>
     </>
   );
