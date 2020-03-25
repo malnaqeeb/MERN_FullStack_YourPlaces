@@ -13,9 +13,9 @@ router.delete("/bucketlist/:pid", bucketlistControllers.deleteFromBucketList);
 
 router.get('/friends', friendsControllers.getFriends);
 router.post('/friends', friendsControllers.createFriendRequest);
-router.get('/friends/requests', friendsControllers.getFriendRequests);
-router.put('/friends/requests', friendsControllers.acceptFriendRequest);
-router.delete('/friends/requests', friendsControllers.rejectFriendRequest);
+// router.get('/friends/requests', friendsControllers.getFriendRequests);
+// router.put('/friends/requests', friendsControllers.acceptFriendRequest);
+// router.delete('/friends/requests', friendsControllers.rejectFriendRequest);
 
 module.exports = router;
 

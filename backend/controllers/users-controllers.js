@@ -2,8 +2,7 @@ const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const HttpError = require('../model/http-error');
 const User = require('../model/user');
-const config = require('config');
-const jwtKey = config.get('JWT_KEY');
+const JWT_KEY = process.env.JWT_KEY;
 const cloudinary = require('../uploads/cloudinary');
 
 const getUserFriend = async (req, res, next) => {
@@ -41,6 +40,7 @@ const getUserFriend = async (req, res, next) => {
         }))
   });
 };
+
 const getUsers = async (req, res, next) => {
   let users;
 
@@ -81,7 +81,7 @@ const signup = async (req, res, next) => {
   }
   let token;
   try {
-    token = jwt.sign({ userId: createdUser.id, email: createdUser.email, token }, jwtKey, {
+    token = jwt.sign({ userId: createdUser.id, email: createdUser.email, token }, JWT_KEY, {
       expiresIn: '1h',
     });
   } catch (error) {
@@ -102,7 +102,7 @@ const login = async (req, res, next) => {
 
   let token;
   try {
-    token = jwt.sign({ userId: existingUser.id, email: existingUser.email, token }, jwtKey, {
+    token = jwt.sign({ userId: existingUser.id, email: existingUser.email, token }, JWT_KEY, {
       expiresIn: '1h',
     });
   } catch (error) {
@@ -115,7 +115,7 @@ const signJwt = async (req, res, next) => {
   console.log(req.user);
   let token;
   try {
-    token = jwt.sign({ userId: req.user._id, email: req.user.email }, jwtKey, {
+    token = jwt.sign({ userId: req.user._id, email: req.user.email }, JWT_KEY, {
       expiresIn: '1h',
     });
   } catch (error) {
@@ -140,7 +140,4 @@ const getUser = async (req, res, next) => {
   });
 };
 
-
-
 module.exports = { getUsers, signup, login, getUser, updateUser, signJwt, getUserFriend };
-
