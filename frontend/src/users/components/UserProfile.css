@@ -12,3 +12,9 @@
     margin-top: 5px;
     margin-bottom: 5px;
   }
+  .notification-box{
+    background-color:#F8DF00;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 1em;
+  }

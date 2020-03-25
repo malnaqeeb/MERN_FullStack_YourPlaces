@@ -189,19 +189,19 @@ const UserProfile = props => {
               </Button>
             </React.Fragment>
           )}
-          <div>
-            <p>Do You Want To Receive E-mail Notifications?</p>
-            <Button
-              onClick={() => {
-                notificationHandler();
-                setNotificationStyle(!notificationStyle);
-              }}
-            >
-              {notificationStyle ? "TURN OFF" : "TURN ON"}
-            </Button>
-          </div>
         </Card>
       )}
+      <div className="notification-box">
+        <p>Do You Want To Receive E-mail Notifications?</p>
+        <Button
+          onClick={() => {
+            notificationHandler();
+            setNotificationStyle(!notificationStyle);
+          }}
+        >
+          {notificationStyle ? "TURN OFF" : "TURN ON"}
+        </Button>
+      </div>
     </div>
   );
 };
