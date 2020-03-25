@@ -6,7 +6,7 @@ const config = require('config');
 const jwtKey = config.get('JWT_KEY');
 const cloudinary = require('../uploads/cloudinary');
 
-const getUser = async (req, res, next) => {
+const getUserFriend = async (req, res, next) => {
    const user = await User.findById(req.userData.userId)
     .populate({ path: 'friends', model: User })
     .populate({ path: 'friendRequests.user', model: User });
@@ -41,7 +41,6 @@ const getUser = async (req, res, next) => {
         }))
   });
 };
-
 const getUsers = async (req, res, next) => {
   let users;
 
@@ -72,6 +71,7 @@ const signup = async (req, res, next) => {
       email,
       image: result.url,
       password,
+      social: {},
       places: [],
     });
 
@@ -85,7 +85,7 @@ const signup = async (req, res, next) => {
       expiresIn: '1h',
     });
   } catch (error) {
-    return next(new HttpError('Signing up failed, please try agein later', 500));
+    return next(new HttpError('Signing up failed, please try again later', 500));
   }
   res.status(201).json({ userId: createdUser.id, email: createdUser.email, token });
 };
@@ -95,7 +95,7 @@ const login = async (req, res, next) => {
 
   let existingUser;
   try {
-    existingUser = await User.findBuCredantials(email, password);
+    existingUser = await User.findByCredentials(email, password);
   } catch (error) {
     return next(error);
   }
@@ -106,6 +106,31 @@ const login = async (req, res, next) => {
       expiresIn: '1h',
     });
   } catch (error) {
+    return next(new HttpError('Logging in failed, please try agein later', 500));
+  }
+  res.status(201).json({ userId: existingUser.id, email: existingUser.email, token });
+};
+
+const signJwt = async (req, res, next) => {
+  console.log(req.user);
+  let token;
+  try {
+    token = jwt.sign({ userId: req.user._id, email: req.user.email }, jwtKey, {
+      expiresIn: '1h',
+    });
+  } catch (error) {
+    return next(new HttpError('Logging in failed, please try again later', 500));
+  }
+  res.status(201).redirect(`http://localhost:3000/social?userId=${req.user._id}&token=${token}`);
+};
+
+
+const getUser = async (req, res, next) => {
+  let user;
+
+  try {
+    user = await User.findById(req.params.userId, "name image");
+  } catch (error) {
     return next(new HttpError('Loggin in failed, please try agein later', 500));
   }
   res.status(201).json({
@@ -115,10 +140,7 @@ const login = async (req, res, next) => {
   });
 };
 
-// we added friend request methods
-module.exports = {
-  getUser,
-  getUsers,
-  signup,
-  login,
-};
+
+
+module.exports = { getUsers, signup, login, getUser, updateUser, signJwt, getUserFriend };
+

@@ -1,12 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Avatar from '../../shared/component/UIElements/Avatar';
-import Card from '../../shared/component/UIElements/Card';
-import './UserItem.css';
-import useHttpClient from '../../shared/hooks/http-hook';
-import ErrorModal from '../../shared/component/UIElements/ErrorModal';
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import Avatar from "../../shared/component/UIElements/Avatar";
+import Card from "../../shared/component/UIElements/Card";
+import "./UserItem.css";
+import useHttpClient from "../../shared/hooks/http-hook";
+import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 import Button from '@material-ui/core/Button'
-// import Card1 from '@material-ui/core/Card';
 import FriendshipLable from './FriendshipLable'
 
 const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {

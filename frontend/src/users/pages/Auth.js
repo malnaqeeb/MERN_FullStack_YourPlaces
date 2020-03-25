@@ -14,11 +14,14 @@ import {
   VALIDATOR_REQUIRE,
 } from '../../shared/Util/validators';
 import { AuthContext } from '../../shared/context/auth-context';
+// React Icons
+import { FaFacebookF, FaGoogle } from 'react-icons/fa';
 
 const Auth = () => {
   const auth = useContext(AuthContext);
   const [isLoginMod, setIsLoginMod] = useState(true);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const [socialLogin, toggleSocialLogin] = useState(true);
 
   const [state, inputHandler, setFormData] = useFrom(
     {
@@ -60,6 +63,7 @@ const Auth = () => {
       );
     }
     setIsLoginMod(prevMode => !prevMode);
+    toggleSocialLogin(socialLogin => !socialLogin);
   };
 
   const authSubmitHandler = async event => {
@@ -107,7 +111,23 @@ const Auth = () => {
         {isLoading && <LoadingSpinner asOverlay />}
         <h2>Login Required</h2>
         <hr />
-        <form className="place-form" onSubmit={authSubmitHandler}>
+        <form onSubmit={authSubmitHandler}>
+          {/* social login */}
+          {socialLogin && (
+            <div>
+              <h3>Log in with</h3>
+              <a className='socialBtn' href={`${process.env.REACT_APP_BACKEND_URL}/users/facebook`}>
+                <FaFacebookF />
+                <span className='socialName'>Facebook</span>
+              </a>
+              {/*  */}
+              <a className='socialBtn' href={`${process.env.REACT_APP_BACKEND_URL}/users/google`}>
+                <FaGoogle />
+                <span className='socialName'>Google</span>
+              </a>
+              <h3>______or______</h3>
+            </div>
+          )}
           {!isLoginMod && (
             <Input
               id="name"
@@ -146,12 +166,12 @@ const Auth = () => {
             errorText="Please enter a valid password, at least 6 characters."
             onInput={inputHandler}
           />
-          <Button type="submit" disabled={!state.isValid}>
+          <Button type='submit' disabled={!state.isValid}>
             {isLoginMod ? 'LOGIN' : 'SIGNUP'}
           </Button>
         </form>
         <Button inverse onClick={switchModelHandler}>
-          SWITHC TO {isLoginMod ? 'SIGNUP' : 'LOGIN'}
+          SWITCH TO {isLoginMod ? 'SIGNUP' : 'LOGIN'}
         </Button>
       </Card>
     </Fragment>
