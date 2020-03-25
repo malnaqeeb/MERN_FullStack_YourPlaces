@@ -1,4 +1,5 @@
 import React, { useState, Fragment, useContext, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import "./PlaceItem.css";
 import Card from "../../shared/component/UIElements/Card";
 import Button from "../../shared/component/formElements/Button";
@@ -8,16 +9,76 @@ import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
 import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 import { AuthContext } from "../../shared/context/auth-context";
 import useHttpClient from "../../shared/hooks/http-hook";
+
 const PlaceItem = ({ place, onDeletePlace }) => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const auth = useContext(AuthContext);
   const [showMap, setShowMap] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [evaluation, setEvaluation] = useState();
+  const [addLikes, setAddLikes] = useState();
+  const [addDislikes, setAddDislike] = useState();
   const [showTravelWishButton, setShowTravelWishButton] = useState(true);
   const [showTick, setShowTick] = useState(false);
   const openMapHandler = () => setShowMap(true);
   const closeMapHandler = () => setShowMap(false);
   const { id, image, name, title, address, description, location } = place;
+  const history = useHistory();
+  useEffect(() => {
+    const fetchEvaluation = async () => {
+      try {
+        const data = await sendRequest(
+          `${process.env.REACT_APP_BACKEND_URL}/places/evaluation/${id}`
+        );
+        setEvaluation(data.place);
+      } catch (error) {}
+    };
+    fetchEvaluation();
+  }, [addLikes, addDislikes, id, sendRequest]);
+
+  const addLikeAndRemoved = async () => {
+    if (auth.isLoggedIn) {
+      try {
+        const newData = { likes: auth.userId };
+        const data = await sendRequest(
+          `${process.env.REACT_APP_BACKEND_URL}/places/like/${id}`,
+          "POST",
+          JSON.stringify(newData),
+          {
+            Authorization: "Bearer " + auth.token,
+            "Content-Type": "application/json"
+          }
+        );
+
+        setAddLikes(data);
+      } catch (error) {}
+    } else {
+      history.push("/auth");
+    }
+  };
+
+  const addDisLikeAndRemoved = async () => {
+    if (auth.isLoggedIn) {
+      try {
+        const newData = { disLike: auth.userId };
+        const data = await sendRequest(
+          `${process.env.REACT_APP_BACKEND_URL}/places/dislike/${id}`,
+
+          "POST",
+
+          JSON.stringify(newData),
+          {
+            Authorization: "Bearer " + auth.token,
+            "Content-Type": "application/json"
+          }
+        );
+
+        setAddDislike(data);
+      } catch (error) {}
+    } else {
+      history.push("/auth");
+    }
+  };
 
   const showDeleteWaringHandler = () => {
     setShowConfirmModal(true);
@@ -29,14 +90,9 @@ const PlaceItem = ({ place, onDeletePlace }) => {
   const confirmDeleteHandler = async () => {
     setShowConfirmModal(false);
     try {
-      await sendRequest(
-        `${process.env.REACT_APP_BACKEND_URL}/places/${id}`,
-        "DELETE",
-        null,
-        {
-          Authorization: "Bearer " + auth.token
-        }
-      );
+      await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/places/${id}`, 'DELETE', null, {
+        Authorization: 'Bearer ' + auth.token,
+      });
       onDeletePlace(id);
     } catch (error) {}
   };
@@ -44,7 +100,7 @@ const PlaceItem = ({ place, onDeletePlace }) => {
     try {
       setShowTravelWishButton(false);
       await sendRequest(
-        `${process.env.REACT_APP_BACKEND_URL}/places/${auth.userId}/mybucketlist/${id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/user/bucketlist/${id}`,
         "PATCH",
         null,
         {
@@ -122,8 +178,7 @@ const PlaceItem = ({ place, onDeletePlace }) => {
         }
       >
         <p>
-          Do you want to proceed and delete this place? note that it can't be
-          undone thereafter.
+          Do you want to proceed and delete this place? note that it can't be undone thereafter.
         </p>
       </Modal>
       {users && (
@@ -134,7 +189,40 @@ const PlaceItem = ({ place, onDeletePlace }) => {
               <img src={image.imageUrl} alt={name} />
             </div>
             <div className="place-item__info">
-              <p>{JSON.stringify()}</p>
+<div className='evaluation'>
+              {evaluation && (
+                <div className='like'>
+                  <p className='like-count'>
+                    {evaluation.likes >= 1000
+                      ? evaluation.likes.length / 1000 + "k"
+                      : evaluation.likes.length}
+                  </p>
+                  <i
+                    className='fas fa-thumbs-up fa-2x'
+                    onClick={addLikeAndRemoved}
+                    style={{
+                      color: evaluation.likes.includes(auth.userId) && "green"
+                    }}
+                  ></i>
+                </div>
+              )}
+              {evaluation && (
+                <div className='dislike'>
+                  <p className='dislike-count'>
+                    {evaluation.disLike >= 1000
+                      ? evaluation.disLike.length / 1000 + "k"
+                      : evaluation.disLike.length}
+                  </p>
+                  <i
+                    className='fas fa-thumbs-down fa-2x'
+                    onClick={addDisLikeAndRemoved}
+                    style={{
+                      color: evaluation.disLike.includes(auth.userId) && "red"
+                    }}
+                  ></i>
+                </div>
+              )}
+            </div>              <p>{JSON.stringify()}</p>
               <h2>{title}</h2>
               <h3>{address}</h3>
               <p>{description}</p>

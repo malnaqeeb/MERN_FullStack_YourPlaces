@@ -82,7 +82,8 @@ const Auth = () => {
             'Content-Type': 'application/json',
           },
         );
-        auth.login(res.userId, res.token);
+
+        auth.login(res.userId, res.token, null, res.friendStatus);
       } catch (error) {}
     } else {
       try {
@@ -106,7 +107,7 @@ const Auth = () => {
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
-      <Card className='authentication'>
+      <Card className="authentication">
         {isLoading && <LoadingSpinner asOverlay />}
         <h2>Login Required</h2>
         <hr />
@@ -129,12 +130,12 @@ const Auth = () => {
           )}
           {!isLoginMod && (
             <Input
-              id='name'
-              element='input'
-              type='text'
-              label='Your Name'
+              id="name"
+              element="input"
+              type="text"
+              label="Your Name"
               validators={[VALIDATOR_REQUIRE()]}
-              errorText='Please enter a valid name'
+              errorText="Please enter a valid name"
               onInput={inputHandler}
             />
           )}
@@ -143,25 +144,26 @@ const Auth = () => {
               center
               id={'image'}
               onInput={inputHandler}
-              errorText='Please provide an image'
+              errorText="Please provide an image"
             />
           )}
           <Input
-            id='email'
-            element='input'
-            type='email'
-            label='Email'
+            id="email"
+            element="input"
+            type="email"
+            label="Email"
+            isLoading
             validators={[VALIDATOR_EMAIL()]}
-            errorText='Please enter a valid email address'
+            errorText="Please enter a valid email address"
             onInput={inputHandler}
           />
           <Input
-            id='password'
-            element='input'
-            type='password'
-            label='Password'
+            id="password"
+            element="input"
+            type="password"
+            label="Password"
             validators={[VALIDATOR_MINLENGTH(6)]}
-            errorText='Please enter a valid password, at least 6 characters.'
+            errorText="Please enter a valid password, at least 6 characters."
             onInput={inputHandler}
           />
           <Button type='submit' disabled={!state.isValid}>

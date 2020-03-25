@@ -1,17 +1,16 @@
 const express = require('express');
-const { check } = require('express-validator');
+const {check} = require('express-validator');
 const route = express.Router();
 const fileUpload = require('../middleware/file-upload');
 const checkAuth = require('../middleware/check-auth');
 const placessControllers = require('../controllers/places-controller');
 
 
-route.get("/:pid", placessControllers.getPlaceById);
-route.get("/user/:uid", placessControllers.getPlacesByUserId);
-route.get("/:uid/mybucketlist", placessControllers.getBucketListByUserId);
+route.get('/:pid', placessControllers.getPlaceById);
+route.get('/user/:uid', placessControllers.getPlacesByUserId);
+route.get('/evaluation/:id', placessControllers.placeEvaluation);
 
 route.use(checkAuth);
-route.patch("/:uid/mybucketlist/:pid/", placessControllers.addToBucketList);
 route.post(
   '/',
   fileUpload.single('image'),
@@ -19,12 +18,12 @@ route.post(
     check('title')
       .not()
       .isEmpty(),
-    check('description').isLength({ min: 5 }),
+    check('description').isLength({min: 5}),
     check('address')
       .not()
-      .isEmpty(),
+      .isEmpty()
   ],
-  placessControllers.createPlace,
+  placessControllers.createPlace
 );
 
 route.patch(
@@ -33,13 +32,13 @@ route.patch(
     check('title')
       .not()
       .isEmpty(),
-    check('description').isLength({ min: 5 }),
+    check('description').isLength({min: 5})
   ],
-  placessControllers.updatePlaceById,
+  placessControllers.updatePlaceById
 );
+route.post('/like/:id', placessControllers.likeThePlace);
+route.post('/disLike/:id', placessControllers.disLikeThePlace);
 
-route.patch("/:uid/mybucketlist", placessControllers.visitedPlace)
-route.delete("/:pid", placessControllers.deletePlaceById);
-route.delete("/:uid/mybucketlist/:pid/", placessControllers.deleteFromBucketList)
+route.delete('/:pid', placessControllers.deletePlaceById);
 
 module.exports = route;

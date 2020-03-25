@@ -1,0 +1,29 @@
+.vscode/
+.idea/
+node_modules/
+.test
+
+# dependencies
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+frontend/build
+
+# misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+nodemon.json
+package-lock.json
+yarn.lock
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
