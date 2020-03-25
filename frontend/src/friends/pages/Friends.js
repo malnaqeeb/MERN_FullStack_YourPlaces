@@ -3,17 +3,18 @@ import FriendList from '../FriendList';
 import { AuthContext } from '../../shared/context/auth-context';
 import useHttpClient from '../../shared/hooks/http-hook';
 import ErrorModal from '../../shared/component/UIElements/ErrorModal';
+import FriendRequestList from '../FriendRequestList';
 
 const Friends = () => {
   const auth = useContext(AuthContext);
-  const [receivedFriend, setReceivedFriend] = useState();
-  const [friends, setFriends] = useState();
-
+  const [friends, setFriends] = useState([]);
+  const [friendRequests, setFriendRequests] = useState([]);
+  const [processedRequests, setProcessedRequests] = useState([]);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   useEffect(() => {
-    const getUser = async () => {
+    const getFriends = async () => {
       try {
-        const friendsData = await sendRequest(
+        const userData = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/friends`,
           'GET',
           null,
@@ -21,8 +22,12 @@ const Friends = () => {
             Authorization: 'Bearer ' + auth.token,
           },
         );
-
-        const requestsData = await sendRequest(
+        setFriends(userData.friends);
+      } catch (error) { }
+    };
+    const getFriendRequests = async () => {
+      try {
+        const userData = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/friends/requests`,
           'GET',
           null,
@@ -30,41 +35,38 @@ const Friends = () => {
             Authorization: 'Bearer ' + auth.token,
           },
         );
-        setReceivedFriend(requestsData.friendRequests);
-        setFriends(friendsData.friends);
-      } catch (error) {}
+        setFriendRequests(userData.friendRequests);
+      } catch (error) { }
     };
-    getUser();
-  }, [sendRequest]);
+    getFriends();
+    getFriendRequests();
+  }, [processedRequests,auth.token,sendRequest]);
 
-  const acceptFriendHandler = async id => {
-    await setFriends(prevFriends => {
-      const acceptedFriend = receivedFriend.find(users => users.userId === id);
-      return prevFriends.concat(acceptedFriend);
-    });
-    setReceivedFriend(prevReceivedFriend => {
-      return prevReceivedFriend.filter(users => users.userId !== id);
-    });
-  };
-
-  const cancelFriendHandler = id => {
-    setReceivedFriend(prevReceivedFriend => {
-      return prevReceivedFriend.filter(users => users.userId !== id);
-    });
-  };
+  const processFriendRequest = userId => {
+    setProcessedRequests(prevValue => [...prevValue, userId]);
+  }
 
   return (
     <Fragment>
-      <ErrorModal error={error} onClear={clearError} />
-      {!isLoading && receivedFriend && friends && (
-        <FriendList
-          auth={auth}
-          receivedFriend={receivedFriend}
-          friends={friends}
-          acceptFriendHandler={acceptFriendHandler}
-          cancelFriendHandler={cancelFriendHandler}
-        />
-      )}
+      <Fragment>
+        <ErrorModal error={error} onClear={clearError} />
+        {!isLoading && friends && (
+          <FriendList
+            friends={friends}
+          />
+        )}
+      </Fragment>
+      <Fragment>
+        <ErrorModal error={error} onClear={clearError} />
+        {!isLoading && friendRequests && (
+          <FriendRequestList
+            auth={auth}
+            friendRequests={friendRequests}
+            acceptFriendHandler={processFriendRequest}
+            cancelFriendHandler={processFriendRequest}
+          />
+        )}
+      </Fragment>
     </Fragment>
   );
 };

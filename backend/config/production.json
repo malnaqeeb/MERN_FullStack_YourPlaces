@@ -1,8 +1,8 @@
 {
-  "mongoURI": "",
-  "MAPBOX_API_KEY": "",
-  "JWT_KEY": "",
-  "CLOUD_NAME": "",
-  "CLOUDINARY_API_KEY": "",
-  "CLOUDINARY_API_SECRET": ""
+  "mongoURI": "mongodb+srv://place:347Yt023@shareyourplace-lzxiz.mongodb.net/test?retryWrites=true&w=majority",
+  "MAPBOX_API_KEY": "pk.eyJ1IjoieWxjIiwiYSI6ImNrN3hyYWZyNjAwOGQzZnFrd254eW13NXYifQ.ymf1_69t2HrNwyWic3DSdw",
+  "JWT_KEY": "supersecret_dont_share",
+  "CLOUD_NAME": "dqxb7twea",
+  "CLOUDINARY_API_KEY": "947426896171957",
+  "CLOUDINARY_API_SECRET": "TEqb_0yTAXJ4VtJG5cBF_PGockg"
 }

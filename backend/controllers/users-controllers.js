@@ -4,8 +4,43 @@ const HttpError = require('../model/http-error');
 const User = require('../model/user');
 const config = require('config');
 const jwtKey = config.get('JWT_KEY');
-var cloudinary = require('../uploads/cloudinary');
+const cloudinary = require('../uploads/cloudinary');
 
+const getUserFriend = async (req, res, next) => {
+   const user = await User.findById(req.userData.userId)
+    .populate({ path: 'friends', model: User })
+    .populate({ path: 'friendRequests.user', model: User });
+
+  res.status(201).json({
+    userId: req.userData.userId,
+    email: user.email,
+    image: user.image,
+    name: user.name,
+    friends: !user.friends
+      ? []
+      : user.friends
+        .toObject()
+        .map(friend => ({
+          id: friend._id,
+          name: friend.name,
+          email: friend.email,
+          image: friend.image
+        })),
+    friendRequests: !user.friendRequests
+      ? []
+      : user.friendRequests
+        .toObject()
+        .map(request => ({
+          ...request,
+          user: {
+            id: request.user._id,
+            email: request.user.email,
+            image: request.user.image,
+            name: request.user.name,
+          }
+        }))
+  });
+};
 const getUsers = async (req, res, next) => {
   let users;
 
@@ -42,11 +77,7 @@ const signup = async (req, res, next) => {
 
     await createdUser.save();
   } catch (error) {
-
-    return next(
-      new HttpError(`${error}`, 500)
-    );
-
+    return next(new HttpError('Signin up  failed, please try again later.', 500));
   }
   let token;
   try {
@@ -61,6 +92,7 @@ const signup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
+
   let existingUser;
   try {
     existingUser = await User.findByCredentials(email, password);
@@ -99,49 +131,16 @@ const getUser = async (req, res, next) => {
   try {
     user = await User.findById(req.params.userId, "name image");
   } catch (error) {
-    return next(
-      new HttpError("Fetching user failed, please try again later.", 500)
-    );
+    return next(new HttpError('Loggin in failed, please try agein later', 500));
   }
-  res
-    .status(200)
-    .json({ user: user.toObject({ getters: true })});
+  res.status(201).json({
+    userId: existingUser.id,
+    email: existingUser.email,
+    token,
+  });
 };
 
-const updateUser = async (req, res, next) => {
-  let user;
-  let url;
 
-  if(req.params.userId !== req.userData.userId){
-    return next(
-      new HttpError("Not authorized.", 401)
-    );
-  }
 
-  if(req.file){
-    try{
-      const result = await cloudinary.uploader.upload(req.file.path);
-      url = result.url;
-    } catch {
-      return next(
-        new HttpError("Updating user failed, please try again later.", 500)
-      );
-    }
-  }
+module.exports = { getUsers, signup, login, getUser, updateUser, signJwt, getUserFriend };
 
-  try {
-    user = await User.findById(req.params.userId);
-    user.name = req.body.name || user.name;
-    user.image = url || user.image;
-    await user.save();
-  } catch {
-    return next(
-      new HttpError("Updating user failed, please try again later.", 500)
-    );
-  }
-  res
-    .status(200)
-    .json({ user: {name: user.name, image: user.image}});
-};
-
-module.exports = { getUsers, signup, login, getUser, updateUser, signJwt  };

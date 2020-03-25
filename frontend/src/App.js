@@ -67,7 +67,6 @@ const App = () => {
           <Social />
         </Route>
         <Redirect to="/auth" />
-
       </Switch>
     );
   }

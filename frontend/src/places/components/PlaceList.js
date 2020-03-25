@@ -8,7 +8,7 @@ const PlaceList = ({ items, onDeletePlace }) => {
   
   if (items.length === 0) {
     return (
-      <div className='place-list center'>
+      <div className="place-list center">
         <Card>
           <h2>No places found maybe create one ?</h2>
           <Button to='/places/new'>Share place</Button>
@@ -17,7 +17,7 @@ const PlaceList = ({ items, onDeletePlace }) => {
     );
   }
   return (
-    <ul className='place-list'>
+    <ul className="place-list">
       {items.map(place => (
         <PlaceItem key={place.id} place={place} onDeletePlace={onDeletePlace}/>
       ))}

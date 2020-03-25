@@ -64,8 +64,9 @@ route.get("/:userId", usersControllers.getUser);
 route.use(checkAuth);
 
 route.patch("/:userId",
-  fileUpload.single("image"), 
+  fileUpload.single("image"),
   usersControllers.updateUser);
 
-module.exports = route;
+route.get('/me', usersControllers.getUserFriend);
 
+module.exports = route;

@@ -4,10 +4,12 @@ const fs = require('fs');
 const path = require('path');
 const placesRoute = require('./routes/places-route');
 const usersRoute = require('./routes/users-route');
+const friendsRoutes = require("./routes/friend-route");
 const HttpError = require('./model/http-error');
 const connectDB = require('./config/db');
 const passport = require('passport');
 const passportSetup = require('./middleware/passport-setup');
+
 const app = express();
 const port = process.env.PORT || 5000;
 // connect the database
@@ -31,6 +33,7 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use('/api/places', placesRoute);
 app.use('/api/users', usersRoute);
+app.use("/api/friends", friendsRoutes);
 
 app.use((req, res, next) => {
   res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
@@ -42,13 +45,11 @@ app.use((req, res, next) => {
   throw error;
 });
 
-// Custom error handling /
+// error handling middleware
+// In case of 4 arguments are existed, then express will recognize it as error handling
+// This code will be executed every time getting error
 app.use((error, req, res, next) => {
-  // if (req.file) {
-  //   fs.unlink(req.file.path, error => {
-  //     console.log(error);
-  //   });
-  // }
+
   if (res.headerSent) {
     return next(error);
   }

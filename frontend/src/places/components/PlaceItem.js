@@ -9,6 +9,7 @@ import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
 import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 import { AuthContext } from "../../shared/context/auth-context";
 import useHttpClient from "../../shared/hooks/http-hook";
+
 const PlaceItem = ({ place, onDeletePlace }) => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const auth = useContext(AuthContext);
@@ -89,14 +90,9 @@ const PlaceItem = ({ place, onDeletePlace }) => {
   const confirmDeleteHandler = async () => {
     setShowConfirmModal(false);
     try {
-      await sendRequest(
-        `${process.env.REACT_APP_BACKEND_URL}/places/${id}`,
-        "DELETE",
-        null,
-        {
-          Authorization: "Bearer " + auth.token
-        }
-      );
+      await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/places/${id}`, 'DELETE', null, {
+        Authorization: 'Bearer ' + auth.token,
+      });
       onDeletePlace(id);
     } catch (error) {}
   };
@@ -182,8 +178,7 @@ const PlaceItem = ({ place, onDeletePlace }) => {
         }
       >
         <p>
-          Do you want to proceed and delete this place? note that it can't be
-          undone thereafter.
+          Do you want to proceed and delete this place? note that it can't be undone thereafter.
         </p>
       </Modal>
       {users && (
