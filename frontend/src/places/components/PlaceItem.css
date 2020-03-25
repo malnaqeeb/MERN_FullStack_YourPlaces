@@ -31,6 +31,8 @@
 }
 
 .place-item__actions {
+  position: relative;
+  z-index: 11;
   padding: 1rem;
   text-align: center;
   border-top: 1px solid #ccc;
@@ -59,6 +61,12 @@
   margin: 10px 5px 0;
   display: flex;
 }
+
+.evaluation i:hover{
+  cursor: pointer;
+  opacity: 0.75;
+}
+
 .map-container {
   height: 15rem;
   width: 100%;

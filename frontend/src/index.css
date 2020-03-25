@@ -112,3 +112,8 @@ body {
     opacity: 1;
   }
 }
+
+.forget_password{
+  width: 30%;
+  margin: auto;
+}
