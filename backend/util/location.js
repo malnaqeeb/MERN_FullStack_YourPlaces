@@ -1,5 +1,5 @@
-const axios = require("axios");
-const HttpError = require("../model/http-error");
+const axios = require('axios');
+const HttpError = require('../model/http-error');
 const MAPBOX_API_KEY = process.env.MAPBOX_API_KEY;
 
 async function getCoordsForAddress(address) {
@@ -11,7 +11,7 @@ async function getCoordsForAddress(address) {
   const data = res.data;
   if (!data || data.features.length === 0) {
     const error = new HttpError(
-      "Could not find location for the spesified address."
+      'Could not find location for the spesified address.'
     );
     throw error;
   }
@@ -19,4 +19,5 @@ async function getCoordsForAddress(address) {
   const coordinates = data.features[1].geometry.coordinates;
   return coordinates;
 }
+
 module.exports = getCoordsForAddress;

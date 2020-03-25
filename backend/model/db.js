@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const db = process.env.mongoURI;
 
@@ -10,7 +10,7 @@ const connectDB = async () => {
       useFindAndModify: false,
       useUnifiedTopology: true
     });
-    console.log("mongoDB Connected");
+    console.log('mongoDB Connected');
   } catch (error) {
     console.error(error.message);
     process.exit(1);

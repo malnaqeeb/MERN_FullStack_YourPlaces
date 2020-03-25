@@ -25,7 +25,7 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   );
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
   next();
@@ -42,7 +42,7 @@ app.use((req, res, next) => {
 
 // Here I check if the user use a wrong path
 app.use((req, res, next) => {
-  return next(new HttpError('Could not find this route.', 404))
+  return next(new HttpError('Could not find this route.', 404));
 });
 
 // error handling middleware
@@ -51,7 +51,7 @@ app.use((error, req, res, next) => {
     return next(error);
   }
   res.status(error.code || 500);
-  res.json({ message: error.message || 'An unKnown error occurred!' });
+  res.json({message: error.message || 'An unKnown error occurred!'});
 });
 
 // Connect the express server
