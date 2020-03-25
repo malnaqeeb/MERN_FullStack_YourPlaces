@@ -58,7 +58,7 @@ const createPlace = async (req, res, next) => {
 
   const {url, public_id} = req.file;
   const imageSrc = {
-    imageUrl: file.url,
+    imageUrl: url,
     id: public_id
   };
   const createdPlace = new Place({
