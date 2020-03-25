@@ -1,11 +1,11 @@
 const express = require('express');
 const passport = require('passport');
-const { check } = require('express-validator');
+const {check} = require('express-validator');
 const route = express.Router();
 
-const checkAuth = require("../middleware/check-auth");
-const usersControllers = require("../controllers/users-controllers");
-const fileUpload = require("../middleware/file-upload");
+const checkAuth = require('../middleware/check-auth');
+const usersControllers = require('../controllers/users-controllers');
+const fileUpload = require('../middleware/file-upload');
 
 route.get('/', usersControllers.getUsers);
 
@@ -19,9 +19,9 @@ route.post(
     check('email')
       .normalizeEmail()
       .isEmail(),
-    check('password').isLength({ min: 6 }),
+    check('password').isLength({min: 6})
   ],
-  usersControllers.signup,
+  usersControllers.signup
 );
 
 route.post('/login', usersControllers.login);
@@ -33,12 +33,12 @@ route.get(
     session: false,
     scope: ['profile', 'email'],
     accessType: 'offline',
-    approvalPrompt: 'force',
-  }),
+    approvalPrompt: 'force'
+  })
 );
 
 // callback route for google to redirect to
-route.get('/google/redirect', passport.authenticate('google', { session: false }), (req, res) => {
+route.get('/google/redirect', passport.authenticate('google', {session: false}), (req, res) => {
   usersControllers.signJwt(req, res);
 });
 
@@ -47,25 +47,26 @@ route.get(
   '/facebook',
   passport.authenticate('facebook', {
     session: false,
-    scope: ['email'],
-  }),
+    scope: ['email']
+  })
 );
 // Callback route to redirect to
 route.get(
   '/facebook/redirect',
-  passport.authenticate('facebook', { session: false }),
+  passport.authenticate('facebook', {session: false}),
   (req, res) => {
     usersControllers.signJwt(req, res);
-  },
+  }
 );
 
-route.get("/:userId", usersControllers.getUser);
+route.get('/:userId', usersControllers.getUser);
 
 route.use(checkAuth);
 
-route.patch("/:userId",
-  fileUpload.single("image"), 
+route.patch('/:userId',
+  fileUpload.single('image'),
   usersControllers.updateUser);
 
-module.exports = route;
+route.get('/me', usersControllers.getUserFriend);
 
+module.exports = route;

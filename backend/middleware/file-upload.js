@@ -1,23 +1,16 @@
-const multer = require("multer");
+const multer = require('multer');
+const cloudinary =  require('../uploads/cloudinary');
+const cloudinaryStorage = require('multer-storage-cloudinary');
 
-const MIME_TYPE_MAP = {
-  "image/png": "png",
-  "image/jpeg": "jpeg",
-  "image/jpg": "jpg"
-};
-const fileUpload = multer({
-  limits: 50000,
-  storage: multer.diskStorage({
-    filename: (req, file, cb) => {
-      const ext = MIME_TYPE_MAP[file.mimetype];
-      cb(null, ext);
+const storage = cloudinaryStorage({
+    cloudinary: cloudinary,
+    folder: 'images',
+    allowedFormats: ['jpg', 'jpeg', 'png'],
+    filename: function (req, file, cb) {
+      cb(undefined, file.filename);
     }
-  }),
-  fileFilter: (req, file, cb) => {
-    const isValid = !!MIME_TYPE_MAP[file.mimetype];
-    let error = isValid ? null : new Error("Invalid mine type!");
-    cb(error, isValid);
-  }
 });
+
+const fileUpload = multer({storage: storage});
 
 module.exports = fileUpload;

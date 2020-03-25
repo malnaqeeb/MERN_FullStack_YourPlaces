@@ -4,53 +4,66 @@ const HttpError = require('../model/http-error');
 const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
 
+const {ObjectId, Date, String, Boolean} = mongoose.Schema.Types;
+
 const userSchema = new Schema({
   name: {
     type: String,
     required: true,
-    trim: true,
+    trim: true
   },
   email: {
     type: String,
     required: true,
     trim: true,
-    unique: true,
+    unique: true
   },
   password: {
     type: String,
     required: true,
     trim: true,
-    minlength: 6,
+    minlength: 6
   },
   image: {
-    type: String,
+    type: String
   },
   social: {
-    google: { type: String, default: null },
-    facebook: { type: String, default: null },
+    google: {type: String, default: null},
+    facebook: {type: String, default: null}
   },
   places: [
     {
       type: mongoose.Types.ObjectId,
       required: true,
 
-      ref: "Place"
+      ref: 'Place'
+    }
+  ],
+  friends: [
+    {
+      type: ObjectId,
+      ref: 'User'
+    }
+  ],
+  friendRequests: [
+    {
+      user: {type: ObjectId, ref: 'User'},
+      date: Date,
+      isSent: Boolean
     }
   ],
   bucketList: [
     {
-      id:{ type: mongoose.Types.ObjectId, required: true, ref: "Place" },
-      _id:false,
-      createdBy: {type:String},
-      isVisited:  {type:Boolean}
-
+      id: {type: mongoose.Types.ObjectId, required: true, ref: 'Place'},
+      _id: false,
+      createdBy: {type: String},
+      isVisited: {type: Boolean}
     }
   ]
-
 });
 // I created my own method to handle the login process
 userSchema.statics.findByCredentials = async (email, password) => {
-  const user = await User.findOne({ email });
+  const user = await User.findOne({email});
   if (!user) {
     throw new HttpError('Invalid credentials, could not log you in.', 401);
   }
@@ -63,7 +76,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
 };
 
 // Hash the plain text password before saveing
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   const user = this;
   if (user.isModified('password')) {
     user.password = await bcrypt.hash(user.password, 8);
