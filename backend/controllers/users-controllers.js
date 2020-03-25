@@ -121,23 +121,18 @@ const signJwt = async (req, res, next) => {
   } catch (error) {
     return next(new HttpError('Logging in failed, please try again later', 500));
   }
-  res.status(201).redirect(`http://localhost:3000/social?userId=${req.user._id}&token=${token}`);
+  res.status(201).redirect(`${process.env.AUTH_REDIRECT_PATH}/social?userId=${req.user._id}&token=${token}`);
 };
 
 
 const getUser = async (req, res, next) => {
   let user;
-
   try {
     user = await User.findById(req.params.userId, "name image");
   } catch (error) {
     return next(new HttpError('Loggin in failed, please try agein later', 500));
   }
-  res.status(201).json({
-    userId: existingUser.id,
-    email: existingUser.email,
-    token,
-  });
+  res.status(201).json({user});
 };
 
 const updateUser = async (req, res, next) => {
