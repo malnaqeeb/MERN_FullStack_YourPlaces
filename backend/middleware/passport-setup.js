@@ -48,8 +48,8 @@ const findOrCreateUser = async (accessToken, refreshToken, profile, done, accoun
 passport.use(
   new GoogleStrategy(
     {
-      clientID: process.env.AUTH_GOOGLE.CLIENT_ID,
-      clientSecret: process.env.AUTH_GOOGLE.SECRET,
+      clientID: process.env.AUTH_GOOGLE_CLIENT_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
       callbackURL: '/api/users/google/redirect',
     },
     (accessToken, refreshToken, profile, done) =>
@@ -61,8 +61,8 @@ passport.use(
 passport.use(
   new FacebookStrategy(
     {
-      clientID: process.env.AUTH_FACEBOOK.CLIENT_ID,
-      clientSecret: process.env.AUTH_FACEBOOK.SECRET,
+      clientID: process.env.AUTH_FACEBOOK_CLIENT_ID,
+      clientSecret: process.env.AUTH_FACEBOOK_SECRET,
       callbackURL: '/api/users/facebook/redirect',
       profileFields: ['id', 'displayName', 'photos', 'email'],
     },

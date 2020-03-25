@@ -6,13 +6,9 @@
     "CLOUD_NAME": "",
     "CLOUDINARY_API_KEY": "",
     "CLOUDINARY_API_SECRET": "",
-    "AUTH_GOOGLE": {
-      "CLIENT_ID": "",
-      "SECRET": ""
-    },
-    "AUTH_FACEBOOK": {
-      "CLIENT_ID": "",
-      "SECRET": ""
-    }
+    "AUTH_GOOGLE_CLIENT_ID": "",
+    "AUTH_GOOGLE_SECRET": "",
+    "AUTH_FACEBOOK_CLIENT_ID": "",
+    "AUTH_FACEBOOK_SECRET": ""
   }
 }
