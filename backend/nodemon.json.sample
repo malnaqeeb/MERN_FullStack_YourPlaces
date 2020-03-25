@@ -1,15 +1,17 @@
 {
   "env":{
-    "mongoURI": "",
-    "MAPBOX_API_KEY": "",
-    "JWT_KEY": "",
-    "CLOUD_NAME": "",
-    "CLOUDINARY_API_KEY": "",
-    "CLOUDINARY_API_SECRET": "",
-    "AUTH_GOOGLE_CLIENT_ID": "",
-    "AUTH_GOOGLE_SECRET": "",
-    "AUTH_FACEBOOK_CLIENT_ID": "",
-    "AUTH_FACEBOOK_SECRET": "",
-    "AUTH_REDIRECT_PATH": ""
+    "mongoURI": "mongodb+srv://seref:kLL10yvBSakyMGrG@cluster0-kpmr1.mongodb.net/class24?retryWrites=true&w=majority",
+    "MAPBOX_API_KEY": "pk.eyJ1Ijoic2VyYWZldHRpbjA3IiwiYSI6ImNrODFtMHlieDBieW4zbm13bTF4azZnbWgifQ.ta34hbI_aqFKzaAeKPr82w",
+    "JWT_KEY": "supersecret_dont_share",
+    "CLOUD_NAME": "darnmrm8t",
+    "CLOUDINARY_API_KEY": "192782136282441",
+    "CLOUDINARY_API_SECRET": "iSIKgXHEH2yg6pbv0LAI20FZyQI",
+    "AUTH_GOOGLE_CLIENT_ID": "176890215670-8g4ni0l3n28h6uge19bgefl8jaf8670r.apps.googleusercontent.com",
+    "AUTH_GOOGLE_SECRET": "Vk1wx2qZ2pK6wbL6IEdatO7p",
+    "AUTH_FACEBOOK_CLIENT_ID": "197518921692541",
+    "AUTH_FACEBOOK_SECRET": "59c6380830aeb907c0a684cc87184595",
+    "AUTH_REDIRECT_PATH": "/"
   }
 }
+
+ 
