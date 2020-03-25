@@ -1,9 +1,10 @@
-const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
-const HttpError = require('../model/http-error');
+const { validationResult } = require('express-validator');
+
 const User = require('../model/user');
+const HttpError = require('../model/http-error');
+
 const JWT_KEY = process.env.JWT_KEY;
-const cloudinary = require('../uploads/cloudinary');
 
 const getUserFriend = async (req, res, next) => {
    const user = await User.findById(req.userData.userId)
@@ -56,20 +57,24 @@ const signup = async (req, res, next) => {
   const error = validationResult(req);
 
   if (!error.isEmpty())
+  {
     return next(new Error('Invalid input passed, please check your data.', 422));
+  }
+    
   const { name, email, password } = req.body;
+
   let createdUser;
   try {
     const existingUser = await User.findOne({ email: email });
 
-    if (existingUser) return next(new HttpError('User exists already, please login instead.', 422));
-    // upload the image first to the cloudinary than I saved the image url on mongodb
-    const result = await cloudinary.uploader.upload(req.file.path);
+    if (existingUser){
+      return next(new HttpError('User exists already, please login instead.', 422));
+    }
 
     createdUser = new User({
       name,
       email,
-      image: result.url,
+      image: req.file.url,
       password,
       social: {},
       places: [],
@@ -136,7 +141,6 @@ const getUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   let user;
-  let url;
 
   if(req.params.userId !== req.userData.userId){
     return next(
@@ -144,21 +148,10 @@ const updateUser = async (req, res, next) => {
     );
   }
 
-  if(req.file){
-    try{
-      const result = await cloudinary.uploader.upload(req.file.path);
-      url = result.url;
-    } catch {
-      return next(
-        new HttpError("Updating user failed, please try again later.", 500)
-      );
-    }
-  }
-
   try {
     user = await User.findById(req.params.userId);
     user.name = req.body.name || user.name;
-    user.image = url || user.image;
+    user.image = req.file.url || user.image;
     await user.save();
   } catch {
     return next(

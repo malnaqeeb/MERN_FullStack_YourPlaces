@@ -7,7 +7,6 @@ import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
 import { AuthContext } from "../../shared/context/auth-context";
 import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 
-let herokuLink = process.env.PUBLIC_URL;
 const BucketList = () => {
   const [placesLoading, setPlacesLoading] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -93,14 +92,14 @@ const BucketList = () => {
           <div className="share-button">
             <a
               href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                `${herokuLink}/${userId}/bucketlist`
+                `${process.env.REACT_APP_PUBLIC_URL}/${userId}/bucketlist`
               )}&text=My%2C+Travel%2C+Bucket%2C+List.&hashtags=travelling,wanderlust,yourplacesapp`}
             >
               <i className="fab fa-twitter-square"></i>
             </a>
             <a
               href={`https://www.facebook.com/sharer.php?u=${encodeURIComponent(
-                `${herokuLink}/${userId}/bucketlist`
+                `${process.env.REACT_APP_PUBLIC_URL}/${userId}/bucketlist`
               )}`}
             >
               <i className="fab fa-facebook-square"></i>
