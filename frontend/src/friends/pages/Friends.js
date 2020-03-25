@@ -15,7 +15,7 @@ const Friends = () => {
     const getFriends = async () => {
       try {
         const userData = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/friends`,
+          `${process.env.REACT_APP_BACKEND_URL}/user/friends`,
           'GET',
           null,
           {
@@ -28,7 +28,7 @@ const Friends = () => {
     const getFriendRequests = async () => {
       try {
         const userData = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/friends/requests`,
+          `${process.env.REACT_APP_BACKEND_URL}/user/friends/requests`,
           'GET',
           null,
           {
@@ -48,15 +48,12 @@ const Friends = () => {
 
   return (
     <Fragment>
-      <Fragment>
         <ErrorModal error={error} onClear={clearError} />
         {!isLoading && friends && (
           <FriendList
             friends={friends}
           />
         )}
-      </Fragment>
-      <Fragment>
         <ErrorModal error={error} onClear={clearError} />
         {!isLoading && friendRequests && (
           <FriendRequestList
@@ -66,7 +63,6 @@ const Friends = () => {
             cancelFriendHandler={processFriendRequest}
           />
         )}
-      </Fragment>
     </Fragment>
   );
 };

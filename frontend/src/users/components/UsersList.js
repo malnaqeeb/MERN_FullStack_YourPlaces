@@ -18,21 +18,9 @@ const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
   }
   return (
     <React.Fragment>
-      {items.filter(authUser => authUser._id === auth.userId).map(user => (
-        <div className="user-item">
-           <div className="user-item__image">
-              <Avatar image={user.image} alt={user.name} />
-            </div>
-            <div className="user-item__info">
-              <h2>{user.name}</h2>
-            </div>
-      
-        </div>
-      ))}
       <ul className="users-list">
-        {items
-          .filter(notAuth => notAuth._id !== auth.userId)
-          .map(user => (
+        {
+          items.map(user => (
             <UserItem
               user={user}
               auth={auth}
@@ -40,7 +28,8 @@ const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
               sendFriendRequestHandler={sendFriendRequestHandler}
               key={user.id}
             />
-          ))}
+          ))
+        }
       </ul>
     </React.Fragment>
   );

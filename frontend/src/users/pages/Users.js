@@ -15,23 +15,20 @@ const Users = () => {
   useEffect(() => {
     const getUsers = async () => {
       try {
-        if (!auth.token) {
-          const data = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/users`);
-          setUsers(data.users);
-        } else {
-          const data = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/users`);
-
-          const userData = await sendRequest(
-            `${process.env.REACT_APP_BACKEND_URL}/users/me`,
+        const data = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/users`);
+        let userData;
+        if (auth.token) {
+          userData = await sendRequest(
+            `${process.env.REACT_APP_BACKEND_URL}/user/friends`,
             'GET',
             null,
             {
               Authorization: 'Bearer ' + auth.token,
             },
           );
-          setUser(userData);
-          setUsers(data.users);
         }
+        setUser(userData);
+        setUsers(data.users);
       } catch (error) { console.error(error) }
     };
     getUsers();

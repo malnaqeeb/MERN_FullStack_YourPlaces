@@ -11,14 +11,14 @@ import { useAuth } from "./shared/hooks/auth-hook";
 import LoadingSpinner from "./shared/component/UIElements/LoadingSpinner";
 import Social from "./users/pages/Social";
 
-const Friends = React.lazy(() => import('./friends/pages/Friends'));
-const BucketList = React.lazy(() => import("./places/components/BucketList"));
+const Auth = React.lazy(() => import("./users/pages/Auth"));
+const User = React.lazy(() => import("./users/pages/User"));
 const Users = React.lazy(() => import("./users/pages/Users"));
+const Friends = React.lazy(() => import('./friends/pages/Friends'));
 const NewPlace = React.lazy(() => import("./places/pages/NewPlace"));
 const UserPlaces = React.lazy(() => import("./places/pages/UserPlaces"));
-const User = React.lazy(() => import("./users/pages/User"));
 const UpdatePlace = React.lazy(() => import("./places/pages/UpdatePlace"));
-const Auth = React.lazy(() => import("./users/pages/Auth"));
+const BucketList = React.lazy(() => import("./places/components/BucketList"));
 
 const App = () => {
   const { token, login, logout, userId } = useAuth();
@@ -30,20 +30,20 @@ const App = () => {
         <Route path="/" exact>
           <Users />
         </Route>
-        <Route path="/friends" exact>
-          <Friends />
-        </Route>
         <Route path="/:userId/places" exact>
           <UserPlaces />
-        </Route>
-        <Route path="/:userId/mybucketlist">
-          <BucketList />
         </Route>
         <Route path="/places/new" exact>
           <NewPlace />
         </Route>
         <Route path="/places/:placeId/">
           <UpdatePlace />
+        </Route>
+        <Route path="/:userId/friends" exact>
+          <Friends />
+        </Route>
+        <Route path="/:userId/bucketlist">
+          <BucketList />
         </Route>
         <Route path="/:userId/profile">
           <User />
