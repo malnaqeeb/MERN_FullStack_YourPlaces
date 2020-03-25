@@ -1,4 +1,3 @@
-const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const passport = require('passport');
@@ -57,5 +56,5 @@ app.use((error, req, res, next) => {
 
 // Connect the express server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`Server running on port ${PORT}`);
 });
