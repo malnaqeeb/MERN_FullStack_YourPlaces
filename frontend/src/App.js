@@ -30,20 +30,20 @@ const App = () => {
         <Route path="/" exact>
           <Users />
         </Route>
-        <Route path="/friends" exact>
-          <Friends />
-        </Route>
         <Route path="/:userId/places" exact>
           <UserPlaces />
-        </Route>
-        <Route path="/:userId/mybucketlist">
-          <BucketList />
         </Route>
         <Route path="/places/new" exact>
           <NewPlace />
         </Route>
         <Route path="/places/:placeId/">
           <UpdatePlace />
+        </Route>
+        <Route path="/:userId/friends" exact>
+          <Friends />
+        </Route>
+        <Route path="/:userId/bucketlist">
+          <BucketList />
         </Route>
         <Route path="/:userId/profile">
           <User />

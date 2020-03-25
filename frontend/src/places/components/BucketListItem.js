@@ -27,7 +27,7 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
   const deleteFromBucketList = async () => {
     try {
       await sendRequest(
-        `${process.env.REACT_APP_BACKEND_URL}/places/${auth.userId}/mybucketlist/${bucket.id._id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/user/bucketlist/${bucket.id._id}`,
         "DELETE",
         null,
         {
@@ -41,12 +41,9 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
   const visitedPlace = async () => {
     try {
       await sendRequest(
-        `${process.env.REACT_APP_BACKEND_URL}/places/${auth.userId}/mybucketlist`,
-        "PATCH",
-        JSON.stringify({
-          isVisited: !visited,
-          placeId: bucket.id._id
-        }),
+        `${process.env.REACT_APP_BACKEND_URL}/user/bucketlist/${bucket.id._id}`,
+        "PUT",
+        null,
         {
           "Content-Type": "application/json",
           Authorization: "Bearer " + auth.token

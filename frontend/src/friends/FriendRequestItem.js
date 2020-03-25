@@ -16,7 +16,7 @@ const ReceivedFriendRequestItem = ({
   const acceptFriendRequest = async userID => {
     try {
       await sendRequest(
-        `${process.env.REACT_APP_BACKEND_URL}/friends/requests/${requestId}/accept`,
+        `${process.env.REACT_APP_BACKEND_URL}/user/friends/requests/${requestId}/accept`,
         'GET',
         null,
         {
@@ -29,7 +29,7 @@ const ReceivedFriendRequestItem = ({
   const cancelFriendRequest = async userID => {
     try {
       await sendRequest(
-        `${process.env.REACT_APP_BACKEND_URL}/friends/requests/${requestId}/cancel`,
+        `${process.env.REACT_APP_BACKEND_URL}/user/friends/requests/${requestId}/cancel`,
         'GET',
         null,
         {

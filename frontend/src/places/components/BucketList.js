@@ -24,7 +24,7 @@ const BucketList = () => {
     const getBucketList = async () => {
       try {
         const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/places/${userId}/mybucketlist`
+          `${process.env.REACT_APP_BACKEND_URL}/user/bucketlist?q=${userId}`
         );
         setPlaces(data.userWithBucketList);
         setPlacesLoading(false);
@@ -93,14 +93,14 @@ const BucketList = () => {
           <div className="share-button">
             <a
               href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                `${herokuLink}/${userId}/mybucketlist`
+                `${herokuLink}/${userId}/bucketlist`
               )}&text=My%2C+Travel%2C+Bucket%2C+List.&hashtags=travelling,wanderlust,yourplacesapp`}
             >
               <i className="fab fa-twitter-square"></i>
             </a>
             <a
               href={`https://www.facebook.com/sharer.php?u=${encodeURIComponent(
-                `${herokuLink}/${userId}/mybucketlist`
+                `${herokuLink}/${userId}/bucketlist`
               )}`}
             >
               <i className="fab fa-facebook-square"></i>

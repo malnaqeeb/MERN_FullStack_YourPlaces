@@ -20,7 +20,7 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
     const sendFriendRequest = async (id) => {
       try {
         await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/friends/`,
+          `${process.env.REACT_APP_BACKEND_URL}/user/friends`,
           'POST',
           JSON.stringify({
             friendId: id

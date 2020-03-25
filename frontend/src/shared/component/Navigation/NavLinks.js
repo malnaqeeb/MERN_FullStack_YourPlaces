@@ -14,11 +14,6 @@ const NavLinks = props => {
       </li>
       {auth.isLoggedIn && (
         <li>
-          <NavLink to="/friends">MY FRIENDS</NavLink>
-        </li>
-      )}
-      {auth.isLoggedIn && (
-        <li>
           <NavLink to={`/${auth.userId}/places`}>MY PLACES</NavLink>
         </li>
       )}
@@ -26,18 +21,20 @@ const NavLinks = props => {
         <li>
           <NavLink to="/places/new">ADD PLACES</NavLink>
         </li>
-      )}{auth.isLoggedIn && (
+      )}
+      {auth.isLoggedIn && (
         <li>
-<<<<<<< HEAD
-          <NavLink to="/auth">AUTHENTICATE</NavLink>
-=======
-          <NavLink to={`/${auth.userId}/mybucketlist`}>MY BUCKET LIST</NavLink>
+          <NavLink to={`/${auth.userId}/friends`}>MY FRIENDS</NavLink>
+        </li>
+      )}
+      {auth.isLoggedIn && (
+        <li>
+          <NavLink to={`/${auth.userId}/bucketlist`}>MY BUCKET LIST</NavLink>
         </li>
       )}
       {auth.isLoggedIn && (
         <li>
           <NavLink to={`/${auth.userId}/profile`}>MY</NavLink>
->>>>>>> development
         </li>
       )}
       {!auth.isLoggedIn && (
