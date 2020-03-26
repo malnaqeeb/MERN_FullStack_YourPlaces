@@ -182,7 +182,7 @@ const PlaceItem = ({ place, onDeletePlace }) => {
         </p>
       </Modal>
       {users && (
-        <li className="place-item">
+        <li className="place-item fade-in">
           <Card className="place-item__content">
             <div className="place-item__image">
               <img src={image.imageUrl} alt={name} />
