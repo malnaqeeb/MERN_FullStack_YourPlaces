@@ -137,7 +137,7 @@ const UserProfile = props => {
   };
 
   return (
-    <div className="profile">
+    <div className="profile fade-in">
       {isLoading && <LoadingSpinner />}
       <ErrorModal error={error} onClear={clearError} />
       {!isLoading && (

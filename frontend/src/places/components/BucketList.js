@@ -41,11 +41,6 @@ const BucketList = () => {
     getUser();
   }, [sendRequest, userId]);
 
-  const goHome = () => {
-    clearError();
-    history.push("/");
-  };
-
   if (error) {
     return <ErrorModal error={error} onClear={clearError} header={`Hey!`} />;
   }
@@ -80,7 +75,7 @@ const BucketList = () => {
           </div>
         )}
         <React.Fragment>
-          <h2 className="center yellow-text">
+          <h2 className="center yellow-text fade-in">
             Bucket List of{" "}
             <span className="pink-text"> {user && user.user.name}</span>{" "}
           </h2>
