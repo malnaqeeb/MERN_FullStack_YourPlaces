@@ -17,7 +17,7 @@ const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
   }
   return (
     <React.Fragment>
-      <ul className="users-list fade-in">
+      <ul className="users-list fade-in no-select">
         {
           items.map(user => (
             <UserItem

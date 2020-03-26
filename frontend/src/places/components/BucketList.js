@@ -54,7 +54,7 @@ const BucketList = () => {
     return (
       <div>
         {userId === auth.userId && (
-          <div className="share-box">
+          <div className="share-box  no-select">
             <div className="share-button">
               <a
                 href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
@@ -75,7 +75,7 @@ const BucketList = () => {
           </div>
         )}
         <React.Fragment>
-          <h2 className="center yellow-text fade-in">
+          <h2 className="center yellow-text fade-in no-select">
             Bucket List of{" "}
             <span className="pink-text"> {user && user.user.name}</span>{" "}
           </h2>

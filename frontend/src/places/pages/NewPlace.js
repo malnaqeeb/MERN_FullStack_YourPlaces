@@ -57,7 +57,7 @@ const NewPlace = () => {
       <div className="fade-in">
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
-      <form className='place-form' onSubmit={placeSubmitHandler}>
+      <form className='place-form no-select' onSubmit={placeSubmitHandler}>
         <Input
           id='title'
           element='input'
