@@ -47,6 +47,12 @@ const placeSchema = new Schema({
   likes: { type: Array },
   disLike: { type: Array },
   created_at: { type: Date, required: true, default: Date.now },
+  rate: { type: Number, required: true, default: 0 },
+});
+
+placeSchema.pre('validate', function(next) {
+  this.rate = this.likes.length - this.disLike.length;
+  next();
 });
 
 module.exports = mongoose.model('Place', placeSchema);

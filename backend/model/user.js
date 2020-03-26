@@ -77,7 +77,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
   return user;
 };
 
-userSchema.pre('validate', function(next) {
+userSchema.pre('save', function(next) {
   this.placesCount = this.places.length;
   next();
 });
