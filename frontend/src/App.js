@@ -23,6 +23,7 @@ const NewPlace = React.lazy(() => import("./places/pages/NewPlace"));
 const UserPlaces = React.lazy(() => import("./places/pages/UserPlaces"));
 const UpdatePlace = React.lazy(() => import("./places/pages/UpdatePlace"));
 const BucketList = React.lazy(() => import("./places/components/BucketList"));
+const RegisterConfirmation = React.lazy(() => import('./users/components/RegisterConfirmation'));
 
 const App = () => {
   const { token, login, logout, userId } = useAuth();
@@ -79,7 +80,10 @@ const App = () => {
         <Route path='/resetpassword/:token'>
           <ResetEmail />
         </Route>
-        <Redirect to='/auth' />
+        <Route path="/confirm/:token">
+          <RegisterConfirmation />
+        </Route>
+        <Redirect to="/auth" />
       </Switch>
     );
   }

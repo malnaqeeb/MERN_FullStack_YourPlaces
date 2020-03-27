@@ -25,6 +25,9 @@ const userSchema = new Schema({
     trim: true,
     minlength: 6
   },
+  verifyAccountToken: String, 
+  verifyAccountExpires: Date,
+  active: { type: Boolean, default: false },
   image: {
     type: String
   },
@@ -91,6 +94,11 @@ userSchema.pre('save', async function (next) {
 userSchema.methods.generatePasswordReset = function() {
   this.resetPasswordToken = crypto.randomBytes(20).toString("hex");
   this.resetPasswordExpires = Date.now() + 3600000; //expires in an hour
+};
+
+userSchema.methods.generateAccountVerify = function() {
+  this.verifyAccountToken = crypto.randomBytes(20).toString("hex");
+  this.verifyAccountExpires = Date.now() + 3600000; 
 };
 userSchema.plugin(uniqueValidator);
 const User = mongoose.model('User', userSchema);

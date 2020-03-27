@@ -19,7 +19,7 @@ const Users = () => {
         let userData;
         if (auth.token) {
           userData = await sendRequest(
-            `${process.env.REACT_APP_BACKEND_URL}/user/friends`,
+            `${process.env.REACT_APP_BACKEND_URL}/users/me`,
             'GET',
             null,
             {
