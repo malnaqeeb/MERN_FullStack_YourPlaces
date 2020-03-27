@@ -18,8 +18,7 @@ const UserProfile = props => {
   const [editImage, setEditImage] = useState(false);
   const [editName, setEditName] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  const { name, image, notifications } = props.user;
-  const [userNotifications, setUserNotifications] = useState(notifications);
+  const { name, image,  notifications } = props.user;
   const [notificationStyle, setNotificationStyle] = useState(notifications);
 
   const [state, inputHandler, setFormData] = useFrom(
@@ -123,16 +122,13 @@ const UserProfile = props => {
     try {
       await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/users/notifications/${userId}`,
-        "PATCH",
-        JSON.stringify({
-          notifications: !userNotifications
-        }),
+        "PUT",
+        null,
         {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`
         }
       );
-      setUserNotifications(!notifications);
     } catch (error) {}
   };
 
@@ -195,8 +191,9 @@ const UserProfile = props => {
         <p>Do You Want To Receive E-mail Notifications?</p>
         <Button
           onClick={() => {
-            notificationHandler();
             setNotificationStyle(!notificationStyle);
+            notificationHandler();
+            console.log(notifications)
           }}
         >
           {notificationStyle ? "TURN OFF" : "TURN ON"}
