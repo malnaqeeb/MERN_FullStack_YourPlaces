@@ -4,6 +4,7 @@ import ErrorModal from '../../shared/component/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/component/UIElements/LoadingSpinner';
 import useHttpClient from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
+import Select from '../../shared/component/Select';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -20,8 +21,7 @@ const Users = () => {
           `${process.env.REACT_APP_BACKEND_URL}/users?sortBy=${sortBy}`,
         );
         setUsers(data.users);
-        console.log(users);
-        console.log(data.users);
+
         let userData;
         if (auth.token) {
           userData = await sendRequest(
@@ -45,18 +45,14 @@ const Users = () => {
     setProcessedUsers(prevValue => [...prevValue, id]);
   };
 
-  const sortByNameOrCount = () => {
-    const selectElement = document.getElementById('select');
-    let sortedUsers;
-    if (selectElement.value === 'Name') {
-      setSortBy('name');
-    }
-    if (selectElement.value === 'PlaceCount') {
-      setSortBy('-placesCount');
-    }
-    if (selectElement.value === 'Registration') {
-      setSortBy('-created_at');
-    }
+  //sort users on seleced option below
+  const optionValues = ['', 'name', 'placesCount', 'registration'];
+  const sortByNameCountDate = selectElem => {
+    if (selectElem.value === 'name') setSortBy('name');
+
+    if (selectElem.value === 'placesCount') setSortBy('-placesCount');
+
+    if (selectElem.value === 'registration') setSortBy('-created_at');
   };
 
   return (
@@ -69,11 +65,12 @@ const Users = () => {
       )}
       {!isLoading && users && (
         <Fragment>
-          <select id="select" onChange={sortByNameOrCount}>
-            <option value="PlaceCount">Sort By Place Count</option>
-            <option value="Name">Sort By Name</option>
-            <option value="Registration">Sort By Registration Date</option>
-          </select>
+          <Select
+            array={optionValues}
+            method={'sort'}
+            idName={'select-sort-users'}
+            onChangeEvent={sortByNameCountDate}
+          />
           <UsersList
             items={users}
             userData={user}
