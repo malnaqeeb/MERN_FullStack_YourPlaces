@@ -54,7 +54,7 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
     <Fragment>
       {isLoading && <LoadingSpinner asOverlay />}
 
-      <div className="bucket-list-item">
+      <div className="bucket-list-item no-select">
         <Modal
           show={showDetails}
           onCancel={closeDetailsHandler}

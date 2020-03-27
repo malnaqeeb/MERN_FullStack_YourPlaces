@@ -155,7 +155,7 @@ const PlaceItem = ({ place, onDeletePlace }) => {
         footerClass="place-item__actions"
         footer={<Button onClick={closeMapHandler}>Close</Button>}
       >
-        <div className="map-container">
+        <div className="map-container no-select">
           <h2>THE MAP!</h2>
           <Map center={location} zoom={16} />
         </div>
@@ -182,13 +182,13 @@ const PlaceItem = ({ place, onDeletePlace }) => {
         </p>
       </Modal>
       {users && (
-        <li className="place-item">
+        <li className="place-item fade-in">
           <Card className="place-item__content">
             <div className="place-item__image">
               <img src={image.imageUrl} alt={name} />
             </div>
             <div className="place-item__info">
-              <div className="evaluation">
+              <div className="evaluation no-select">
                 {evaluation && (
                   <div className="like">
                     <p className="like-count">

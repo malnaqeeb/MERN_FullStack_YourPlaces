@@ -7,7 +7,7 @@ const NavLinks = props => {
   const auth = useContext(AuthContext);
 
   return (
-    <ul className='nav-links'>
+    <ul className="nav-links no-select">
       <li>
         <NavLink to='/' exact>
           ALL USERS

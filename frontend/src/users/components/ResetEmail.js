@@ -56,12 +56,12 @@ const ResetEmail = () => {
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
       {sendPassword ? (
-        <Card className='forget_password'>
+        <Card className='forget_password no-select'>
           <p>{sendPassword.message}</p>
           <Button to='/auth'>AUTHENTICATE</Button>
         </Card>
       ) : (
-        <Card className='forget_password'>
+        <Card className='forget_password no-select'>
           <form className='place-form' onSubmit={resetPasswordSubmitHandler}>
             <Input
               id='password'

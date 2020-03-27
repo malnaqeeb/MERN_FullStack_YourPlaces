@@ -162,7 +162,7 @@ const signJwt = async (req, res, next) => {
 const getUser = async (req, res, next) => {
   let user;
   try {
-    user = await User.findById(req.params.userId, "name image");
+    user = await User.findById(req.params.userId, "name image notifications");
   } catch (error) {
     return next(
       new HttpError("Failed to get the user, please try again later.", 500)
@@ -188,7 +188,7 @@ const updateUser = async (req, res, next) => {
       new HttpError("Updating user failed, please try again later.", 500)
     );
   }
-  res.status(200).json({ user: { name: user.name, image: user.image } });
+  res.status(200).json({ user: { name: user.name, image: user.image, notifications:user.notifications } });
 };
 
 const forgetPassword = async (req, res, next) => {
@@ -258,7 +258,7 @@ const setNotifications = async (req, res, next) => {
   const userId = req.userData.userId;
   try {
     const user = await User.findById(userId);
-    user.notifications = req.body.notifications;
+    user.notifications = !user.notifications;
     await user.save();
   } catch (error) {
     return next(error);
