@@ -1,22 +1,21 @@
-import React, { useState, useContext, Fragment } from "react";
-import { Link } from "react-router-dom";
-import "./Auth.css";
-import Input from "../../shared/component/formElements/Input";
-import Button from "../../shared/component/formElements/Button";
-import Card from "../../shared/component/UIElements/Card";
-import ErrorModal from "../../shared/component/UIElements/ErrorModal";
-import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
-import ImageUpload from "../../shared/component/formElements/ImageUpload";
-import useHttpClient from "../../shared/hooks/http-hook";
-import { useFrom } from "../../shared/hooks/form-hook";
+import React, { useState, useContext, Fragment } from 'react';
+import './Auth.css';
+import Input from '../../shared/component/formElements/Input';
+import Button from '../../shared/component/formElements/Button';
+import Card from '../../shared/component/UIElements/Card';
+import ErrorModal from '../../shared/component/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/component/UIElements/LoadingSpinner';
+import ImageUpload from '../../shared/component/formElements/ImageUpload';
+import useHttpClient from '../../shared/hooks/http-hook';
+import { useFrom } from '../../shared/hooks/form-hook';
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
-  VALIDATOR_REQUIRE
-} from "../../shared/Util/validators";
-import { AuthContext } from "../../shared/context/auth-context";
+  VALIDATOR_REQUIRE,
+} from '../../shared/Util/validators';
+import { AuthContext } from '../../shared/context/auth-context';
 // React Icons
-import { FaFacebookF, FaGoogle } from "react-icons/fa";
+import { FaFacebookF, FaGoogle } from 'react-icons/fa';
 
 const Auth = () => {
   const auth = useContext(AuthContext);
@@ -27,15 +26,15 @@ const Auth = () => {
   const [state, inputHandler, setFormData] = useFrom(
     {
       email: {
-        value: "",
-        isValid: false
+        value: '',
+        isValid: false,
       },
       password: {
-        value: "",
-        isValid: false
-      }
+        value: '',
+        isValid: false,
+      },
     },
-    false
+    false,
   );
   const switchModelHandler = () => {
     if (!isLoginMod) {
@@ -43,24 +42,24 @@ const Auth = () => {
         {
           ...state.inputs,
           name: undefined,
-          image: undefined
+          image: undefined,
         },
-        state.inputs.email.isValid && state.inputs.password.isValid
+        state.inputs.email.isValid && state.inputs.password.isValid,
       );
     } else {
       setFormData(
         {
           ...state.inputs,
           name: {
-            value: "",
-            isValid: false
+            value: '',
+            isValid: false,
           },
           image: {
             value: null,
-            isValid: false
-          }
+            isValid: false,
+          },
         },
-        false
+        false,
       );
     }
     setIsLoginMod(prevMode => !prevMode);
@@ -74,14 +73,14 @@ const Auth = () => {
       try {
         const res = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/users/login`,
-          "POST",
+          'POST',
           JSON.stringify({
             email: state.inputs.email.value,
-            password: state.inputs.password.value
+            password: state.inputs.password.value,
           }),
           {
-            "Content-Type": "application/json"
-          }
+            'Content-Type': 'application/json',
+          },
         );
 
         auth.login(res.userId, res.token, null, res.friendStatus);
@@ -89,15 +88,15 @@ const Auth = () => {
     } else {
       try {
         const formData = new FormData();
-        formData.append("email", state.inputs.email.value);
-        formData.append("password", state.inputs.password.value);
-        formData.append("name", state.inputs.name.value);
-        formData.append("image", state.inputs.image.value);
+        formData.append('email', state.inputs.email.value);
+        formData.append('password', state.inputs.password.value);
+        formData.append('name', state.inputs.name.value);
+        formData.append('image', state.inputs.image.value);
 
         const res = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/users/signup`,
-          "POST",
-          formData
+          'POST',
+          formData,
         );
 
         auth.login(res.userId, res.token);
@@ -108,7 +107,7 @@ const Auth = () => {
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
-      <Card className="authentication no-select">
+      <Card className="authentication">
         {isLoading && <LoadingSpinner asOverlay />}
         <h2>Login Required</h2>
         <hr />
@@ -117,20 +116,14 @@ const Auth = () => {
           {socialLogin && (
             <div>
               <h3>Log in with</h3>
-              <a
-                className="socialBtn"
-                href={`${process.env.REACT_APP_BACKEND_URL}/users/facebook`}
-              >
+              <a className='socialBtn' href={`${process.env.REACT_APP_BACKEND_URL}/users/facebook`}>
                 <FaFacebookF />
-                <span className="socialName">Facebook</span>
+                <span className='socialName'>Facebook</span>
               </a>
               {/*  */}
-              <a
-                className="socialBtn"
-                href={`${process.env.REACT_APP_BACKEND_URL}/users/google`}
-              >
+              <a className='socialBtn' href={`${process.env.REACT_APP_BACKEND_URL}/users/google`}>
                 <FaGoogle />
-                <span className="socialName">Google</span>
+                <span className='socialName'>Google</span>
               </a>
               <h3>______or______</h3>
             </div>
@@ -149,7 +142,7 @@ const Auth = () => {
           {!isLoginMod && (
             <ImageUpload
               center
-              id={"image"}
+              id={'image'}
               onInput={inputHandler}
               errorText="Please provide an image"
             />
@@ -173,17 +166,12 @@ const Auth = () => {
             errorText="Please enter a valid password, at least 6 characters."
             onInput={inputHandler}
           />
-          <Button type="submit" disabled={!state.isValid}>
-            {isLoginMod ? "LOGIN" : "SIGNUP"}
+          <Button type='submit' disabled={!state.isValid}>
+            {isLoginMod ? 'LOGIN' : 'SIGNUP'}
           </Button>
-          {isLoginMod && (
-            <Link to="/forgetpassword">
-              <Button>FORGOT PASSWORD</Button>
-            </Link>
-          )}
         </form>
         <Button inverse onClick={switchModelHandler}>
-          SWITCH TO {isLoginMod ? "SIGNUP" : "LOGIN"}
+          SWITCH TO {isLoginMod ? 'SIGNUP' : 'LOGIN'}
         </Button>
       </Card>
     </Fragment>

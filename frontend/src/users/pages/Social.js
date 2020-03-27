@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { AuthContext } from '../../shared/context/auth-context';
 
 export default function Social() {
