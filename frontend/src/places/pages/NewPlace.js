@@ -54,9 +54,10 @@ const NewPlace = () => {
 
   return (
     <Fragment>
+      <div className="fade-in">
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
-      <form className='place-form' onSubmit={placeSubmitHandler}>
+      <form className='place-form no-select' onSubmit={placeSubmitHandler}>
         <Input
           id='title'
           element='input'
@@ -88,7 +89,8 @@ const NewPlace = () => {
         <Button type='submit' disabled={!state.isValid}>
           ADD PLACE
         </Button>
-      </form>
+      </form>  
+      </div>
     </Fragment>
   );
 };

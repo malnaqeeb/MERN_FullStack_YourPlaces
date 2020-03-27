@@ -72,7 +72,7 @@ route.post(
 
 route.use(checkAuth);
 
-route.patch("/notifications/:userId", usersControllers.setNotifications)
+route.put("/notifications/:userId", usersControllers.setNotifications)
 route.patch('/:userId',
   fileUpload.single('image'),
   usersControllers.updateUser);
