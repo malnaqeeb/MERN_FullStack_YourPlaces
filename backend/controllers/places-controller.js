@@ -27,14 +27,12 @@ const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.uid;
   const sortBy = req.query.sortBy || 'date';
   let userWithPlaces;
-  const variable = `places.${sortBy}`;
   try {
-    userWithPlaces = await User.findById(userId)
-      .populate({
-        path: 'places',
-        options: { sort: { [sortBy]: '1' } },
-      })
-      .sort({ [variable]: 1 });
+    userWithPlaces = await User.findById(userId).populate({
+      path: 'places',
+      options: { sort: { [sortBy]: '1' } },
+    });
+
     console.log(userWithPlaces);
     if (!userWithPlaces || userWithPlaces.places.length === 0)
       return next(
@@ -42,9 +40,9 @@ const getPlacesByUserId = async (req, res, next) => {
       );
 
     res.json({
-      userWithPlaces: userWithPlaces.places
-        // .sort((p1, p2) => p1[sortBy] > p2[sortBy])
-        .map(place => place.toObject({ getters: true })),
+      userWithPlaces: userWithPlaces.places.map(place =>
+        place.toObject({ getters: true }),
+      ),
     });
   } catch (error) {
     console.log(error);

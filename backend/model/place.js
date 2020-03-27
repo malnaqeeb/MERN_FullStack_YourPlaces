@@ -48,6 +48,7 @@ const placeSchema = new Schema({
   disLike: { type: Array },
   created_at: { type: Date, required: true, default: Date.now },
   rate: { type: Number, required: true, default: 0 },
+  category: { type: Array },
 });
 
 placeSchema.pre('validate', function(next) {
