@@ -25,6 +25,11 @@ const thisSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
         required: true
+      },
+      isSent:{
+        type: Boolean,
+        default: false,
+        required: true
       }
     }
   ]

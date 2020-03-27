@@ -20,7 +20,7 @@ const getUserCorresponders = async (req, res, next) => {
 const getMessagesFromCorresponder = async (req, res, next) => {
   let messages;
   try {
-    messages = await Message.findOneAndUpdate({owner: req.userData.userId, corresponder: req.params.corresponderId}, {$set: {hasNewMessage: false}}).exec();
+    messages = await Message.findOneAndUpdate({owner: req.userData.userId, corresponder: req.params.corresponderId}, {$set: {hasNewMessage: false}}, {upsert: true}).exec();
     res.json({messages: messages.messages || []});
   } catch (error) {
     return next(new HttpError('Failed to get Messages, please try again later', 500));
@@ -42,7 +42,7 @@ const sendMessageToCorresponder = async (req, res, next) => {
     ).exec();
     await Message.updateOne(
       {owner: req.params.corresponderId, corresponder: req.userData.userId},
-      {$push: {messages: {message: req.body.message}}, $set: {hasNewMessage: true}},
+      {$push: {messages: {message: req.body.message, isSent: true}}, $set: {hasNewMessage: true}},
       {upsert: true}
     ).exec();
     res.json({message: "Message Sent!"});
