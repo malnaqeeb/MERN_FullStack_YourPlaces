@@ -91,15 +91,6 @@ const signup = async (req, res, next) => {
     // send email
     let link = req.headers.origin + "/confirm/" + createdUser.verifyAccountToken;
 
-    // delete user from database in case not verify his email after one hour of signup
-    setTimeout(async () => {
-      const user = await User.findOne({ email: createdUser.email });
-      if (!user.active) {
-        user.remove();
-      }
-    }, 3600000);
-
-
     accountVerifyEmail(createdUser.name, createdUser.email, link);
     
     await createdUser.save();
