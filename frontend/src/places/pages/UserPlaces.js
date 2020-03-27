@@ -3,6 +3,7 @@ import PlaceList from "../components/PlaceList";
 import { useParams, useHistory } from "react-router-dom";
 import useHttpClient from "../../shared/hooks/http-hook";
 import ErrorModal from "../../shared/component/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
 import "./UserPlaces.css";
 
 const UserPlaces = () => {
@@ -61,11 +62,18 @@ const UserPlaces = () => {
         onClear={goHome}
       />
     );
- 
+  if (isLoading)
+    return (
+      <div className="center">
+        <LoadingSpinner />
+      </div>
+    );
+
   return (
     <Fragment>
-      <div className="place-overlay-container fade-in">
-        <h2 className="center yellow-text inline no-select">
+      <div className="place-overlay-container">
+        <div className="place-overlay animated fadeOut"></div>
+        <h2 className="center yellow-text inline">
           Places of <span className="pink-text"> {user && user.user.name}</span>{" "}
         </h2>
         <ErrorModal error={error} onClear={clearError} />

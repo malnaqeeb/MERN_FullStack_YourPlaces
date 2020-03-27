@@ -48,7 +48,6 @@ const Friends = () => {
 
   return (
     <Fragment>
-      <div className="fade-in no-select">
         <ErrorModal error={error} onClear={clearError} />
         {!isLoading && friends && (
           <FriendList
@@ -64,7 +63,6 @@ const Friends = () => {
             cancelFriendHandler={processFriendRequest}
           />
         )}
-        </div>
     </Fragment>
   );
 };

@@ -5,12 +5,13 @@ import Card from "../../shared/component/UIElements/Card";
 import Button from "../../shared/component/formElements/Button";
 import Modal from "../../shared/component/UIElements/Modal";
 import Map from "../../shared/component/UIElements/Map";
+import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
 import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 import { AuthContext } from "../../shared/context/auth-context";
 import useHttpClient from "../../shared/hooks/http-hook";
 
 const PlaceItem = ({ place, onDeletePlace }) => {
-  const {error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const auth = useContext(AuthContext);
   const [showMap, setShowMap] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -89,14 +90,9 @@ const PlaceItem = ({ place, onDeletePlace }) => {
   const confirmDeleteHandler = async () => {
     setShowConfirmModal(false);
     try {
-      await sendRequest(
-        `${process.env.REACT_APP_BACKEND_URL}/places/${id}`,
-        "DELETE",
-        null,
-        {
-          Authorization: "Bearer " + auth.token
-        }
-      );
+      await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/places/${id}`, 'DELETE', null, {
+        Authorization: 'Bearer ' + auth.token,
+      });
       onDeletePlace(id);
     } catch (error) {}
   };
@@ -143,7 +139,12 @@ const PlaceItem = ({ place, onDeletePlace }) => {
       return true;
     }
   };
-
+  if (isLoading)
+    return (
+      <div className="center">
+        <LoadingSpinner />
+      </div>
+    );
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
@@ -155,7 +156,7 @@ const PlaceItem = ({ place, onDeletePlace }) => {
         footerClass="place-item__actions"
         footer={<Button onClick={closeMapHandler}>Close</Button>}
       >
-        <div className="map-container no-select">
+        <div className="map-container">
           <h2>THE MAP!</h2>
           <Map center={location} zoom={16} />
         </div>
@@ -177,52 +178,51 @@ const PlaceItem = ({ place, onDeletePlace }) => {
         }
       >
         <p>
-          Do you want to proceed and delete this place? note that it can't be
-          undone thereafter.
+          Do you want to proceed and delete this place? note that it can't be undone thereafter.
         </p>
       </Modal>
       {users && (
-        <li className="place-item fade-in">
+        <li className="place-item">
           <Card className="place-item__content">
+            {isLoading && <LoadingSpinner asOverlay />}
             <div className="place-item__image">
               <img src={image.imageUrl} alt={name} />
             </div>
             <div className="place-item__info">
-              <div className="evaluation no-select">
-                {evaluation && (
-                  <div className="like">
-                    <p className="like-count">
-                      {evaluation.likes >= 1000
-                        ? evaluation.likes.length / 1000 + "k"
-                        : evaluation.likes.length}
-                    </p>
-                    <i
-                      className="fas fa-thumbs-up fa-2x"
-                      onClick={addLikeAndRemoved}
-                      style={{
-                        color: evaluation.likes.includes(auth.userId) && "green"
-                      }}
-                    ></i>
-                  </div>
-                )}
-                {evaluation && (
-                  <div className="dislike">
-                    <p className="dislike-count">
-                      {evaluation.disLike >= 1000
-                        ? evaluation.disLike.length / 1000 + "k"
-                        : evaluation.disLike.length}
-                    </p>
-                    <i
-                      className="fas fa-thumbs-down fa-2x"
-                      onClick={addDisLikeAndRemoved}
-                      style={{
-                        color: evaluation.disLike.includes(auth.userId) && "red"
-                      }}
-                    ></i>
-                  </div>
-                )}
-              </div>{" "}
-              <p>{JSON.stringify()}</p>
+<div className='evaluation'>
+              {evaluation && (
+                <div className='like'>
+                  <p className='like-count'>
+                    {evaluation.likes >= 1000
+                      ? evaluation.likes.length / 1000 + "k"
+                      : evaluation.likes.length}
+                  </p>
+                  <i
+                    className='fas fa-thumbs-up fa-2x'
+                    onClick={addLikeAndRemoved}
+                    style={{
+                      color: evaluation.likes.includes(auth.userId) && "green"
+                    }}
+                  ></i>
+                </div>
+              )}
+              {evaluation && (
+                <div className='dislike'>
+                  <p className='dislike-count'>
+                    {evaluation.disLike >= 1000
+                      ? evaluation.disLike.length / 1000 + "k"
+                      : evaluation.disLike.length}
+                  </p>
+                  <i
+                    className='fas fa-thumbs-down fa-2x'
+                    onClick={addDisLikeAndRemoved}
+                    style={{
+                      color: evaluation.disLike.includes(auth.userId) && "red"
+                    }}
+                  ></i>
+                </div>
+              )}
+            </div>              <p>{JSON.stringify()}</p>
               <h2>{title}</h2>
               <h3>{address}</h3>
               <p>{description}</p>
@@ -247,23 +247,11 @@ const PlaceItem = ({ place, onDeletePlace }) => {
                 )}
               {checkAdded(users) && auth.userId && (
                 <span className="animated">
-                  Already in your bucket{" "}
-                  <span
-                    role="img"
-                    aria-label={"already-in your bucket"}
-                    aria-hidden={false}
-                  >
-                    &#9989;
-                  </span>
+                  Already in your bucket &#9989;{" "}
                 </span>
               )}
               {showTick && (
-                <span className=" fadeOut animated">
-                  Added{" "}
-                  <span role="img" aria-label={"added"} aria-hidden={false}>
-                    &#9989;
-                  </span>
-                </span>
+                <span className="fadeOut animated">Added &#9989; </span>
               )}
             </div>
           </Card>

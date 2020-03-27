@@ -60,16 +60,9 @@ route.get(
 );
 
 route.get('/:userId', usersControllers.getUser);
-route.post("/forget", usersControllers.forgetPassword);
-route.post(
-  "/reset/:token",
-  check("password").isLength({ min: 6 }),
-  usersControllers.resetPassword
-);
 
 route.use(checkAuth);
 
-route.put("/notifications/:userId", usersControllers.setNotifications)
 route.patch('/:userId',
   fileUpload.single('image'),
   usersControllers.updateUser);

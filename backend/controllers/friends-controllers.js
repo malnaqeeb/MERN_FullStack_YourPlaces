@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('../model/user');
 const HttpError = require('../model/http-error');
-const { friendAddedNotification, friendAcceptedNotification } = require("../emails/account");
-
-
 
 const {ObjectId} = mongoose.Types;
 
@@ -67,7 +64,6 @@ const makeFriendshipFromRequest = async (requestInfo) => {
       {_id: requestInfo.requestingUser.id},
       {$addToSet: {friends: requestInfo.acceptingUser}}
     );
-
   } catch (error) {
     throw new HttpError('Could not add users as friend.', 500);
   }
@@ -97,23 +93,21 @@ const getFriends = async (req, res, next) => {
 const createFriendRequest = async (req, res, next) => {
   const {friendId} = req.body;
   const {userId} = req.userData;
-  let user
-  let friend
   try {
     // Get the user
-       user = await User.findOne({_id: userId}, '-password')
+    let user = await User.findOne({_id: userId}, '-password')
       .populate({path: 'friends', model: User})
       .populate({path: 'friendRequests.user', model: User});
     // Check if the user is friend with the person before sending a request?
     if (user.friends && user.friends.some(friend => ObjectId(friend.id).equals(friendId))) {
-      return next ? next(new HttpError('You are already friends with ' + user.name, 402)) : true;
+      return next ? next(new HttpError('You are already friend with ' + user.name, 402)) : true;
     }
     // Check if there is an existing request before sending a request?
     if (user.friendRequests && user.friendRequests.some(request => ObjectId(request.user.id).equals(friendId))) {
       return next ? next(new HttpError('There is already a request related with ' + user.name, 402)) : true;
     }
     // If not friends and There are no previous request.
-    friend = await User.findOne({_id: friendId}, '-password');
+    const friend = await User.findOne({_id: friendId}, '-password');
     if (!friend) {
       throw new HttpError('Could not find friend to sent request!', 404);
     }
@@ -137,9 +131,6 @@ const createFriendRequest = async (req, res, next) => {
       {_id: friendId},
       {$addToSet: {friendRequests: receivedRequest}}
     );
-    if(friend.notifications === true){
-          friendAddedNotification(friend.name, user.name, friend.email)
-    }
 
     res.status(200).json({message: 'Friend request created successfully!'});
   } catch {
@@ -176,7 +167,6 @@ const getFriendRequests = async (req, res, next) => {
 const acceptFriendRequest = async (req, res, next) => {
   const {requestId} = req.params;
   const {userId} = req.userData;
-  const user = await User.findById(userId)
   try {
     // Check if there is a request
     const requestInfo = await checkRequestById(userId, requestId);
@@ -187,14 +177,7 @@ const acceptFriendRequest = async (req, res, next) => {
     // Add both users to each others friends arrays (addToSet)
     if (!requestInfo.isAlreadyFriend) {
       await makeFriendshipFromRequest(requestInfo);
-
-      const accepting = await User.findById(requestInfo.acceptingUser.id);
-      const requesting = await User.findById(requestInfo.requestingUser.id)
-      if(user.notifications === true){
-        friendAcceptedNotification(requesting.name, accepting.name, requesting.email)
-      }
     }
-    
     // return a success message
     res.status(200).json({message: 'Friend request has been approved successfully!'});
   } catch (error) {
