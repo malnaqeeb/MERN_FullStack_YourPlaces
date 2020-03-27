@@ -16,7 +16,14 @@ body {
 .slide-in-left-enter {
   transform: translateX(-100%);
 }
-
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 .slide-in-left-enter-active {
   transform: translateX(0);
   opacity: 1;
@@ -61,11 +68,11 @@ body {
 }
 
 .fade-in {
-  animation: fadeIn ease 5s;
-  -webkit-animation: fadeIn ease 5s;
-  -moz-animation: fadeIn ease 5s;
-  -o-animation: fadeIn ease 5s;
-  -ms-animation: fadeIn ease 5s;
+  animation: fadeIn ease 3s;
+  -webkit-animation: fadeIn ease 3s;
+  -moz-animation: fadeIn ease 3s;
+  -o-animation: fadeIn ease 3s;
+  -ms-animation: fadeIn ease 3s;
 }
 
 @keyframes fadeIn {
@@ -111,4 +118,9 @@ body {
   100% {
     opacity: 1;
   }
+}
+
+.forget_password {
+  width: 30%;
+  margin: auto;
 }

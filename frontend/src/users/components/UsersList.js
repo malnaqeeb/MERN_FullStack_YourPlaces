@@ -3,13 +3,12 @@ import UserItem from './UserItem';
 import Card from '../../shared/component/UIElements/Card';
 import './UsersList.css';
 import './UserItem.css';
-import Avatar from '../../shared/component/UIElements/Avatar';
 
 const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
 
   if (items.length === 0) {
     return (
-      <div className="center">
+      <div className="center fade-in">
         <Card>
           <h2>No users found.</h2>
         </Card>
@@ -18,7 +17,7 @@ const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
   }
   return (
     <React.Fragment>
-      <ul className="users-list">
+      <ul className="users-list fade-in no-select">
         {
           items.map(user => (
             <UserItem

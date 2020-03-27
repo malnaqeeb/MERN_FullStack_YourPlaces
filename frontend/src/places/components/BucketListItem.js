@@ -1,5 +1,4 @@
 import React, { useState, useContext, Fragment } from "react";
-import { useHistory } from "react-router-dom";
 import Button from "../../shared/component/formElements/Button";
 import Modal from "../../shared/component/UIElements/Modal";
 import { AuthContext } from "../../shared/context/auth-context";
@@ -11,7 +10,6 @@ import { Link, useParams } from "react-router-dom";
 
 const BucketListItem = ({ bucket, deleteBucket }) => {
   const [showDetails, setShowDetails] = useState(false);
-  const [visited, setVisited] = useState(bucket.isVisited);
   const [visitStyle, setVisitStyle] = useState(bucket.isVisited);
   const auth = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -49,15 +47,14 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
           Authorization: "Bearer " + auth.token
         }
       );
-      setVisited(!bucket.isVisited);
     } catch (error) {}
   };
-
+  if(error) return <ErrorModal error={error} onClear={clearError}/>
   return (
     <Fragment>
       {isLoading && <LoadingSpinner asOverlay />}
 
-      <div className="bucket-list-item">
+      <div className="bucket-list-item no-select">
         <Modal
           show={showDetails}
           onCancel={closeDetailsHandler}
@@ -68,7 +65,7 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
         >
           <div className="detail-item">
             <div className="bucket-image">
-              <img style={{ width: "100%" }} src={id.image.imageUrl}></img>
+              <img style={{ width: "100%" }} src={id.image.imageUrl} alt="bucket-place"></img>
             </div>
 
             <div className="bucket-info">
@@ -86,7 +83,7 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
         <p style={{ textDecoration: visitStyle ? "line-through" : "none" }}>
           {bucket && bucket.id.title}
         </p>
-        {userId == auth.userId && (
+        {userId === auth.userId && (
           <Button
             danger
             onClick={() => {
@@ -98,7 +95,7 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
         )}
 
         <Button onClick={() => openDetailsHandler()}>Show Details</Button>
-        {userId == auth.userId && (
+        {userId === auth.userId && (
           <Button
             inverse
             onClick={() => {

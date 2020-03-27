@@ -14,11 +14,12 @@ import ImageUpload from "../../shared/component/formElements/ImageUpload";
 
 import "./UserProfile.css";
 const UserProfile = props => {
-  const {userId, token} = useContext(AuthContext);
+  const { userId, token } = useContext(AuthContext);
   const [editImage, setEditImage] = useState(false);
-  const [editName, setEditName] = useState(false);  
+  const [editName, setEditName] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  const { name, image } = props.user;
+  const { name, image,  notifications } = props.user;
+  const [notificationStyle, setNotificationStyle] = useState(notifications);
 
   const [state, inputHandler, setFormData] = useFrom(
     {
@@ -45,7 +46,7 @@ const UserProfile = props => {
         },
         false
       );
-    } else if(editName) {
+    } else if (editName) {
       setFormData(
         {
           name: {
@@ -55,7 +56,7 @@ const UserProfile = props => {
         },
         false
       );
-    } else {      
+    } else {
       setFormData(
         {
           email: {
@@ -75,11 +76,11 @@ const UserProfile = props => {
   const changeEditName = () => {
     setEditName(currentMode => !currentMode);
     switchModelHandler();
-  }
+  };
   const changeEditImage = () => {
     setEditImage(currentMode => !currentMode);
     switchModelHandler();
-  }
+  };
 
   const authSubmitHandler = async () => {
     if (editName) {
@@ -92,7 +93,7 @@ const UserProfile = props => {
           }),
           {
             "Content-Type": "application/json",
-            "Authorization" : `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           }
         );
         setEditName(false);
@@ -108,7 +109,7 @@ const UserProfile = props => {
           "PATCH",
           formData,
           {
-            "Authorization" : `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           }
         );
         setEditImage(false);
@@ -117,45 +118,87 @@ const UserProfile = props => {
     }
   };
 
-  return (
-    <div className="profile">
-      { isLoading && <LoadingSpinner />}
-      <ErrorModal error={error} onClear={clearError} />
-      {!isLoading && 
-        <Card className="profile__card">
-        {!editName && 
-          <React.Fragment>
-            {editImage ? 
-              <ImageUpload
-                center
-                id={"image"}
-                onInput={inputHandler}
-                errorText='Please provide an image'
-              /> : <Avatar image={image} className="profile__avatar"/>
-            }
-            {editImage && <Button inverse onClick={authSubmitHandler}>Save</Button>}
-            <Button onClick={changeEditImage}>{editImage? 'Cancel' : 'Change Image'}</Button>
-          </React.Fragment>
+  const notificationHandler = async () => {
+    try {
+      await sendRequest(
+        `${process.env.REACT_APP_BACKEND_URL}/users/notifications/${userId}`,
+        "PUT",
+        null,
+        {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
         }
-        {!editImage && 
-          <React.Fragment>
-            { editName ? 
-              <Input
-                id='name'
-                element='input'
-                  type='text'
-                  label='Your Name'
-                  validators={[VALIDATOR_REQUIRE()]}
-                  errorText='Please enter a valid name'
+      );
+    } catch (error) {}
+  };
+
+  return (
+    <div className="profile fade-in no-select">
+      {isLoading && <LoadingSpinner />}
+      <ErrorModal error={error} onClear={clearError} />
+      {!isLoading && (
+        <Card className="profile__card">
+          {!editName && (
+            <React.Fragment>
+              {editImage ? (
+                <ImageUpload
+                  center
+                  id={"image"}
                   onInput={inputHandler}
-                /> : <h4>{name}</h4>
-              }
-              {editName && <Button inverse onClick={authSubmitHandler}>Save</Button>}
-              <Button onClick={changeEditName}>{editName? 'Cancel' : 'Edit Name'}</Button>
+                  errorText="Please provide an image"
+                />
+              ) : (
+                <Avatar image={image} className="profile__avatar" />
+              )}
+              {editImage && (
+                <Button inverse onClick={authSubmitHandler}>
+                  Save
+                </Button>
+              )}
+              <Button onClick={changeEditImage}>
+                {editImage ? "Cancel" : "Change Image"}
+              </Button>
             </React.Fragment>
-          }
+          )}
+          {!editImage && (
+            <React.Fragment>
+              {editName ? (
+                <Input
+                  id="name"
+                  element="input"
+                  type="text"
+                  label="Your Name"
+                  validators={[VALIDATOR_REQUIRE()]}
+                  errorText="Please enter a valid name"
+                  onInput={inputHandler}
+                />
+              ) : (
+                <h4>{name}</h4>
+              )}
+              {editName && (
+                <Button inverse onClick={authSubmitHandler}>
+                  Save
+                </Button>
+              )}
+              <Button onClick={changeEditName}>
+                {editName ? "Cancel" : "Edit Name"}
+              </Button>
+            </React.Fragment>
+          )}
         </Card>
-      }
+      )}
+      <div className="notification-box">
+        <p>Do You Want To Receive E-mail Notifications?</p>
+        <Button
+          onClick={() => {
+            setNotificationStyle(!notificationStyle);
+            notificationHandler();
+            console.log(notifications)
+          }}
+        >
+          {notificationStyle ? "TURN OFF" : "TURN ON"}
+        </Button>
+      </div>
     </div>
   );
 };
