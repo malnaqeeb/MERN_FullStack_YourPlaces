@@ -6,6 +6,7 @@
     "CLOUD_NAME": "",
     "CLOUDINARY_API_KEY": "",
     "CLOUDINARY_API_SECRET": "",
+    "SEND_GRID_API_KEY": "",
     "AUTH_GOOGLE_CLIENT_ID": "",
     "AUTH_GOOGLE_SECRET": "",
     "AUTH_FACEBOOK_CLIENT_ID": "",
