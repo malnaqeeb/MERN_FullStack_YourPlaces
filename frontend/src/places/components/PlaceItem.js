@@ -1,14 +1,15 @@
-import React, { useState, Fragment, useContext, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import "./PlaceItem.css";
-import Card from "../../shared/component/UIElements/Card";
-import Button from "../../shared/component/formElements/Button";
-import Modal from "../../shared/component/UIElements/Modal";
-import Map from "../../shared/component/UIElements/Map";
-import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
-import ErrorModal from "../../shared/component/UIElements/ErrorModal";
-import { AuthContext } from "../../shared/context/auth-context";
-import useHttpClient from "../../shared/hooks/http-hook";
+import React, { useState, Fragment, useContext, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import './PlaceItem.css';
+import Card from '../../shared/component/UIElements/Card';
+import Button from '../../shared/component/formElements/Button';
+import Modal from '../../shared/component/UIElements/Modal';
+import Map from '../../shared/component/UIElements/Map';
+import LoadingSpinner from '../../shared/component/UIElements/LoadingSpinner';
+import ErrorModal from '../../shared/component/UIElements/ErrorModal';
+import { AuthContext } from '../../shared/context/auth-context';
+import useHttpClient from '../../shared/hooks/http-hook';
+import { PLACE_TAG_TITLES } from '../../shared/Util/constants';
 
 const PlaceItem = ({ place, onDeletePlace }) => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -22,13 +23,22 @@ const PlaceItem = ({ place, onDeletePlace }) => {
   const [showTick, setShowTick] = useState(false);
   const openMapHandler = () => setShowMap(true);
   const closeMapHandler = () => setShowMap(false);
-  const { id, image, name, title, address, description, location } = place;
+  const {
+    id,
+    image,
+    name,
+    title,
+    address,
+    description,
+    location,
+    tags,
+  } = place;
   const history = useHistory();
   useEffect(() => {
     const fetchEvaluation = async () => {
       try {
         const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/places/evaluation/${id}`
+          `${process.env.REACT_APP_BACKEND_URL}/places/evaluation/${id}`,
         );
         setEvaluation(data.place);
       } catch (error) {}
@@ -42,18 +52,18 @@ const PlaceItem = ({ place, onDeletePlace }) => {
         const newData = { likes: auth.userId };
         const data = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/places/like/${id}`,
-          "POST",
+          'POST',
           JSON.stringify(newData),
           {
-            Authorization: "Bearer " + auth.token,
-            "Content-Type": "application/json"
-          }
+            Authorization: 'Bearer ' + auth.token,
+            'Content-Type': 'application/json',
+          },
         );
 
         setAddLikes(data);
       } catch (error) {}
     } else {
-      history.push("/auth");
+      history.push('/auth');
     }
   };
 
@@ -64,19 +74,19 @@ const PlaceItem = ({ place, onDeletePlace }) => {
         const data = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/places/dislike/${id}`,
 
-          "POST",
+          'POST',
 
           JSON.stringify(newData),
           {
-            Authorization: "Bearer " + auth.token,
-            "Content-Type": "application/json"
-          }
+            Authorization: 'Bearer ' + auth.token,
+            'Content-Type': 'application/json',
+          },
         );
 
         setAddDislike(data);
       } catch (error) {}
     } else {
-      history.push("/auth");
+      history.push('/auth');
     }
   };
 
@@ -90,9 +100,14 @@ const PlaceItem = ({ place, onDeletePlace }) => {
   const confirmDeleteHandler = async () => {
     setShowConfirmModal(false);
     try {
-      await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/places/${id}`, 'DELETE', null, {
-        Authorization: 'Bearer ' + auth.token,
-      });
+      await sendRequest(
+        `${process.env.REACT_APP_BACKEND_URL}/places/${id}`,
+        'DELETE',
+        null,
+        {
+          Authorization: 'Bearer ' + auth.token,
+        },
+      );
       onDeletePlace(id);
     } catch (error) {}
   };
@@ -101,11 +116,11 @@ const PlaceItem = ({ place, onDeletePlace }) => {
       setShowTravelWishButton(false);
       await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/user/bucketlist/${id}`,
-        "PATCH",
+        'PATCH',
         null,
         {
-          Authorization: "Bearer " + auth.token
-        }
+          Authorization: 'Bearer ' + auth.token,
+        },
       );
       setShowTick(true);
     } catch (error) {
@@ -117,7 +132,7 @@ const PlaceItem = ({ place, onDeletePlace }) => {
     const getUsers = async () => {
       try {
         const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/users`
+          `${process.env.REACT_APP_BACKEND_URL}/users`,
         );
         setUsers(data.users);
       } catch (error) {}
@@ -178,7 +193,8 @@ const PlaceItem = ({ place, onDeletePlace }) => {
         }
       >
         <p>
-          Do you want to proceed and delete this place? note that it can't be undone thereafter.
+          Do you want to proceed and delete this place? note that it can't be
+          undone thereafter.
         </p>
       </Modal>
       {users && (
@@ -189,43 +205,55 @@ const PlaceItem = ({ place, onDeletePlace }) => {
               <img src={image.imageUrl} alt={name} />
             </div>
             <div className="place-item__info">
-<div className='evaluation'>
-              {evaluation && (
-                <div className='like'>
-                  <p className='like-count'>
-                    {evaluation.likes >= 1000
-                      ? evaluation.likes.length / 1000 + "k"
-                      : evaluation.likes.length}
-                  </p>
-                  <i
-                    className='fas fa-thumbs-up fa-2x'
-                    onClick={addLikeAndRemoved}
-                    style={{
-                      color: evaluation.likes.includes(auth.userId) && "green"
-                    }}
-                  ></i>
-                </div>
-              )}
-              {evaluation && (
-                <div className='dislike'>
-                  <p className='dislike-count'>
-                    {evaluation.disLike >= 1000
-                      ? evaluation.disLike.length / 1000 + "k"
-                      : evaluation.disLike.length}
-                  </p>
-                  <i
-                    className='fas fa-thumbs-down fa-2x'
-                    onClick={addDisLikeAndRemoved}
-                    style={{
-                      color: evaluation.disLike.includes(auth.userId) && "red"
-                    }}
-                  ></i>
-                </div>
-              )}
-            </div>              <p>{JSON.stringify()}</p>
+              <div className="evaluation">
+                {evaluation && (
+                  <div className="like">
+                    <p className="like-count">
+                      {evaluation.likes >= 1000
+                        ? evaluation.likes.length / 1000 + 'k'
+                        : evaluation.likes.length}
+                    </p>
+                    <i
+                      className="fas fa-thumbs-up fa-2x"
+                      onClick={addLikeAndRemoved}
+                      style={{
+                        color:
+                          evaluation.likes.includes(auth.userId) && 'green',
+                      }}
+                    ></i>
+                  </div>
+                )}
+                {evaluation && (
+                  <div className="dislike">
+                    <p className="dislike-count">
+                      {evaluation.disLike >= 1000
+                        ? evaluation.disLike.length / 1000 + 'k'
+                        : evaluation.disLike.length}
+                    </p>
+                    <i
+                      className="fas fa-thumbs-down fa-2x"
+                      onClick={addDisLikeAndRemoved}
+                      style={{
+                        color:
+                          evaluation.disLike.includes(auth.userId) && 'red',
+                      }}
+                    ></i>
+                  </div>
+                )}
+              </div>{' '}
+              <p>{JSON.stringify()}</p>
               <h2>{title}</h2>
               <h3>{address}</h3>
               <p>{description}</p>
+              <div>
+                {tags.map(tag => {
+                  return (
+                    <span key={tag}>
+                      &nbsp;*&nbsp;{PLACE_TAG_TITLES[tag]}&nbsp;*&nbsp;
+                    </span>
+                  );
+                })}
+              </div>
             </div>
             <div className="place-item__actions">
               <Button inverse onClick={openMapHandler}>
@@ -247,7 +275,7 @@ const PlaceItem = ({ place, onDeletePlace }) => {
                 )}
               {checkAdded(users) && auth.userId && (
                 <span className="animated">
-                  Already in your bucket &#9989;{" "}
+                  Already in your bucket &#9989;{' '}
                 </span>
               )}
               {showTick && (

@@ -26,14 +26,19 @@ const getPlaceById = async (req, res, next) => {
 const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.uid;
   const sortBy = req.query.sortBy || 'date';
+  const tagFilter = req.query.tagFilter;
+
   let userWithPlaces;
   try {
-    userWithPlaces = await User.findById(userId).populate({
+    const populateOptions = {
       path: 'places',
       options: { sort: { [sortBy]: '1' } },
-    });
+    };
+    if (tagFilter) {
+      populateOptions.match = { tags: { $in: tagFilter.split(',') } };
+    }
+    userWithPlaces = await User.findById(userId).populate(populateOptions);
 
-    console.log(userWithPlaces);
     if (!userWithPlaces || userWithPlaces.places.length === 0)
       return next(
         new HttpError('Could not find a place for the provided user id.', 404),
@@ -62,7 +67,8 @@ const createPlace = async (req, res, next) => {
       new Error('Invalid input passed, please check your data.', 422),
     );
 
-  const { title, description, address } = req.body;
+  const { title, description, address, tags } = req.body;
+  const tagsSplitted = tags.split(',');
   // Here I change the coordinatis to object and also reverse the lng becaouse I useed the mapbox  geocode by default it geve us an array [lat, lng].
   let changeCoordinates;
   let coordinates;
@@ -88,6 +94,7 @@ const createPlace = async (req, res, next) => {
     location: coordinates,
     image: imageSrc,
     creator: req.userData.userId,
+    tags: tagsSplitted,
   });
 
   let user;
@@ -115,8 +122,7 @@ const createPlace = async (req, res, next) => {
 };
 
 const updatePlaceById = async (req, res, next) => {
-  const { title, description } = req.body;
-
+  const { title, description, tags } = req.body;
   const error = validationResult(req);
   if (!error.isEmpty())
     return next(
@@ -141,6 +147,7 @@ const updatePlaceById = async (req, res, next) => {
 
     place.title = title;
     place.description = description;
+    place.tags = tags;
     place.save();
 
     res.status(200).json({ place: place.toObject({ getters: true }) });

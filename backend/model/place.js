@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const { PLACE_TAGS_VALUES } = require('../util/constants');
+
 const Schema = mongoose.Schema;
 
 const placeSchema = new Schema({
@@ -48,7 +50,7 @@ const placeSchema = new Schema({
   disLike: { type: Array },
   created_at: { type: Date, required: true, default: Date.now },
   rate: { type: Number, required: true, default: 0 },
-  category: { type: Array },
+  tags: { type: [{ type: String, enum: PLACE_TAGS_VALUES }], default: [] },
 });
 
 placeSchema.pre('validate', function(next) {

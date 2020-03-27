@@ -1,4 +1,4 @@
-import React, { useContext, Fragment } from 'react';
+import React, { useContext, Fragment, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import './NewPlace.css';
 import Input from '../../shared/component/formElements/Input';
@@ -40,7 +40,25 @@ const NewPlace = () => {
     },
     false,
   );
+  const [tags, setTags] = useState([]);
   const history = useHistory();
+
+  const handleTagChange = event => {
+    const tagName = event.target.name;
+    const checked = event.target.checked;
+    if (checked) {
+      setTags(oldTags => {
+        return oldTags.includes(tagName) ? oldTags : [...oldTags, tagName];
+      });
+    } else {
+      setTags(oldTags => {
+        return oldTags.includes(tagName)
+          ? oldTags.filter(tag => tag !== tagName)
+          : oldTags;
+      });
+    }
+  };
+
   const placeSubmitHandler = async event => {
     event.preventDefault();
     try {
@@ -50,7 +68,7 @@ const NewPlace = () => {
       formData.append('address', state.inputs.address.value);
       formData.append('creator', auth.userId);
       formData.append('image', state.inputs.image.value);
-
+      formData.append('tags', tags);
       await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/places`,
         'POST',
@@ -62,6 +80,27 @@ const NewPlace = () => {
       history.push('/');
     } catch (error) {}
   };
+
+  const tagInputs = [];
+
+  PLACE_TAGS.map(tag => {
+    const checked = tags.includes(tag.name);
+    const tagInput = (
+      <span key={tag.name}>
+        <label>
+          <input
+            type="checkbox"
+            name={tag.name}
+            checked={checked}
+            onChange={handleTagChange}
+          />
+          {tag.title}
+        </label>
+        <span>&nbsp;&nbsp;</span>
+      </span>
+    );
+    tagInputs.push(tagInput);
+  });
 
   return (
     <Fragment>
@@ -101,6 +140,7 @@ const NewPlace = () => {
           errorText="Please enter a valid description address."
           onInput={inputHandler}
         />
+        {tagInputs}
         <Button type="submit" disabled={!state.isValid}>
           ADD PLACE
         </Button>

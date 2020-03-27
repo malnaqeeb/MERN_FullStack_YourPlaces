@@ -5,6 +5,7 @@ import useHttpClient from '../../shared/hooks/http-hook';
 import ErrorModal from '../../shared/component/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/component/UIElements/LoadingSpinner';
 import Select from '../../shared/component/Select';
+import { PLACE_TAGS } from '../../shared/Util/constants';
 import './UserPlaces.css';
 
 const UserPlaces = () => {
@@ -14,7 +15,7 @@ const UserPlaces = () => {
   const history = useHistory();
   const [user, setUser] = useState();
   const [sortBy, setSortBy] = useState('');
-  const [filterBy, setFilterBy] = useState('');
+  const [tags, setTags] = useState([]);
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -31,13 +32,17 @@ const UserPlaces = () => {
     const getPlaces = async () => {
       try {
         const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/places/user/${userId}/?sortBy=${sortBy}&filterBy=${filterBy}`,
+          `${
+            process.env.REACT_APP_BACKEND_URL
+          }/places/user/${userId}/?sortBy=${sortBy}&tagFilter=${tags.join(
+            ',',
+          )}`,
         );
         setPlaces(data.userWithPlaces);
       } catch (error) {}
     };
     getPlaces();
-  }, [sendRequest, userId, sortBy]);
+  }, [sendRequest, userId, sortBy, tags]);
   const placeDeleteHandler = detetedPlaceId => {
     setPlaces(prevPlaces =>
       prevPlaces.filter(places => places.id !== detetedPlaceId),
@@ -64,25 +69,20 @@ const UserPlaces = () => {
     if (selectElem.value === 'created_at') setSortBy('created_at');
   };
 
-  const categories = [
-    '',
-    'accounting',
-    'airport',
-    'amusement_park',
-    'aquarium',
-    'art_gallery',
-    'atm',
-    'bakery',
-    'bank',
-    'bar',
-    'beauty_salon',
-    'bicycle_store',
-  ];
-
-  const filterByCategory = selectElem => {
-    categories.forEach(category => {
-      if (selectElem.value === category) setFilterBy(category);
-    });
+  const handleTagChange = event => {
+    const tagName = event.target.name;
+    const checked = event.target.checked;
+    if (checked) {
+      setTags(oldTags => {
+        return oldTags.includes(tagName) ? oldTags : [...oldTags, tagName];
+      });
+    } else {
+      setTags(oldTags => {
+        return oldTags.includes(tagName)
+          ? oldTags.filter(tag => tag !== tagName)
+          : oldTags;
+      });
+    }
   };
 
   const goHome = () => {
@@ -103,6 +103,27 @@ const UserPlaces = () => {
       </div>
     );
 
+  const tagInputs = [];
+
+  PLACE_TAGS.map(tag => {
+    const checked = tags.includes(tag.name);
+    const tagInput = (
+      <span key={tag.name}>
+        <label>
+          <input
+            type="checkbox"
+            name={tag.name}
+            checked={checked}
+            onChange={handleTagChange}
+          />
+          {tag.title}
+        </label>
+        <span>&nbsp;&nbsp;</span>
+      </span>
+    );
+    tagInputs.push(tagInput);
+  });
+
   return (
     <Fragment>
       <div className="place-overlay-container">
@@ -118,12 +139,8 @@ const UserPlaces = () => {
               idName={'select-sort-places'}
               onChangeEvent={sortByTitleRateDate}
             />
-            <Select
-              array={categories}
-              method={'filter'}
-              idName={'select-filter-places'}
-              onChangeEvent={filterByCategory}
-            />
+
+            {tagInputs}
 
             <PlaceList items={places} onDeletePlace={placeDeleteHandler} />
           </Fragment>
