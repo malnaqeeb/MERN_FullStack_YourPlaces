@@ -29,10 +29,12 @@ const Users = () => {
         }
         setUser(userData);
         setUsers(data.users);
-      } catch (error) { console.error(error) }
+      } catch (error) {
+        console.error(error);
+      }
     };
     getUsers();
-  }, [processedUsers,auth.token,sendRequest]);
+  }, [processedUsers, auth.token, sendRequest]);
 
   const sendFriendRequestHandler = id => {
     setProcessedUsers(prevValue => [...prevValue, id]);
@@ -42,7 +44,7 @@ const Users = () => {
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && (
-        <div className="center">
+        <div className='center'>
           <LoadingSpinner />
         </div>
       )}
