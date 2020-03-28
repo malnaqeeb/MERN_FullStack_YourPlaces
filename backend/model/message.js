@@ -35,4 +35,8 @@ const thisSchema = new mongoose.Schema({
   ]
 });
 
+thisSchema.statics.createNewMessageId = () =>{
+  return new mongoose.Types.ObjectId();
+}
+
 module.exports = mongoose.model("Message", thisSchema);
