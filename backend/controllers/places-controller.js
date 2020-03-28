@@ -32,7 +32,7 @@ const getPlacesByUserId = async (req, res, next) => {
   try {
     const populateOptions = {
       path: 'places',
-      options: { sort: { [sortBy]: '1' } },
+      options: { sort: { [sortBy]: sortBy === 'title' ? '1' : '-1' } },
     };
     if (tagFilter) {
       populateOptions.match = { tags: { $in: tagFilter.split(',') } };

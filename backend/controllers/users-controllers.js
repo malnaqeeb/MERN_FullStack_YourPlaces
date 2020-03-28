@@ -45,7 +45,6 @@ const getUsers = async (req, res, next) => {
 
   try {
     users = await User.find({}, '-password').sort(sortBy);
-    
   } catch (error) {
     return next(
       new HttpError('Fetching users failed, please try again later.', 500),
