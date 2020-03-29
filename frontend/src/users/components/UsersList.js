@@ -16,7 +16,7 @@ const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
   }
   return (
     <React.Fragment>
-      <ul className="users-list">
+      <ul className="users-mobile users-list">
         {items.map(user => (
           <UserItem
             users={items}

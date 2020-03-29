@@ -59,6 +59,12 @@ body {
     font-size: 1.25rem;
   }
 }
+@media (max-width: 768px) {
+ .users-mobile{
+   width: 60% !important;
+ }
+
+}
 
 .fade-in {
   animation: fadeIn ease 5s;
