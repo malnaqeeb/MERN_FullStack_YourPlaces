@@ -16,7 +16,7 @@ const UserProfileNav = () => {
   return (
     <Fragment>
       <i class={userMenuOpen ? `fas fa-angle-double-right mobile-hidden-icon` : `fas fa-angle-double-right mobile-icon`} onClick={toggleMenu}></i>
-      <Card className={userMenuOpen ? `sideBar` : `sideBar mobile-hidden-menu`} style={navBarHeight}>
+      <Card className={userMenuOpen ? `sideBar fade-in` : `sideBar mobile-hidden-menu fade-in`} style={navBarHeight}>
       <i class="fas fa-angle-double-left desktop-hidden-icon" onClick={toggleMenu}></i>
         <Link className="navLink" to={`/${userId}/profile`}>
           <span>Profile</span>
