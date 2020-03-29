@@ -147,8 +147,8 @@ const Messages = () => {
           <div
             className={
               mobileContactMode
-                ? `contacts__container mobile-contacts`
-                : `contacts__container mobile-hidden-contacts`
+                ? `contacts__container contact__container-mobile`
+                : `contacts__container contact__container-hidden`
             }
           >
             <h2 className="header">Recent</h2>
@@ -195,7 +195,7 @@ const Messages = () => {
           <div
             className={
               mobileContactMode
-                ? `message__box mobile-messages`
+                ? `message__box message__box-hidden`
                 : `message__box message__box-mobile`
             }
           >

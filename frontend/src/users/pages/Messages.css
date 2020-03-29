@@ -68,16 +68,16 @@
   .mobile-hidden {
     display: inline;;
   }
-  .mobile-hidden-contacts{
+  .contact__container-hidden{
     display: none;
   }
-  .mobile-messages{
+  .message__box-hidden{
     display: none;
   }
   .message__box-mobile{
     width: 100vw;
   }
-  .mobile-contacts{
+  .contact__container-mobile{
     width: 100vw;
   }
 }
