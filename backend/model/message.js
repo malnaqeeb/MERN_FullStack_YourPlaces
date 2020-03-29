@@ -24,18 +24,24 @@ const thisSchema = new mongoose.Schema({
       date: {
         type: Date,
         default: Date.now,
-        required: true,
+        required: true
       },
-      isSent: {
+      isSent:{
         type: Boolean,
         default: false,
-        required: true,
-      },
-    },
-  ],
+        required: true
+      }
+    }
+  ]
+},{
+  timestamps: true
 });
 thisSchema.statics.createNewMessageId = () => {
   return new mongoose.Types.ObjectId();
 };
+
+thisSchema.statics.createNewMessageId = () =>{
+  return new mongoose.Types.ObjectId();
+}
 
 module.exports = mongoose.model("Message", thisSchema);
