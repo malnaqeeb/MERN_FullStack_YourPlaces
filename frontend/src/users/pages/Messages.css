@@ -58,3 +58,26 @@
   overflow: scroll;
   height: 60%;
 }
+.mobile-hidden{
+  display: none;
+}
+
+
+
+@media (max-width: 768px) {
+  .mobile-hidden {
+    display: inline;;
+  }
+  .mobile-hidden-contacts{
+    display: none;
+  }
+  .mobile-messages{
+    display: none;
+  }
+  .message__box-mobile{
+    width: 100vw;
+  }
+  .mobile-contacts{
+    width: 100vw;
+  }
+}

@@ -20,6 +20,7 @@ const Messages = () => {
   const { token } = useContext(AuthContext);
   const message = useContext(MessageContext);
   const [allMessages, setAllMessages] = useState(message.messagesData);
+  const [mobileContactMode, setMobileContactMode] = useState(true);
 
   // scroll to the bottom of the messages box
   const myScrollRef = useRef();
@@ -32,10 +33,10 @@ const Messages = () => {
     {
       message: {
         value: "",
-        isValid: false,
-      },
+        isValid: false
+      }
     },
-    false,
+    false
   );
 
   // fetching contacts (only texted ones not all users)
@@ -46,8 +47,8 @@ const Messages = () => {
         "GET",
         null,
         {
-          Authorization: `Bearer ${token}`,
-        },
+          Authorization: `Bearer ${token}`
+        }
       );
       setContacts(data.corresponders);
       scrollToBottom();
@@ -69,14 +70,17 @@ const Messages = () => {
         `${process.env.REACT_APP_BACKEND_URL}/user/messages/${corresponderId}`,
         "POST",
         JSON.stringify({
-          message: messageValue,
+          message: messageValue
         }),
         {
           Authorization: "Bearer " + token,
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       );
-      setAllMessages([...allMessages, { message: messageValue, isSent: true, _id: res.messageId }]);
+      setAllMessages([
+        ...allMessages,
+        { message: messageValue, isSent: true, _id: res.messageId }
+      ]);
       scrollToBottom();
     } catch (error) {
       console.error(error);
@@ -101,8 +105,8 @@ const Messages = () => {
         "GET",
         null,
         {
-          Authorization: "Bearer " + token,
-        },
+          Authorization: "Bearer " + token
+        }
       );
       fetchContacts();
       setAllMessages(fetchedMessages.messages);
@@ -114,16 +118,23 @@ const Messages = () => {
 
   // Delete a corresponder
   const dltCorresponder = async id => {
-    await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/user/messages/${id}`, "DELETE", null, {
-      Authorization: "Bearer " + token,
-    });
+    await sendRequest(
+      `${process.env.REACT_APP_BACKEND_URL}/user/messages/${id}`,
+      "DELETE",
+      null,
+      {
+        Authorization: "Bearer " + token
+      }
+    );
     const filteredContacts = contacts.filter(contact => contact._id !== id);
     setContacts(filteredContacts);
     setAllMessages([]);
     fetchContacts();
   };
 
-  const msgBoxHeight = { height: window.innerHeight - 0.12 * window.innerHeight };
+  const msgBoxHeight = {
+    height: window.innerHeight - 0.12 * window.innerHeight
+  };
 
   return (
     <React.Fragment>
@@ -133,7 +144,13 @@ const Messages = () => {
       {!isLoading && (
         <Card className="messages__card" style={msgBoxHeight}>
           {/* Contacts */}
-          <div className="contacts__container">
+          <div
+            className={
+              mobileContactMode
+                ? `contacts__container mobile-contacts`
+                : `contacts__container mobile-hidden-contacts`
+            }
+          >
             <h2 className="header">Recent</h2>
             <div className="contacts__box">
               {contacts.length > 0 &&
@@ -141,11 +158,14 @@ const Messages = () => {
                   <Card
                     className="user-item__content"
                     key={contact.corresponder._id}
-                    className={` user-item__content ${message.id === contact.corresponder._id &&
-                      "activatedContact"}`}
+                    className={` user-item__content ${message.id ===
+                      contact.corresponder._id && "activatedContact"}`}
                   >
                     <div
-                      onClick={() => getUserMessages(contact.corresponder._id)}
+                      onClick={() => {
+                        getUserMessages(contact.corresponder._id);
+                        setMobileContactMode(false);
+                      }}
                       className={`cardWidth`}
                     >
                       <div className="user-item__image">
@@ -158,7 +178,11 @@ const Messages = () => {
                         <h3>{contact.corresponder.name}</h3>
                       </div>
                     </div>
-                    <button onClick={() => dltCorresponder(contact.corresponder._id)}>X</button>
+                    <button
+                      onClick={() => dltCorresponder(contact.corresponder._id)}
+                    >
+                      X
+                    </button>
                   </Card>
                 ))}
             </div>
@@ -168,8 +192,15 @@ const Messages = () => {
           </div>
 
           {/* Messages */}
-          <div className="message__box">
+          <div
+            className={
+              mobileContactMode
+                ? `message__box mobile-messages`
+                : `message__box message__box-mobile`
+            }
+          >
             <h2 className="header">Messages</h2>
+            <button onClick={()=>{setMobileContactMode(true)}} className="mobile-hidden"> BACK </button>
             <div className="msgsContainer">
               {allMessages.length > 0 ? (
                 allMessages.map((msg, i) => (

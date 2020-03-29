@@ -14,7 +14,6 @@ const getUserCorresponders = async (req, res, next) => {
         path: "corresponder",
         select: "name image",
       }).sort("-updatedAt").exec();
-      .exec();
     res.json({ corresponders });
   } catch (error) {
     return next(new HttpError("Failed to get MessageList, please try again later", 500));
