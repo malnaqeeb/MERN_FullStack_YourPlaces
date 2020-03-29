@@ -75,10 +75,6 @@ const BucketList = () => {
           </div>
         )}
         <React.Fragment>
-          <h2 className="center yellow-text fade-in no-select">
-            Bucket List of{" "}
-            <span className="pink-text"> {user && user.user.name}</span>{" "}
-          </h2>
           {places && places.length === 0 && auth.userId === userId && (
             <h2
               className="center yellow-text fade-in"
@@ -96,6 +92,13 @@ const BucketList = () => {
           )}
 
           <div className="bucket-list-content">
+            <div className="m-b-2">
+              <h2 className=" yellow-text fade-in no-select center">
+                Bucket List of{" "}
+                <span className="pink-text"> {user && user.user.name}</span>{" "}
+              </h2>
+            </div>
+
             {places &&
               places.map((bucket, index) => {
                 return (

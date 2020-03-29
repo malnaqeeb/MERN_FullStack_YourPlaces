@@ -8,6 +8,8 @@ import UserProfile from "../components/UserProfile";
 import Messages from "../pages/Messages";
 import Users from "../../users/pages/Users";
 import UserProfileNav from "../components/UserProfileNav";
+import BucketList from "../../places/components/BucketList";
+import Friends from "../../friends/pages/Friends";
 
 const User = () => {
   const { userId } = useContext(AuthContext);
@@ -43,6 +45,12 @@ const User = () => {
             </Route>
             <Route path={`/:userId/messages`} exact>
               <Messages />
+            </Route>
+            <Route path={`/:userId/bucketlist`}>
+              <BucketList/>
+            </Route>
+            <Route path={`/:userId/friends`}>
+              <Friends/>
             </Route>
             <Route path="/">
               <Users />

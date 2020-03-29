@@ -57,7 +57,6 @@ const App = () => {
         <Route path='/:userId/profile'>
           <User />
         </Route>
-        <Redirect to='/' />
         <Route path="/:userId/messages">
           <UserProfileNav />
           <Messages />

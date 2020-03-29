@@ -66,6 +66,9 @@ body {
 .p-1 {
   padding: 1rem;
 }
+.m-b-2{
+  margin-bottom: 2rem;
+}
 @media (max-width: 600px) {
   h2,
   h3 {

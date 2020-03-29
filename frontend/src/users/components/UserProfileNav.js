@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import Card from "../../shared/component/UIElements/Card";
 import { AuthContext } from "../../shared/context/auth-context";
@@ -6,17 +6,32 @@ import "./UserProfileNav.css";
 
 const UserProfileNav = () => {
   const { userId } = useContext(AuthContext);
-
-  const navBarHeight = { height: window.innerHeight - 0.11 * window.innerHeight };
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const toggleMenu = ()=>{
+    setUserMenuOpen(!userMenuOpen)
+  }
+  const navBarHeight = {
+    height: window.innerHeight - 0.11 * window.innerHeight
+  };
   return (
-    <Card className="sideBar" style={navBarHeight}>
-      <Link className="navLink" to={`/${userId}/profile`}>
-        <h2>Profile</h2>
-      </Link>
-      <Link className="navLink" to={`/${userId}/messages`}>
-        <h2>Messages</h2>
-      </Link>
-    </Card>
+    <Fragment>
+      <i class={userMenuOpen ? `fas fa-angle-double-right mobile-hidden-icon` : `fas fa-angle-double-right mobile-icon`} onClick={toggleMenu}></i>
+      <Card className={userMenuOpen ? `sideBar` : `sideBar mobile-hidden-menu`} style={navBarHeight}>
+      <i class="fas fa-angle-double-left desktop-hidden-icon" onClick={toggleMenu}></i>
+        <Link className="navLink" to={`/${userId}/profile`}>
+          <span>Profile</span>
+        </Link>
+        <Link className="navLink" to={`/${userId}/bucketlist`}>
+          <span>My Bucket List</span>
+        </Link>
+        <Link className="navLink" to={`/${userId}/friends`}>
+          <span>My Friends</span>
+        </Link>
+        <Link className="navLink" to={`/${userId}/messages`}>
+          <span>Messages</span>
+        </Link>
+      </Card>
+    </Fragment>
   );
 };
 
