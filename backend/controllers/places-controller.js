@@ -39,10 +39,15 @@ const getPlacesByUserId = async (req, res, next) => {
     }
     userWithPlaces = await User.findById(userId).populate(populateOptions);
 
-    if (!userWithPlaces || userWithPlaces.places.length === 0)
+    if (!userWithPlaces)
       return next(
         new HttpError('Could not find a place for the provided user id.', 404),
       );
+    if (userWithPlaces.places.length === 0) {
+      return next(
+        new HttpError('There is no place with selected tag(s) .', 404),
+      );
+    }
 
     res.json({
       userWithPlaces: userWithPlaces.places.map(place =>

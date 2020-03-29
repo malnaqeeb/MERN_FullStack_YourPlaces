@@ -13,6 +13,7 @@ import {
 } from '../../shared/Util/validators';
 import { useFrom } from '../../shared/hooks/form-hook';
 import { PLACE_TAGS } from '../../shared/Util/constants';
+import Checkbox from '@material-ui/core/Checkbox';
 import './NewPlace.css';
 
 const UpdatePlace = () => {
@@ -83,6 +84,7 @@ const UpdatePlace = () => {
 
   const handleTagChange = event => {
     const tagName = event.target.name;
+
     const checked = event.target.checked;
     if (checked) {
       setTags(oldTags => {
@@ -128,11 +130,11 @@ const UpdatePlace = () => {
       const tagInput = (
         <span key={tag.name}>
           <label>
-            <input
-              type="checkbox"
+            <Checkbox
               name={tag.name}
-              checked={checked}
+              checked={!!checked}
               onChange={handleTagChange}
+              inputProps={{ 'aria-label': 'primary checkbox' }}
             />
             {tag.title}
           </label>

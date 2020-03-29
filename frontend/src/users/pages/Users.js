@@ -4,7 +4,7 @@ import ErrorModal from '../../shared/component/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/component/UIElements/LoadingSpinner';
 import useHttpClient from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
-import Select from '../../shared/component/Select';
+import { Select, MenuItem } from '@material-ui/core';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -45,14 +45,12 @@ const Users = () => {
     setProcessedUsers(prevValue => [...prevValue, id]);
   };
 
-  //sort users on seleced option below
-  const optionValues = ['', 'name', 'placesCount', 'registration'];
-  const sortByNameCountDate = selectElem => {
-    if (selectElem.value === 'name') setSortBy('name');
-
-    if (selectElem.value === 'placesCount') setSortBy('-placesCount');
-
-    if (selectElem.value === 'registration') setSortBy('-created_at');
+  //sort users on selected option below
+  const sortByNameCountDate = event => {
+    const menuItemValue = event.target.value;
+    if (menuItemValue === 'name') setSortBy('name');
+    if (menuItemValue === 'placesCount') setSortBy('-placesCount');
+    if (menuItemValue === 'registration') setSortBy('-created_at');
   };
 
   return (
@@ -66,11 +64,17 @@ const Users = () => {
       {!isLoading && users && (
         <Fragment>
           <Select
-            array={optionValues}
-            method={'sort'}
-            idName={'select-sort-users'}
-            onChangeEvent={sortByNameCountDate}
-          />
+            onChange={sortByNameCountDate}
+            defaultValue="none"
+            style={{ color: 'white', margin: '1rem' }}
+          >
+            <MenuItem value="none" disabled>
+              Choose an option to Sort
+            </MenuItem>
+            <MenuItem value="placesCount">Place Count</MenuItem>
+            <MenuItem value="name">Name</MenuItem>
+            <MenuItem value="registration">Registration Date</MenuItem>
+          </Select>
           <UsersList
             items={users}
             userData={user}

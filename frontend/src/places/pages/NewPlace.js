@@ -14,6 +14,7 @@ import ErrorModal from '../../shared/component/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/component/UIElements/LoadingSpinner';
 import ImageUpload from '../../shared/component/formElements/ImageUpload';
 import { PLACE_TAGS } from '../../shared/Util/constants';
+import { Checkbox } from '@material-ui/core';
 
 const NewPlace = () => {
   const auth = useContext(AuthContext);
@@ -88,11 +89,11 @@ const NewPlace = () => {
     const tagInput = (
       <span key={tag.name}>
         <label>
-          <input
-            type="checkbox"
+          <Checkbox
             name={tag.name}
             checked={checked}
             onChange={handleTagChange}
+            inputProps={{ 'aria-label': 'primary checkbox' }}
           />
           {tag.title}
         </label>

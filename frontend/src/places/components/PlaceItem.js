@@ -9,6 +9,7 @@ import LoadingSpinner from '../../shared/component/UIElements/LoadingSpinner';
 import ErrorModal from '../../shared/component/UIElements/ErrorModal';
 import { AuthContext } from '../../shared/context/auth-context';
 import useHttpClient from '../../shared/hooks/http-hook';
+import Chip from '@material-ui/core/Chip';
 import { PLACE_TAG_TITLES } from '../../shared/Util/constants';
 
 const PlaceItem = ({ place, onDeletePlace }) => {
@@ -248,9 +249,14 @@ const PlaceItem = ({ place, onDeletePlace }) => {
               <div>
                 {tags.map(tag => {
                   return (
-                    <span key={tag}>
-                      &nbsp;*&nbsp;{PLACE_TAG_TITLES[tag]}&nbsp;*&nbsp;
-                    </span>
+                    <Chip
+                      key={tag}
+                      className="tag-chip"
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                      label={PLACE_TAG_TITLES[tag]}
+                    />
                   );
                 })}
               </div>

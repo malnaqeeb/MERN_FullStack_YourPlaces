@@ -4,7 +4,8 @@ import { useParams, useHistory } from 'react-router-dom';
 import useHttpClient from '../../shared/hooks/http-hook';
 import ErrorModal from '../../shared/component/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/component/UIElements/LoadingSpinner';
-import Select from '../../shared/component/Select';
+import { Select, Checkbox, MenuItem } from '@material-ui/core';
+
 import { PLACE_TAGS } from '../../shared/Util/constants';
 import './UserPlaces.css';
 
@@ -16,6 +17,7 @@ const UserPlaces = () => {
   const [user, setUser] = useState();
   const [sortBy, setSortBy] = useState('');
   const [tags, setTags] = useState([]);
+
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -62,11 +64,11 @@ const UserPlaces = () => {
   };
 
   //sort on selected option below
-  const optionValues = ['', 'rate', 'title', 'created_at'];
-  const sortByTitleRateDate = selectElem => {
-    if (selectElem.value === 'rate') setSortBy('rate');
-    if (selectElem.value === 'title') setSortBy('title');
-    if (selectElem.value === 'created_at') setSortBy('created_at');
+  const sortByTitleRateDate = event => {
+    const menuItemValue = event.target.value;
+    if (menuItemValue === 'rate') setSortBy('rate');
+    if (menuItemValue === 'title') setSortBy('title');
+    if (menuItemValue === 'created_at') setSortBy('created_at');
   };
 
   const handleTagChange = event => {
@@ -110,11 +112,11 @@ const UserPlaces = () => {
     const tagInput = (
       <span key={tag.name}>
         <label>
-          <input
-            type="checkbox"
+          <Checkbox
             name={tag.name}
             checked={checked}
             onChange={handleTagChange}
+            inputProps={{ 'aria-label': 'primary checkbox' }}
           />
           {tag.title}
         </label>
@@ -133,14 +135,21 @@ const UserPlaces = () => {
         <ErrorModal error={error} onClear={clearError} />
         {!isLoading && places && (
           <Fragment>
-            <Select
-              array={optionValues}
-              method={'sort'}
-              idName={'select-sort-places'}
-              onChangeEvent={sortByTitleRateDate}
-            />
-
-            {tagInputs}
+            <div className="sort-filter-layout">
+              <Select
+                onChange={sortByTitleRateDate}
+                defaultValue="none"
+                style={{ color: 'white' }}
+              >
+                <MenuItem value="none" disabled>
+                  Choose an option to Sort
+                </MenuItem>
+                <MenuItem value="rate">Sort By Rate</MenuItem>
+                <MenuItem value="title">Sort By Title</MenuItem>
+                <MenuItem value="created_at">Sort By Adding Date</MenuItem>
+              </Select>
+              {tagInputs}
+            </div>
 
             <PlaceList items={places} onDeletePlace={placeDeleteHandler} />
           </Fragment>

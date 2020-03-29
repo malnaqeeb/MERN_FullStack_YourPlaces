@@ -48,30 +48,40 @@
 .place-item__actions a {
   margin: 0.5rem;
 }
+
 .evaluation {
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
-  position:relative;
+  position: relative;
   z-index: 10;
 }
-.evaluation > div {
+
+.evaluation>div {
   margin: 10px 5px 0;
   display: flex;
 }
+
 .map-container {
   height: 15rem;
   width: 100%;
 }
+
 @media (min-width: 768px) {
   .place-item__image {
     height: 20rem;
   }
 }
+
 p.like-count {
   margin-top: 10px;
   margin-right: 10px;
 }
+
 p.dislike-count {
   margin-right: 10px;
+}
+
+.tag-chip {
+  margin-right: 5px
 }
