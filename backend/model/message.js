@@ -33,6 +33,8 @@ const thisSchema = new mongoose.Schema({
       }
     }
   ]
+},{
+  timestamps: true
 });
 
 thisSchema.statics.createNewMessageId = () =>{
