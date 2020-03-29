@@ -9,6 +9,7 @@ const {
 } = require("../emails/account");
 
 const JWT_KEY = process.env.JWT_KEY;
+const { accountActivatedEmail, accountVerifyEmail } = require('../register-confirmation/mail-generator')
 
 const getUserFriend = async (req, res, next) => {
   const user = await User.findById(req.userData.userId)
@@ -86,7 +87,12 @@ const signup = async (req, res, next) => {
       social: {},
       places: []
     });
+    createdUser.generateAccountVerify();
+    // send email
+    let link = req.headers.origin + "/confirm/" + createdUser.verifyAccountToken;
 
+    accountVerifyEmail(createdUser.name, createdUser.email, link);
+    
     await createdUser.save();
   } catch (error) {
     return next(
@@ -107,9 +113,38 @@ const signup = async (req, res, next) => {
       new HttpError("Signing up failed, please try again later", 500)
     );
   }
+
+  if (!createdUser.active) {
+    return next(new HttpError("Verify your account", 500));
+  }
+
   res
     .status(201)
     .json({ userId: createdUser.id, email: createdUser.email, token });
+};
+
+// get the token and check it with the user token and check the time to ensure that it still withen one hour 
+const confirmAccount = async (req, res, next) => {
+  const user = await User.findOne({
+    verifyAccountToken: req.params.token,
+    verifyAccountExpires: { $gt: Date.now() }
+  });
+  try {
+    if (!user) {
+      return next(
+        new HttpError("Verify account token is invalid or has expired. Please sign up once again", 401)
+      );
+    }
+    user.active = true;
+    user.verifyAccountToken = undefined;
+    user.verifyAccountExpires = undefined;
+    accountActivatedEmail(user.name, user.email);
+    user.save();
+    // send email
+    res.status(200).json({ message: "Your account has been activeted." });
+  } catch (error) {
+    return next(new HttpError(error.message, 500));
+  }
 };
 
 const login = async (req, res, next) => {
@@ -135,6 +170,9 @@ const login = async (req, res, next) => {
     return next(
       new HttpError("Logging in failed, please try agein later", 500)
     );
+  }
+  if (!existingUser.active) {
+    return next(new HttpError("We already sent you an eamail, please click the to activate your account", 500));
   }
   res
     .status(201)
@@ -278,5 +316,6 @@ module.exports = {
   getUserFriend,
   forgetPassword,
   resetPassword,
-  setNotifications
+  setNotifications,
+  confirmAccount
 };
