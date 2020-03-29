@@ -14,7 +14,8 @@
   }
   .notification-box{
     background-color:#F8DF00;
-    color: #4D4D4D;
+    color: black;
+    border: 2px solid black;
     box-sizing: border-box;
     border-radius: 5px;
     padding: 1em;

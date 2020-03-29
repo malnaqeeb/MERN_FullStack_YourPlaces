@@ -10,9 +10,9 @@ const FriendRequestList = ({
 }) => {
   if (friendRequests.length === 0) {
     return (
-      <div className="center">
+      <div className="center m-1">
         <Card>
-          <h2>No friend requests found.</h2>
+          <h2 className='gray-text'>No friend requests found.</h2>
         </Card>
       </div>
     );

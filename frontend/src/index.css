@@ -54,6 +54,12 @@ body {
   color: #ff0055;
   margin-left: 0.75%;
 }
+.gray-text{
+  color: #4d4d4d;
+}
+.block{
+  display: block;
+}
 .m-1 {
   margin: 1rem;
 }
@@ -73,6 +79,14 @@ body {
   -moz-animation: fadeIn ease 3s;
   -o-animation: fadeIn ease 3s;
   -ms-animation: fadeIn ease 3s;
+}
+
+.fade-in-faster {
+  animation: fadeIn ease 1.5s;
+  -webkit-animation: fadeIn ease 1.5s;
+  -moz-animation: fadeIn ease 1.5s;
+  -o-animation: fadeIn ease 1.5s;
+  -ms-animation: fadeIn ease 1.5s;
 }
 
 @keyframes fadeIn {
