@@ -4,22 +4,22 @@ const thisSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Types.ObjectId,
     required: true,
-    ref: "User"
+    ref: "User",
   },
   corresponder: {
     type: mongoose.Types.ObjectId,
     required: true,
-    ref: "User"
+    ref: "User",
   },
   hasNewMessage: {
     type: Boolean,
-    default: false
+    default: false,
   },
   messages: [
     {
       message: {
         type: String,
-        required: true
+        required: true,
       },
       date: {
         type: Date,
@@ -36,6 +36,9 @@ const thisSchema = new mongoose.Schema({
 },{
   timestamps: true
 });
+thisSchema.statics.createNewMessageId = () => {
+  return new mongoose.Types.ObjectId();
+};
 
 thisSchema.statics.createNewMessageId = () =>{
   return new mongoose.Types.ObjectId();

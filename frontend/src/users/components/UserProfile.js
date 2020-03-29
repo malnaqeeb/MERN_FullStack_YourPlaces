@@ -14,9 +14,9 @@ import ImageUpload from "../../shared/component/formElements/ImageUpload";
 
 import "./UserProfile.css";
 const UserProfile = props => {
-  const {userId, token} = useContext(AuthContext);
+  const { userId, token } = useContext(AuthContext);
   const [editImage, setEditImage] = useState(false);
-  const [editName, setEditName] = useState(false);  
+  const [editName, setEditName] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const { name, image } = props.user;
 
@@ -24,14 +24,14 @@ const UserProfile = props => {
     {
       email: {
         value: "",
-        isValid: false
+        isValid: false,
       },
       password: {
         value: "",
-        isValid: false
-      }
+        isValid: false,
+      },
     },
-    false
+    false,
   );
 
   const switchModelHandler = () => {
@@ -40,34 +40,34 @@ const UserProfile = props => {
         {
           image: {
             value: null,
-            isValid: false
-          }
+            isValid: false,
+          },
         },
-        false
+        false,
       );
-    } else if(editName) {
+    } else if (editName) {
       setFormData(
         {
           name: {
             value: name,
-            isValid: false
-          }
+            isValid: false,
+          },
         },
-        false
+        false,
       );
-    } else {      
+    } else {
       setFormData(
         {
           email: {
             value: "",
-            isValid: false
+            isValid: false,
           },
           password: {
             value: "",
-            isValid: false
-          }
+            isValid: false,
+          },
         },
-        false
+        false,
       );
     }
   };
@@ -75,11 +75,11 @@ const UserProfile = props => {
   const changeEditName = () => {
     setEditName(currentMode => !currentMode);
     switchModelHandler();
-  }
+  };
   const changeEditImage = () => {
     setEditImage(currentMode => !currentMode);
     switchModelHandler();
-  }
+  };
 
   const authSubmitHandler = async () => {
     if (editName) {
@@ -88,12 +88,12 @@ const UserProfile = props => {
           `${process.env.REACT_APP_BACKEND_URL}/users/${userId}`,
           "PATCH",
           JSON.stringify({
-            name: state.inputs.name.value
+            name: state.inputs.name.value,
           }),
           {
             "Content-Type": "application/json",
-            "Authorization" : `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         );
         setEditName(false);
         props.setUser(res.user);
@@ -108,8 +108,8 @@ const UserProfile = props => {
           "PATCH",
           formData,
           {
-            "Authorization" : `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         );
         setEditImage(false);
         props.setUser(res.user);
@@ -119,43 +119,55 @@ const UserProfile = props => {
 
   return (
     <div className="profile">
-      { isLoading && <LoadingSpinner />}
+      {isLoading && <LoadingSpinner />}
       <ErrorModal error={error} onClear={clearError} />
-      {!isLoading && 
+      {!isLoading && (
         <Card className="profile__card">
-        {!editName && 
-          <React.Fragment>
-            {editImage ? 
-              <ImageUpload
-                center
-                id={"image"}
-                onInput={inputHandler}
-                errorText='Please provide an image'
-              /> : <Avatar image={image} className="profile__avatar"/>
-            }
-            {editImage && <Button inverse onClick={authSubmitHandler}>Save</Button>}
-            <Button onClick={changeEditImage}>{editImage? 'Cancel' : 'Change Image'}</Button>
-          </React.Fragment>
-        }
-        {!editImage && 
-          <React.Fragment>
-            { editName ? 
-              <Input
-                id='name'
-                element='input'
-                  type='text'
-                  label='Your Name'
-                  validators={[VALIDATOR_REQUIRE()]}
-                  errorText='Please enter a valid name'
+          {!editName && (
+            <React.Fragment>
+              {editImage ? (
+                <ImageUpload
+                  center
+                  id={"image"}
                   onInput={inputHandler}
-                /> : <h4>{name}</h4>
-              }
-              {editName && <Button inverse onClick={authSubmitHandler}>Save</Button>}
-              <Button onClick={changeEditName}>{editName? 'Cancel' : 'Edit Name'}</Button>
+                  errorText="Please provide an image"
+                />
+              ) : (
+                <Avatar image={image} className="profile__avatar" />
+              )}
+              {editImage && (
+                <Button inverse onClick={authSubmitHandler}>
+                  Save
+                </Button>
+              )}
+              <Button onClick={changeEditImage}>{editImage ? "Cancel" : "Change Image"}</Button>
             </React.Fragment>
-          }
+          )}
+          {!editImage && (
+            <React.Fragment>
+              {editName ? (
+                <Input
+                  id="name"
+                  element="input"
+                  type="text"
+                  label="Your Name"
+                  validators={[VALIDATOR_REQUIRE()]}
+                  errorText="Please enter a valid name"
+                  onInput={inputHandler}
+                />
+              ) : (
+                <h4>{name}</h4>
+              )}
+              {editName && (
+                <Button inverse onClick={authSubmitHandler}>
+                  Save
+                </Button>
+              )}
+              <Button onClick={changeEditName}>{editName ? "Cancel" : "Edit Name"}</Button>
+            </React.Fragment>
+          )}
         </Card>
-      }
+      )}
     </div>
   );
 };

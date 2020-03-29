@@ -1,0 +1,24 @@
+.navLink {
+  color: #ffd900;
+  text-decoration: none;
+  text-align: center;
+  padding: 1%;
+  border: 1px solid transparent;
+  color: white;
+}
+
+.navLink:hover {
+  background: #ffd900;
+  color: black;
+  border: 1px solid black;
+}
+
+.sideBar {
+  background: #ff0055;
+  float: left;
+  display: flex;
+  flex-flow: column wrap;
+  padding: 5% 2% 20%;
+  color: #ffd900;
+  cursor: pointer;
+}
