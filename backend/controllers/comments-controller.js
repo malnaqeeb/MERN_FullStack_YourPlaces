@@ -9,7 +9,7 @@ const getComments = async (req, res, next) => {
         .populate(
             {
                 path: "creator",
-                select: 'name image -_id'
+                select: 'name image'
             }
         )
         .exec();
@@ -29,9 +29,19 @@ const createComment = async (req, res, next) => {
         const placeId = req.params.pid;
         const creator = req.userData.userId;
         const comment = req.body.comment;
-        const createdComment = await Comment.create({placeId,creator,comment}).exec();
-        res.json({comment: createdComment});
-    } catch {
+        const title = req.body.title;
+        const createdComment = await Comment.create({placeId ,creator, title, comment});
+        const doc = await Comment.findOne(createdComment)
+        .populate(
+            {
+                path: "creator",
+                select: 'name image'
+            }
+        )
+        .exec();
+        res.json({comment: doc});
+    } catch (e) {
+        console.log(e);
         return next(new HttpError('Something went wrong, could not create comment.', 500));
     }
 }
@@ -59,6 +69,7 @@ const updateComment = async (req, res, next) => {
 
     try{
         comment.comment = req.body.comment;
+        comment.title = req.body.title;
         await comment.save();
     } catch {
         return next(new HttpError('Something went wrong, could not update the comment with the provided id', 500));
@@ -85,7 +96,7 @@ const deleteComment = async (req, res, next) => {
     }
 
     try{
-        await Comment.remove(comment);
+        await Comment.deleteOne(comment);
     } catch {
         return next(new HttpError('Something went wrong, could not update the comment with the provided id', 500));
     }

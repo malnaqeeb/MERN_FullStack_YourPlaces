@@ -11,7 +11,7 @@ const UserPlaces = () => {
   const [places, setPlaces] = useState();
   const userId = useParams().userId;
   const history = useHistory();
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(); 
   useEffect(() => {
     const getUser = async () => {
       try {

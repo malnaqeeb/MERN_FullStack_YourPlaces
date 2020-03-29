@@ -16,11 +16,11 @@ route.get("/:pid/comments", commentsControllers.getComments);
 route.use(checkAuth);
 
 route.post("/:pid/comments", 
-  [check('comment').not().isEmpty()], 
+  [check('comment').not().isEmpty(), check('title').not().isEmpty()], 
   commentsControllers.createComment);
 
 route.patch("/:pid/comments/:cid", 
-  [check('comment').not().isEmpty()], 
+  [check('comment').not().isEmpty(), check('title').not().isEmpty()], 
   commentsControllers.updateComment);
 
 route.delete("/:pid/comments/:cid", commentsControllers.deleteComment);
