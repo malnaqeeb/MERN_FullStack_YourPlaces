@@ -30,7 +30,7 @@
   height: 4rem;
   margin-right: 1rem;
 }
-.user-item__info{
+.user-item__info {
   display: flex;
   flex-direction: column;
 }
@@ -56,7 +56,11 @@
   height: auto;
 }
 
-.user-item__icon a:hover{
+.user-item__icon a:hover {
   background-color: #292929;
   opacity: 0.5;
+}
+
+.flex {
+  display: flex;
 }

@@ -1,13 +1,12 @@
-import React from 'react';
-import UserItem from './UserItem';
-import Card from '../../shared/component/UIElements/Card';
-import './UsersList.css';
-import './UserItem.css';
-import Avatar from '../../shared/component/UIElements/Avatar';
+import React from "react";
+import UserItem from "./UserItem";
+import Card from "../../shared/component/UIElements/Card";
+import Avatar from "../../shared/component/UIElements/Avatar"
+import "./UsersList.css";
+import "./UserItem.css";
 
 
 const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
-
   if (items.length === 0) {
     return (
       <div className="center fade-in">
@@ -30,7 +29,7 @@ const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
 
         </div>
       ))}
-      <ul className="users-list">
+      <ul className="users-list users-mobile">
         {
           items
           .filter(notAuth => notAuth._id !== auth.userId)

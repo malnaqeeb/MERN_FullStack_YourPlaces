@@ -12,7 +12,7 @@ import { useFrom } from "../../shared/hooks/form-hook";
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
-  VALIDATOR_REQUIRE
+  VALIDATOR_REQUIRE,
 } from "../../shared/Util/validators";
 import { AuthContext } from "../../shared/context/auth-context";
 // React Icons
@@ -28,12 +28,12 @@ const Auth = () => {
     {
       email: {
         value: "",
-        isValid: false
+        isValid: false,
       },
       password: {
         value: "",
-        isValid: false
-      }
+        isValid: false,
+      },
     },
     false
   );
@@ -53,7 +53,7 @@ const Auth = () => {
           ...state.inputs,
           name: {
             value: "",
-            isValid: false
+            isValid: false,
           },
           image: {
             value: null,
@@ -80,8 +80,8 @@ const Auth = () => {
             password: state.inputs.password.value
           }),
           {
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         );
 
         auth.login(res.userId, res.token, null, res.friendStatus);

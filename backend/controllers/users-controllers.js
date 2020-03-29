@@ -27,7 +27,7 @@ const getUserFriend = async (req, res, next) => {
           id: friend._id,
           name: friend.name,
           email: friend.email,
-          image: friend.image
+          image: friend.image,
         })),
     friendRequests: !user.friendRequests
       ? []
@@ -37,9 +37,9 @@ const getUserFriend = async (req, res, next) => {
             id: request.user._id,
             email: request.user.email,
             image: request.user.image,
-            name: request.user.name
-          }
-        }))
+            name: request.user.name,
+          },
+        })),
   });
 };
 
@@ -85,7 +85,7 @@ const signup = async (req, res, next) => {
       image: req.file.url,
       password,
       social: {},
-      places: []
+      places: [],
     });
     createdUser.generateAccountVerify();
     // send email
@@ -145,6 +145,7 @@ const confirmAccount = async (req, res, next) => {
   } catch (error) {
     return next(new HttpError(error.message, 500));
   }
+  res.status(201).json({ userId: createdUser.id, email: createdUser.email, token });
 };
 
 const login = async (req, res, next) => {

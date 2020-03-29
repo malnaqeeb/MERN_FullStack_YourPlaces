@@ -25,14 +25,14 @@ const UserProfile = props => {
     {
       email: {
         value: "",
-        isValid: false
+        isValid: false,
       },
       password: {
         value: "",
-        isValid: false
-      }
+        isValid: false,
+      },
     },
-    false
+    false,
   );
 
   const switchModelHandler = () => {
@@ -41,34 +41,34 @@ const UserProfile = props => {
         {
           image: {
             value: null,
-            isValid: false
-          }
+            isValid: false,
+          },
         },
-        false
+        false,
       );
     } else if (editName) {
       setFormData(
         {
           name: {
             value: name,
-            isValid: false
-          }
+            isValid: false,
+          },
         },
-        false
+        false,
       );
     } else {
       setFormData(
         {
           email: {
             value: "",
-            isValid: false
+            isValid: false,
           },
           password: {
             value: "",
-            isValid: false
-          }
+            isValid: false,
+          },
         },
-        false
+        false,
       );
     }
   };
@@ -89,7 +89,7 @@ const UserProfile = props => {
           `${process.env.REACT_APP_BACKEND_URL}/users/${userId}`,
           "PATCH",
           JSON.stringify({
-            name: state.inputs.name.value
+            name: state.inputs.name.value,
           }),
           {
             "Content-Type": "application/json",
