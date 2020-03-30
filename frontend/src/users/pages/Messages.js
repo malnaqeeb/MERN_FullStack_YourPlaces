@@ -177,7 +177,11 @@ const Messages = () => {
                 ))}
             </div>
             <div className="innerBox">
-              {contacts.length === 0 && <Link to="/">Text a user</Link>}
+              {contacts.length === 0 && (
+                <Link className="link-text" to="/">
+                  Text a user!
+                </Link>
+              )}
             </div>
           </div>
 
@@ -190,14 +194,14 @@ const Messages = () => {
             }
           >
             <h2 className="header">Messages</h2>
-            <button
+            <a
               onClick={() => {
                 setMobileContactMode(true);
               }}
               className="mobile-hidden"
             >
               BACK
-            </button>
+            </a>
             <div className="msgsContainer">
               {allMessages.length > 0 ? (
                 allMessages.map((msg, i) => (
