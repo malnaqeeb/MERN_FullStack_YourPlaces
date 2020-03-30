@@ -187,7 +187,7 @@ const UserProfile = props => {
           )}
         </Card>
       )}
-      <div className="notification-box">
+      <div className="notification-box card">
         <p>Do You Want To Receive E-mail Notifications?</p>
         <Button
           onClick={() => {

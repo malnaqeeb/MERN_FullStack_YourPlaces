@@ -168,13 +168,13 @@ const Messages = () => {
                       }}
                       className={`cardWidth`}
                     >
-                      <div className="user-item__image">
+                      <div className="user-item__image m-1">
                         <Avatar
                           image={contact.corresponder.image}
                           alt={contact.corresponder.name}
                         />
                       </div>
-                      <div className="user-item__info">
+                      <div className="user-item__info m-1">
                         <h3>{contact.corresponder.name}</h3>
                       </div>
                     </div>
