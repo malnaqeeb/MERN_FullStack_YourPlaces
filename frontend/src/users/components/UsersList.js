@@ -21,7 +21,7 @@ const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
            {items.filter(authUser => authUser._id === auth.userId).map(user => (
         <div className="profile-banner fade-in">
             <img src={user.image} alt={user.name} />
-            <Link to={`/${auth.userId}/profile`} ><span>{user.name}</span></Link>
+            <Link to={`/${auth.userId}/my`} ><span>{user.name}</span></Link>
         </div>
       ))}
       <ul className="users-list users-mobile">
