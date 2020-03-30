@@ -15,7 +15,6 @@ const BucketList = () => {
   const auth = useContext(AuthContext);
   const deleteFromBucketList = id => {
     setPlaces(prevPlaces => prevPlaces.filter(place => place.id._id !== id));
-    history.push(`/`);
   };
   useEffect(() => {
     const getBucketList = async () => {
