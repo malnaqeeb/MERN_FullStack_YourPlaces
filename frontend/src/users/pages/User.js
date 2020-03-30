@@ -47,7 +47,7 @@ const User = () => {
           <UserProfileNav />
           <Switch>
           <Route path={`/:userId/my`} exact>
-            <img src="/images/my-page.png" alt="my-page" />
+            <img  className= "fade-in" src="/images/my-page.png" alt="my-page" />
           </Route>
             <Route path={`/:userId/profile`} exact>
               <UserProfile
