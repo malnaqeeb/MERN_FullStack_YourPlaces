@@ -39,6 +39,10 @@
 
 @media (max-width:450px){
   .share-box{
-    top:0
+    width: 4em;
+  }
+  .share-button{
+    font-size: 1.5em;
+    width: 4%;
   }
 }
