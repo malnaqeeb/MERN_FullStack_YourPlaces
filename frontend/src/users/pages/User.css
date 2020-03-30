@@ -1,0 +1,11 @@
+img{
+    width: 45%;
+    display: block;
+    margin: auto;
+}
+
+@media (min-width:450) and (max-width:600px){
+    img{
+        width: 80%;
+    }
+}

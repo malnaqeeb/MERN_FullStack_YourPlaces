@@ -295,8 +295,9 @@ const resetPassword = async (req, res, next) => {
 
 const setNotifications = async (req, res, next) => {
   const userId = req.userData.userId;
+  let user;
   try {
-    const user = await User.findById(userId);
+    user = await User.findById(userId);
     user.notifications = !user.notifications;
     await user.save();
   } catch (error) {
@@ -304,7 +305,7 @@ const setNotifications = async (req, res, next) => {
   }
   res
     .status(200)
-    .json({ message: "Your notification preference has been updated." });
+    .json({ message: user.toObject() });
 };
 
 module.exports = {

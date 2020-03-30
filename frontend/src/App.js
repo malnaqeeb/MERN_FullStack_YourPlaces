@@ -8,7 +8,6 @@ import LoadingSpinner from "./shared/component/UIElements/LoadingSpinner";
 import Social from "./users/pages/Social";
 import Search from "./search/pages/Search";
 import Messages from "./users/pages/Messages";
-import UserProfileNav from "./users/components/UserProfileNav";
 const ForgetPassword = React.lazy(() =>
   import("./users/components/ForgetPassword")
 );
@@ -16,6 +15,7 @@ const ResetEmail = React.lazy(() => import("./users/components/ResetEmail"));
 
 
 const Auth = React.lazy(() => import("./users/pages/Auth"));
+const UserProfileNav = React.lazy(()=>import("./users/components/UserProfileNav"))
 const User = React.lazy(() => import("./users/pages/User"));
 const Users = React.lazy(() => import("./users/pages/Users"));
 const Friends = React.lazy(() => import("./friends/pages/Friends"));
@@ -33,6 +33,9 @@ const App = () => {
   if (token) {
     routes = (
       <Switch>
+        <Route path='/:userId/my'>
+          <User />
+        </Route>
         <Route path='/' exact>
           <Users />
         </Route>
@@ -53,9 +56,6 @@ const App = () => {
         </Route>
         <Route path='/:userId/bucketlist'>
           <BucketList />
-        </Route>
-        <Route path='/:userId/profile'>
-          <User />
         </Route>
         <Route path="/:userId/messages">
           <UserProfileNav />

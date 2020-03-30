@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import useHttpClient from "../../shared/hooks/http-hook";
 import { useFrom } from "../../shared/hooks/form-hook";
 import { AuthContext } from "../../shared/context/auth-context";
@@ -13,14 +13,13 @@ import Button from "../../shared/component/formElements/Button";
 import ImageUpload from "../../shared/component/formElements/ImageUpload";
 
 import "./UserProfile.css";
-const UserProfile = props => {
+const UserProfile = ({user, setUser, notifications}) => {
   const { userId, token } = useContext(AuthContext);
   const [editImage, setEditImage] = useState(false);
   const [editName, setEditName] = useState(false);
+  const [notStyle, setNotStyle] = useState(notifications)
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  const { name, image,  notifications } = props.user;
-  const [notificationStyle, setNotificationStyle] = useState(notifications);
-
+  const { name, image } = user;
   const [state, inputHandler, setFormData] = useFrom(
     {
       email: {
@@ -82,6 +81,7 @@ const UserProfile = props => {
     switchModelHandler();
   };
 
+
   const authSubmitHandler = async () => {
     if (editName) {
       try {
@@ -97,7 +97,7 @@ const UserProfile = props => {
           }
         );
         setEditName(false);
-        props.setUser(res.user);
+        setUser(res.user);
       } catch (error) {}
     } else {
       try {
@@ -113,13 +113,12 @@ const UserProfile = props => {
           }
         );
         setEditImage(false);
-        props.setUser(res.user);
+        setUser(res.user);
       } catch (error) {}
     }
   };
 
   const notificationHandler = async () => {
-    console.log(notifications)
     try {
       await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/users/notifications/${userId}`,
@@ -188,18 +187,16 @@ const UserProfile = props => {
           )}
         </Card>
       )}
-      <div className="notification-box card">
+      {user && <div className="notification-box card">
         <p>Do You Want To Receive E-mail Notifications?</p>
         <Button
-          onClick={() => {
-            setNotificationStyle(!notificationStyle);
-            notificationHandler();
-            console.log(notifications)
-          }}
-        >
-          {notificationStyle ? "TURN OFF" : "TURN ON"}
+          onClick={()=>{
+            setNotStyle(!notStyle)
+            notificationHandler()
+            }}>
+          {notStyle ? "TURN OFF" : "TURN ON"}
         </Button>
-      </div>
+      </div>}
     </div>
   );
 };

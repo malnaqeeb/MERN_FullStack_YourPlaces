@@ -19,7 +19,7 @@
   background: #ff0055;
   float: left;
   display: flex;
-  flex-flow: column wrap;
+  flex-direction: column ;
   padding: 5% 2% 20%;
   color: #ffd900;
   cursor: pointer;

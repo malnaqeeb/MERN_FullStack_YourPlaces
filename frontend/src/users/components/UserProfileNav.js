@@ -6,24 +6,42 @@ import "./UserProfileNav.css";
 
 const UserProfileNav = () => {
   const { userId } = useContext(AuthContext);
-  const [userMenuOpen, setUserMenuOpen] = useState(false)
-  const toggleMenu = ()=>{
-    setUserMenuOpen(!userMenuOpen)
-  }
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const toggleMenu = () => {
+    setUserMenuOpen(!userMenuOpen);
+  };
   const navBarHeight = {
     height: window.innerHeight - 0.11 * window.innerHeight
   };
   return (
     <Fragment>
-      <i className={userMenuOpen ? `fas fa-angle-double-right mobile-hidden-icon desktop-hidden-icon` : `fas fa-angle-double-right mobile-icon desktop-hidden-icon`} onClick={toggleMenu}></i>
-      <Card className={userMenuOpen ? `sideBar fade-in` : `sideBar mobile-hidden-menu fade-in`} style={navBarHeight}>
-      <i className="fas fa-angle-double-left desktop-hidden-icon" onClick={toggleMenu}></i>
-        <Link className="navLink" to={`/${userId}/profile`}>
-          <span>Profile</span>
-        </Link>
+      <i
+        className={
+          userMenuOpen
+            ? `fas fa-angle-double-right mobile-hidden-icon desktop-hidden-icon`
+            : `fas fa-angle-double-right mobile-icon desktop-hidden-icon`
+        }
+        onClick={toggleMenu}
+      ></i>
+      <Card
+        className={
+          userMenuOpen
+            ? `sideBar fade-in`
+            : `sideBar mobile-hidden-menu fade-in`
+        }
+        style={navBarHeight}
+      >
+        <i
+          className="fas fa-angle-double-left desktop-hidden-icon"
+          onClick={toggleMenu}
+        ></i>
         <Link className="navLink" to={`/${userId}/bucketlist`}>
           <span>My Bucket List</span>
         </Link>
+        <Link className="navLink" to={`/${userId}/profile`}>
+          <span>Profile</span>
+        </Link>
+
         <Link className="navLink" to={`/${userId}/friends`}>
           <span>My Friends</span>
         </Link>
