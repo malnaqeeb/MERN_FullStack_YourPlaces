@@ -75,22 +75,6 @@ const BucketList = () => {
           </div>
         )}
         <React.Fragment>
-          {places && places.length === 0 && auth.userId === userId && (
-            <h2
-              className="center yellow-text fade-in"
-              style={{ flexDirection: "column" }}
-            >
-              You don't have any places in your bucket list. Maybe check some
-              places?
-              <Link to="/"> Go to home</Link>
-            </h2>
-          )}
-          {auth.userId !== userId && places && places.length === 0 && (
-            <h2 className="center yellow-text fade-in">
-              This user does not have any places in their bucket list
-            </h2>
-          )}
-
           <div className="bucket-list-content">
             <div className="m-b-2">
               <h2 className=" yellow-text fade-in no-select center">
@@ -98,6 +82,21 @@ const BucketList = () => {
                 <span className="pink-text"> {user && user.user.name}</span>{" "}
               </h2>
             </div>
+            {places && places.length === 0 && auth.userId === userId && (
+              <h2
+                className="center yellow-text fade-in"
+                style={{ flexDirection: "column" }}
+              >
+                You don't have any places in your bucket list. Maybe check some
+                places?
+                <Link to="/"> Go to home</Link>
+              </h2>
+            )}
+            {auth.userId !== userId && places && places.length === 0 && (
+              <h2 className="center yellow-text fade-in">
+                This user does not have any places in their bucket list
+              </h2>
+            )}
 
             {places &&
               places.map((bucket, index) => {
