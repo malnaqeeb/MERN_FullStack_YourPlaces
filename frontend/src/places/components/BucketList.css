@@ -37,3 +37,8 @@
 }
 
 
+@media (max-width:450px){
+  .share-box{
+    top:0
+  }
+}

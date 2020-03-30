@@ -4,8 +4,13 @@ img{
     margin: auto;
 }
 
-@media (min-width:450) and (max-width:600px){
+@media (min-width:450px) and (max-width:600px){
     img{
-        width: 80%;
+        width: 70%;
     }
+}
+@media (max-width:449px){
+     img{
+         display: none;
+     }
 }

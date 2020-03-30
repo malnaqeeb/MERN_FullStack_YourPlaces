@@ -47,21 +47,24 @@ body {
   justify-content: center;
   align-items: center;
 }
-.yellow-text {
-  color: #f8df00;
+.white-text {
+  color: white;
 }
-.pink-text {
-  color: #ff0055;
-  margin-left: 0.75%;
-}
+
 .gray-text{
   color: #4d4d4d;
 }
 .block{
   display: block;
 }
+.yellow-text{
+  color: #F8DF00;
+}
 .m-1 {
   margin: 1rem;
+}
+.m-05{
+  margin: 0.5rem;
 }
 .p-1 {
   padding: 1rem;

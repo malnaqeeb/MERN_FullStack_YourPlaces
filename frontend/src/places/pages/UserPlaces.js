@@ -44,7 +44,7 @@ const UserPlaces = () => {
   const getError = err => {
     if (!places && auth.userId !== userId) {
       return (
-        <h2 className="center yellow-text fade-in-faster">
+        <h2 className="center gray-text fade-in-faster">
           There is no place shared by this user
         </h2>
       );
@@ -52,10 +52,10 @@ const UserPlaces = () => {
     if (!places && auth.userId === userId) {
       return (
         <Fragment>
-          <h2 className="center yellow-text fade-in-faster">
+          <h2 className="center gray-text fade-in-faster">
             You don't have any shared places. Would you like to add one?
           </h2>
-          <Link to="/places/new" className="center fade-in-faster">Add a place</Link>
+          <Link to="/places/new" className="center fade-in-faster add-place-button">ADD A PLACE</Link>
         </Fragment>
       );
     } else {
@@ -77,8 +77,8 @@ const UserPlaces = () => {
   return (
     <Fragment>
       <div className="place-overlay-container fade-in">
-        <h2 className="center yellow-text inline no-select">
-          Places of <span className="pink-text"> {user && user.user.name}</span>{" "}
+        <h2 className="center white-text inline no-select">
+          Places of <span className="yellow-text fade-in"> {user && user.user.name}</span>{" "}
         </h2>
         <ErrorModal error={error} onClear={clearError} />
         {!isLoading && places && (

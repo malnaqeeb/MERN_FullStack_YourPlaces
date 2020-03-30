@@ -21,3 +21,17 @@
 .inline {
   display: inline;
 }
+
+.add-place-button{
+  border: 2px solid #4d4d4d;
+  width: 30%;
+  padding: 1em;
+  margin: auto;
+  color:#4d4d4d;
+}
+
+.add-place-button:hover{
+  color:#F8DF00;
+  cursor: pointer;
+  border-color: #F8DF00;
+}
