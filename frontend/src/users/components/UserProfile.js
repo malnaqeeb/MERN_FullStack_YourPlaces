@@ -119,6 +119,7 @@ const UserProfile = props => {
   };
 
   const notificationHandler = async () => {
+    console.log(notifications)
     try {
       await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/users/notifications/${userId}`,
