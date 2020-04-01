@@ -5,7 +5,6 @@ import Card from "../../shared/component/UIElements/Card";
 import "./UsersList.css";
 import "./UserItem.css";
 
-
 const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
   if (items.length === 0) {
     return (
