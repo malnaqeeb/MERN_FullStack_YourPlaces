@@ -13,6 +13,7 @@ const getResults = async (req, res, next) => {
     results.places = await Place.find({
       title: { $regex: query, $options: "i" }
     });
+    // Provides regular expression capabilities for pattern matching strings in queries
     results.users = await User.find({ name: { $regex: query, $options: "i" } });
     res.json({ results });
   } catch (error) {
