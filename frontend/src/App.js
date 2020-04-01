@@ -10,16 +10,21 @@ import { AuthContext } from "./shared/context/auth-context";
 import { useAuth } from "./shared/hooks/auth-hook";
 import LoadingSpinner from "./shared/component/UIElements/LoadingSpinner";
 import Social from "./users/pages/Social";
-
+import Search from "./search/pages/Search";
+const ForgetPassword = React.lazy(() =>
+  import("./users/components/ForgetPassword")
+);
+const ResetEmail = React.lazy(() => import("./users/components/ResetEmail"));
 const Auth = React.lazy(() => import("./users/pages/Auth"));
 const User = React.lazy(() => import("./users/pages/User"));
 const Users = React.lazy(() => import("./users/pages/Users"));
-const Friends = React.lazy(() => import('./friends/pages/Friends'));
+const Friends = React.lazy(() => import("./friends/pages/Friends"));
 const NewPlace = React.lazy(() => import("./places/pages/NewPlace"));
 const UserPlaces = React.lazy(() => import("./places/pages/UserPlaces"));
 const UpdatePlace = React.lazy(() => import("./places/pages/UpdatePlace"));
 const BucketList = React.lazy(() => import("./places/components/BucketList"));
 const Place = React.lazy(() => import("./places/pages/Place"));
+const RegisterConfirmation = React.lazy(() => import('./users/components/RegisterConfirmation'));
 const App = () => {
   const { token, login, logout, userId } = useAuth();
 
@@ -27,13 +32,16 @@ const App = () => {
   if (token) {
     routes = (
       <Switch>
-        <Route path="/" exact>
+        <Route path='/' exact>
           <Users />
         </Route>
-        <Route path="/:userId/places" exact>
+        <Route path='/search' exact>
+          <Search />
+        </Route>
+        <Route path='/:userId/places' exact>
           <UserPlaces />
         </Route>
-        <Route path="/places/new" exact>
+        <Route path='/places/new' exact>
           <NewPlace />
         </Route>
         <Route path="/places/:placeId" exact>
@@ -42,25 +50,25 @@ const App = () => {
         <Route path="/places/:placeId/edit">
           <UpdatePlace />
         </Route>
-        <Route path="/:userId/friends" exact>
+        <Route path='/:userId/friends' exact>
           <Friends />
         </Route>
-        <Route path="/:userId/bucketlist">
+        <Route path='/:userId/bucketlist'>
           <BucketList />
         </Route>
-        <Route path="/:userId/profile">
+        <Route path='/:userId/profile'>
           <User />
         </Route>
-        <Redirect to="/" />
+        <Redirect to='/' />
       </Switch>
     );
   } else {
     routes = (
       <Switch>
-        <Route path="/" exact>
+        <Route path='/' exact>
           <Users />
         </Route>
-        <Route path="/:userId/places" exact>
+        <Route path='/:userId/places' exact>
           <UserPlaces />
         </Route>
         <Route path="/places/:placeId" exact>
@@ -69,8 +77,17 @@ const App = () => {
         <Route path="/auth">
           <Auth />
         </Route>
-        <Route path="/social">
+        <Route path='/social'>
           <Social />
+        </Route>
+        <Route path='/forgetpassword'>
+          <ForgetPassword />
+        </Route>
+        <Route path='/resetpassword/:token'>
+          <ResetEmail />
+        </Route>
+        <Route path="/confirm/:token">
+          <RegisterConfirmation />
         </Route>
         <Redirect to="/auth" />
       </Switch>
@@ -83,7 +100,7 @@ const App = () => {
         token,
         login,
         logout,
-        userId,
+        userId
       }}
     >
       <Router>
@@ -91,7 +108,7 @@ const App = () => {
         <main>
           <Suspense
             fallback={
-              <div className="center">
+              <div className='center'>
                 <LoadingSpinner asOverlay />
               </div>
             }

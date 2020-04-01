@@ -5,11 +5,12 @@ import './UsersList.css';
 import './UserItem.css';
 import Avatar from '../../shared/component/UIElements/Avatar';
 
+
 const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
 
   if (items.length === 0) {
     return (
-      <div className="center">
+      <div className="center fade-in">
         <Card>
           <h2>No users found.</h2>
         </Card>
@@ -18,9 +19,22 @@ const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
   }
   return (
     <React.Fragment>
+           {items.filter(authUser => authUser._id === auth.userId).map(user => (
+        <div className="user-item">
+          <div className="user-item__image">
+            <Avatar image={user.image} alt={user.name} />
+          </div>
+          <div className="user-item__info">
+            <h2>{user.name}</h2>
+          </div>
+
+        </div>
+      ))}
       <ul className="users-list">
         {
-          items.map(user => (
+          items
+          .filter(notAuth => notAuth._id !== auth.userId)
+          .map(user => (
             <UserItem
               user={user}
               auth={auth}

@@ -103,7 +103,7 @@ const UpdatePlace = () => {
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
       {!isLoading && place && (
-        <form className='place-form' onSubmit={placeUpdateSubmitHandler}>
+        <form className='place-form no-select' onSubmit={placeUpdateSubmitHandler}>
           <Input
             id='title'
             element='input'
