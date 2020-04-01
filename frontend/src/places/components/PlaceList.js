@@ -5,7 +5,6 @@ import PlaceItem from "./PlaceItem";
 import Button from "../../shared/component/formElements/Button";
 
 const PlaceList = ({ items, onDeletePlace }) => {
-  
   if (items.length === 0) {
     return (
       <div className="place-list center">
