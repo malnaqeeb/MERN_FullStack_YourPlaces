@@ -35,6 +35,7 @@ const getPlacesByUserId = async (req, res, next) => {
       options: { collation: {locale: 'en'
     },sort: { [sortBy]: sortBy === 'title' ? '1' : '-1' } },
     };
+
     if (tagFilter) {
       populateOptions.match = { tags: { $in: tagFilter.split(',') } };
     }

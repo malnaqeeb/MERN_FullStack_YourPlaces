@@ -44,8 +44,15 @@ const getUsers = async (req, res, next) => {
   let users;
 
   try {
+<<<<<<< HEAD
     users = await User.find({}, '-password').collation({locale: "en" }).sort(sortBy);
+=======
+    users = await User.find({}, '-password')
+      .collation({ locale: 'en' })
+      .sort(sortBy);
+>>>>>>> 705d99b2afb2fa363c96a2deca4ea53e32d0b8cb
   } catch (error) {
+    console.log(error);
     return next(
       new HttpError('Fetching users failed, please try again later.', 500),
     );
@@ -132,6 +139,7 @@ const login = async (req, res, next) => {
       },
     );
   } catch (error) {
+    console.log(error);
     return next(
       new HttpError('Logging in failed, please try agein later', 500),
     );
@@ -164,6 +172,7 @@ const getUser = async (req, res, next) => {
   try {
     user = await User.findById(req.params.userId, 'name image');
   } catch (error) {
+    console.log(error);
     return next(
       new HttpError('Failed to get the user, please try again later.', 500),
     );
