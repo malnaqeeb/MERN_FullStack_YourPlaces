@@ -8,17 +8,25 @@ import UserProfile from "../components/UserProfile";
 import Messages from "../pages/Messages";
 import Users from "../../users/pages/Users";
 import UserProfileNav from "../components/UserProfileNav";
+import BucketList from "../../places/components/BucketList";
+import Friends from "../../friends/pages/Friends";
+import "./User.css";
 
 const User = () => {
   const { userId } = useContext(AuthContext);
   const [user, setUser] = useState({});
+  const [notifications, setNotifications] = useState();
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   useEffect(() => {
     const getUser = async () => {
       try {
-        const data = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/users/${userId}`);
+        const data = await sendRequest(
+          `${process.env.REACT_APP_BACKEND_URL}/users/${userId}`
+        );
         setUser(data.user);
+        setNotifications(data.user.notifications);
+        console.log(data.user.notifications);
       } catch (error) {
         console.log(error);
       }
@@ -38,13 +46,26 @@ const User = () => {
         <Router>
           <UserProfileNav />
           <Switch>
+          <Route path={`/:userId/my`} exact>
+            <img  className= "fade-in" src="/images/my-page.png" alt="my-page" />
+          </Route>
             <Route path={`/:userId/profile`} exact>
-              <UserProfile user={user} setUser={setUser} />
+              <UserProfile
+                user={user}
+                setUser={setUser}
+                notifications={notifications}
+              />
             </Route>
             <Route path={`/:userId/messages`} exact>
               <Messages />
             </Route>
-            <Route path="/">
+            <Route path={`/:userId/bucketlist`} exact>
+              <BucketList />
+            </Route>
+            <Route path={`/:userId/friends`} exact>
+              <Friends />
+            </Route>
+            <Route path="/" exact>
               <Users />
             </Route>
           </Switch>

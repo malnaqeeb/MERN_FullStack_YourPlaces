@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, {useContext} from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import Avatar from "../../shared/component/UIElements/Avatar";
@@ -70,7 +70,11 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
       }
 
       return (
-        <Button variant="contained" color="primary" onClick={() => sendFriendRequest(id)}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => sendFriendRequest(id)}
+        >
           Add Friend
         </Button>
       );
@@ -123,6 +127,17 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
               </h3>
             </div>
           </Link>
+          {auth.isLoggedIn && (
+            <div className="user-item__icon">
+              <Link to={`/${id}/bucketlist`}>
+                <img
+                  src="/images/bucketicon.png"
+                  style={{ width: "100%" }}
+                  alt=""
+                />
+              </Link>
+            </div>
+          )}
         </Card>
         {!isLoading && userData && id !== auth.userId && (
           <div className="flex">

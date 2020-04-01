@@ -8,6 +8,7 @@ const usersControllers = require('../controllers/users-controllers');
 const fileUpload = require('../middleware/file-upload');
 
 route.get('/', usersControllers.getUsers);
+route.get('/me',checkAuth, usersControllers.getUserFriend);
 
 route.post(
   '/signup',
@@ -23,6 +24,8 @@ route.post(
   ],
   usersControllers.signup
 );
+// get token after clicked the link in sent email 
+route.get("/confirm/:token", usersControllers.confirmAccount);
 
 route.post('/login', usersControllers.login);
 
@@ -60,13 +63,20 @@ route.get(
 );
 
 route.get('/:userId', usersControllers.getUser);
+route.post("/forget", usersControllers.forgetPassword);
+route.post(
+  "/reset/:token",
+  check("password").isLength({ min: 6 }),
+  usersControllers.resetPassword
+);
 
 route.use(checkAuth);
 
+route.put("/notifications/:userId", usersControllers.setNotifications)
 route.patch('/:userId',
   fileUpload.single('image'),
   usersControllers.updateUser);
 
-route.get('/me', usersControllers.getUserFriend);
+
 
 module.exports = route;

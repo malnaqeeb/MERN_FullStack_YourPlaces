@@ -8,6 +8,7 @@ const HttpError = require("./model/http-error");
 const userRoute = require("./routes/user-route");
 const usersRoute = require("./routes/users-route");
 const placesRoute = require("./routes/places-route");
+const searchRoute = require("./routes/search-route");
 const passportSetup = require("./middleware/passport-setup");
 
 const PORT = process.env.PORT || 5000;
@@ -35,6 +36,7 @@ app.use(passport.initialize());
 app.use("/api/places", placesRoute);
 app.use("/api/users", usersRoute);
 app.use("/api/user", userRoute);
+app.use("/api/search", searchRoute);
 
 app.use((req, res, next) => {
   res.sendFile(path.resolve(__dirname, "public", "index.html"));

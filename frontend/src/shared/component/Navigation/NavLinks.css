@@ -74,3 +74,11 @@
     color: #292929;
   }
 }
+@media (max-width:950px){
+  .nav-links li{
+    margin: 0 0.5em;
+  }
+  .nav-links a{
+    padding: 0.1rem;
+  }
+}

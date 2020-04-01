@@ -1,4 +1,5 @@
 import React, { useState, useContext, Fragment } from "react";
+import { Link } from "react-router-dom";
 import "./Auth.css";
 import Input from "../../shared/component/formElements/Input";
 import Button from "../../shared/component/formElements/Button";
@@ -34,7 +35,7 @@ const Auth = () => {
         isValid: false,
       },
     },
-    false,
+    false
   );
   const switchModelHandler = () => {
     if (!isLoginMod) {
@@ -42,9 +43,9 @@ const Auth = () => {
         {
           ...state.inputs,
           name: undefined,
-          image: undefined,
+          image: undefined
         },
-        state.inputs.email.isValid && state.inputs.password.isValid,
+        state.inputs.email.isValid && state.inputs.password.isValid
       );
     } else {
       setFormData(
@@ -56,10 +57,10 @@ const Auth = () => {
           },
           image: {
             value: null,
-            isValid: false,
-          },
+            isValid: false
+          }
         },
-        false,
+        false
       );
     }
     setIsLoginMod(prevMode => !prevMode);
@@ -76,7 +77,7 @@ const Auth = () => {
           "POST",
           JSON.stringify({
             email: state.inputs.email.value,
-            password: state.inputs.password.value,
+            password: state.inputs.password.value
           }),
           {
             "Content-Type": "application/json",
@@ -96,7 +97,7 @@ const Auth = () => {
         const res = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/users/signup`,
           "POST",
-          formData,
+          formData
         );
 
         auth.login(res.userId, res.token);
@@ -107,7 +108,7 @@ const Auth = () => {
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
-      <Card className="authentication">
+      <Card className="authentication no-select">
         {isLoading && <LoadingSpinner asOverlay />}
         <h2>Login Required</h2>
         <hr />
@@ -116,12 +117,18 @@ const Auth = () => {
           {socialLogin && (
             <div>
               <h3>Log in with</h3>
-              <a className="socialBtn" href={`${process.env.REACT_APP_BACKEND_URL}/users/facebook`}>
+              <a
+                className="socialBtn"
+                href={`${process.env.REACT_APP_BACKEND_URL}/users/facebook`}
+              >
                 <FaFacebookF />
                 <span className="socialName">Facebook</span>
               </a>
               {/*  */}
-              <a className="socialBtn" href={`${process.env.REACT_APP_BACKEND_URL}/users/google`}>
+              <a
+                className="socialBtn"
+                href={`${process.env.REACT_APP_BACKEND_URL}/users/google`}
+              >
                 <FaGoogle />
                 <span className="socialName">Google</span>
               </a>
@@ -169,6 +176,11 @@ const Auth = () => {
           <Button type="submit" disabled={!state.isValid}>
             {isLoginMod ? "LOGIN" : "SIGNUP"}
           </Button>
+          {isLoginMod && (
+            <Link to="/forgetpassword">
+              <Button>FORGOT PASSWORD</Button>
+            </Link>
+          )}
         </form>
         <Button inverse onClick={switchModelHandler}>
           SWITCH TO {isLoginMod ? "SIGNUP" : "LOGIN"}
