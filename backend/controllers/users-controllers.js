@@ -44,13 +44,19 @@ const getUserFriend = async (req, res, next) => {
 };
 
 const getUsers = async (req, res, next) => {
+  const sortBy = req.query.sortBy || 'name';
+
   let users;
 
   try {
-    users = await User.find({}, "-password");
+    users = await User.find({}, '-password')
+      .collation({ locale: 'en' })
+      .sort(sortBy);
   } catch (error) {
+    console.log(error);
     return next(
-      new HttpError("Fetching users failed, please try again later.", 500)
+      new HttpError('Fetching users failed, please try again later.', 500),
+
     );
   }
   res
@@ -86,6 +92,7 @@ const signup = async (req, res, next) => {
       password,
       social: {},
       places: [],
+      created_at: new Date(),
     });
     createdUser.generateAccountVerify();
     // send email
