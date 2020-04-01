@@ -36,9 +36,6 @@ const thisSchema = new mongoose.Schema({
 },{
   timestamps: true
 });
-thisSchema.statics.createNewMessageId = () => {
-  return new mongoose.Types.ObjectId();
-};
 
 thisSchema.statics.createNewMessageId = () =>{
   return new mongoose.Types.ObjectId();
