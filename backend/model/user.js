@@ -5,7 +5,6 @@ const HttpError = require('../model/http-error');
 const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
 
-const {ObjectId} = mongoose.Schema.Types;
 const { ObjectId, Date, String, Boolean } = mongoose.Schema.Types;
 
 const userSchema = new Schema({
