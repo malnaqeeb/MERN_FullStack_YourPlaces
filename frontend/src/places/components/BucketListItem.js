@@ -49,7 +49,7 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
       );
     } catch (error) {}
   };
-  if(error) return <ErrorModal error={error} onClear={clearError}/>
+  if (error) return <ErrorModal error={error} onClear={clearError} />;
   return (
     <Fragment>
       {isLoading && <LoadingSpinner asOverlay />}
@@ -65,7 +65,11 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
         >
           <div className="detail-item">
             <div className="bucket-image">
-              <img style={{ width: "100%" }} src={id.image.imageUrl} alt="bucket-place"></img>
+              <img
+                style={{ width: "100%" }}
+                src={id.image.imageUrl}
+                alt="bucket-place"
+              ></img>
             </div>
 
             <div className="bucket-info">
@@ -85,6 +89,7 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
         </p>
         {userId === auth.userId && (
           <Button
+            size="mobile"
             danger
             onClick={() => {
               deleteFromBucketList();
@@ -94,9 +99,12 @@ const BucketListItem = ({ bucket, deleteBucket }) => {
           </Button>
         )}
 
-        <Button onClick={() => openDetailsHandler()}>Show Details</Button>
+        <Button size="mobile" onClick={() => openDetailsHandler()}>
+          Show Details
+        </Button>
         {userId === auth.userId && (
           <Button
+            size="mobile"
             inverse
             onClick={() => {
               setVisitStyle(!visitStyle);

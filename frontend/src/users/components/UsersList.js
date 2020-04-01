@@ -1,13 +1,12 @@
-import React from 'react';
-import UserItem from './UserItem';
-import Card from '../../shared/component/UIElements/Card';
-import './UsersList.css';
-import './UserItem.css';
-import Avatar from '../../shared/component/UIElements/Avatar';
+import React from "react";
+import { Link } from 'react-router-dom';
+import UserItem from "./UserItem";
+import Card from "../../shared/component/UIElements/Card";
+import "./UsersList.css";
+import "./UserItem.css";
 
 
 const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
-
   if (items.length === 0) {
     return (
       <div className="center fade-in">
@@ -20,17 +19,12 @@ const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
   return (
     <React.Fragment>
            {items.filter(authUser => authUser._id === auth.userId).map(user => (
-        <div className="user-item">
-          <div className="user-item__image">
-            <Avatar image={user.image} alt={user.name} />
-          </div>
-          <div className="user-item__info">
-            <h2>{user.name}</h2>
-          </div>
-
+        <div className="profile-banner fade-in">
+            <img src={user.image} alt={user.name} />
+            <Link to={`/${auth.userId}/my`} ><span>{user.name}</span></Link>
         </div>
       ))}
-      <ul className="users-list">
+      <ul className="users-list users-mobile">
         {
           items
           .filter(notAuth => notAuth._id !== auth.userId)

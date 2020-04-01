@@ -1,17 +1,19 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useContext } from "react";
 import PlaceList from "../components/PlaceList";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import useHttpClient from "../../shared/hooks/http-hook";
 import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 import "./UserPlaces.css";
+import { AuthContext } from "../../shared/context/auth-context";
 
 const UserPlaces = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [places, setPlaces] = useState();
   const userId = useParams().userId;
   const history = useHistory();
-  const [user, setUser] = useState(); 
-  useEffect(() => {
+  const auth = useContext(AuthContext);
+  const [user, setUser] = useState();
+   useEffect(() => {
     const getUser = async () => {
       try {
         const data = await sendRequest(
@@ -40,11 +42,21 @@ const UserPlaces = () => {
     );
   };
   const getError = err => {
-    if (!places && !isLoading) {
+    if (!places && auth.userId !== userId) {
       return (
-        <h2 className="center yellow-text fade-in">
+        <h2 className="center gray-text fade-in-faster">
           There is no place shared by this user
         </h2>
+      );
+    }
+    if (!places && auth.userId === userId) {
+      return (
+        <Fragment>
+          <h2 className="center gray-text fade-in-faster">
+            You don't have any shared places. Would you like to add one?
+          </h2>
+          <Link to="/places/new" className="center fade-in-faster add-place-button">ADD A PLACE</Link>
+        </Fragment>
       );
     } else {
       return <h2>{err}</h2>;
@@ -61,12 +73,12 @@ const UserPlaces = () => {
         onClear={goHome}
       />
     );
- 
+
   return (
     <Fragment>
       <div className="place-overlay-container fade-in">
-        <h2 className="center yellow-text inline no-select">
-          Places of <span className="pink-text"> {user && user.user.name}</span>{" "}
+        <h2 className="center white-text inline no-select">
+          Places of <span className="yellow-text fade-in"> {user && user.user.name}</span>{" "}
         </h2>
         <ErrorModal error={error} onClear={clearError} />
         {!isLoading && places && (

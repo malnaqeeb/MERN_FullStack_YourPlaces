@@ -1,0 +1,16 @@
+img{
+    width: 45%;
+    display: block;
+    margin: auto;
+}
+
+@media (min-width:450px) and (max-width:600px){
+    img{
+        width: 70%;
+    }
+}
+@media (max-width:449px){
+     img{
+         display: none;
+     }
+}

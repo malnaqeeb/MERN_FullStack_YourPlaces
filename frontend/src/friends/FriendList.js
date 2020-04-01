@@ -7,9 +7,9 @@ const FriendList = ({
 }) => {
   if (friends.length === 0) {
     return (
-      <div className="center">
+      <div className="center m-1">
         <Card>
-          <h2>No friend found.</h2>
+          <h2 className="gray-text">No friend found.</h2>
         </Card>
       </div>
     );
