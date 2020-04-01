@@ -3,3 +3,6 @@
 [0327/142038.453:ERROR:exception_snapshot_win.cc(98)] thread ID 15480 not found in process
 [0327/142038.453:ERROR:exception_snapshot_win.cc(98)] thread ID 6284 not found in process
 [0327/235243.349:ERROR:process_info.cc(359)] UncheckedAllocate
+[0331/165255.223:ERROR:process_info.cc(359)] UncheckedAllocate
+[0401/080558.319:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0401/152430.776:ERROR:crash_report_database_win.cc(428)] unexpected header
