@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import useHttpClient from "../../shared/hooks/http-hook";
 import { useFrom } from "../../shared/hooks/form-hook";
 import { AuthContext } from "../../shared/context/auth-context";
@@ -13,27 +13,25 @@ import Button from "../../shared/component/formElements/Button";
 import ImageUpload from "../../shared/component/formElements/ImageUpload";
 
 import "./UserProfile.css";
-const UserProfile = props => {
+const UserProfile = ({user, setUser, notifications}) => {
   const { userId, token } = useContext(AuthContext);
   const [editImage, setEditImage] = useState(false);
   const [editName, setEditName] = useState(false);
+  const [notStyle, setNotStyle] = useState(notifications)
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  const { name, image, notifications } = props.user;
-  const [userNotifications, setUserNotifications] = useState(notifications);
-  const [notificationStyle, setNotificationStyle] = useState(notifications);
-
+  const { name, image } = user;
   const [state, inputHandler, setFormData] = useFrom(
     {
       email: {
         value: "",
-        isValid: false
+        isValid: false,
       },
       password: {
         value: "",
-        isValid: false
-      }
+        isValid: false,
+      },
     },
-    false
+    false,
   );
 
   const switchModelHandler = () => {
@@ -42,34 +40,34 @@ const UserProfile = props => {
         {
           image: {
             value: null,
-            isValid: false
-          }
+            isValid: false,
+          },
         },
-        false
+        false,
       );
     } else if (editName) {
       setFormData(
         {
           name: {
             value: name,
-            isValid: false
-          }
+            isValid: false,
+          },
         },
-        false
+        false,
       );
     } else {
       setFormData(
         {
           email: {
             value: "",
-            isValid: false
+            isValid: false,
           },
           password: {
             value: "",
-            isValid: false
-          }
+            isValid: false,
+          },
         },
-        false
+        false,
       );
     }
   };
@@ -83,6 +81,7 @@ const UserProfile = props => {
     switchModelHandler();
   };
 
+
   const authSubmitHandler = async () => {
     if (editName) {
       try {
@@ -90,7 +89,7 @@ const UserProfile = props => {
           `${process.env.REACT_APP_BACKEND_URL}/users/${userId}`,
           "PATCH",
           JSON.stringify({
-            name: state.inputs.name.value
+            name: state.inputs.name.value,
           }),
           {
             "Content-Type": "application/json",
@@ -98,7 +97,7 @@ const UserProfile = props => {
           }
         );
         setEditName(false);
-        props.setUser(res.user);
+        setUser(res.user);
       } catch (error) {}
     } else {
       try {
@@ -114,7 +113,7 @@ const UserProfile = props => {
           }
         );
         setEditImage(false);
-        props.setUser(res.user);
+        setUser(res.user);
       } catch (error) {}
     }
   };
@@ -123,21 +122,18 @@ const UserProfile = props => {
     try {
       await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/users/notifications/${userId}`,
-        "PATCH",
-        JSON.stringify({
-          notifications: !userNotifications
-        }),
+        "PUT",
+        null,
         {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`
         }
       );
-      setUserNotifications(!notifications);
     } catch (error) {}
   };
 
   return (
-    <div className="profile">
+    <div className="profile fade-in no-select">
       {isLoading && <LoadingSpinner />}
       <ErrorModal error={error} onClear={clearError} />
       {!isLoading && (
@@ -189,19 +185,18 @@ const UserProfile = props => {
               </Button>
             </React.Fragment>
           )}
-          <div>
-            <p>Do You Want To Receive E-mail Notifications?</p>
-            <Button
-              onClick={() => {
-                notificationHandler();
-                setNotificationStyle(!notificationStyle);
-              }}
-            >
-              {notificationStyle ? "TURN OFF" : "TURN ON"}
-            </Button>
-          </div>
         </Card>
       )}
+      {user && <div className="notification-box card">
+        <p>Do You Want To Receive E-mail Notifications?</p>
+        <Button
+          onClick={()=>{
+            setNotStyle(!notStyle)
+            notificationHandler()
+            }}>
+          {notStyle ? "TURN OFF" : "TURN ON"}
+        </Button>
+      </div>}
     </div>
   );
 };

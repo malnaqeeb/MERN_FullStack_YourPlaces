@@ -1,5 +1,6 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Avatar from "../../shared/component/UIElements/Avatar";
 import Card from "../../shared/component/UIElements/Card";
 import "./UserItem.css";
@@ -7,10 +8,13 @@ import useHttpClient from "../../shared/hooks/http-hook";
 import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 import Button from "@material-ui/core/Button";
 import FriendshipLable from "./FriendshipLable";
+import { MessageContext } from "../../shared/context/message-context";
 
 const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const { id, image, name, places } = user;
+  const message = useContext(MessageContext);
+
   const FriendButton = () => {
     const isFriend = userData.friends
       ? userData.friends.filter(friend => {
@@ -27,12 +31,12 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
           `${process.env.REACT_APP_BACKEND_URL}/user/friends`,
           "POST",
           JSON.stringify({
-            friendId: id
+            friendId: id,
           }),
           {
             Authorization: "Bearer " + auth.token,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         );
         sendFriendRequestHandler(id);
       } catch (error) {
@@ -78,6 +82,35 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
     return <></>;
   };
 
+  // Private messages
+  const MessageButton = () => {
+    const history = useHistory();
+
+    const getMessages = async () => {
+      const corresponderId = user.id;
+      try {
+        const resData = await sendRequest(
+          `${process.env.REACT_APP_BACKEND_URL}/user/messages/${corresponderId}`,
+          "GET",
+          null,
+          {
+            Authorization: "Bearer " + auth.token,
+          },
+        );
+        message.messagesData = resData.messages;
+        message.id = corresponderId;
+        history.push(`/${auth.userId}/messages`);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    return (
+      <Button variant="contained" color="primary" onClick={getMessages}>
+        Message
+      </Button>
+    );
+  };
+
   return (
     <>
       <ErrorModal error={error} onClear={clearError} />
@@ -106,7 +139,12 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
             </div>
           )}
         </Card>
-        {!isLoading && userData && id !== auth.userId && <FriendButton />}
+        {!isLoading && userData && id !== auth.userId && (
+          <div className="flex">
+            <FriendButton />
+            <MessageButton />
+          </div>
+        )}
       </li>
     </>
   );

@@ -39,7 +39,7 @@ const resetPasswordEmail = async (name, email) => {
 const friendAddedNotification = async (name, person, email) => {
   const mailOptions = {
     to: email,
-    from: "bsilakaymak@gmail.com",
+    from: "yourplaces.hyf@gmail.com",
     subject: "You have a new friend request",
     text: `Hi ${name} \n 
            ${person} wants to be your friend \n`
@@ -54,7 +54,7 @@ const friendAddedNotification = async (name, person, email) => {
 const friendAcceptedNotification = async (name, person, email) => {
   const mailOptions = {
     to: email,
-    from: "bsilakaymak@gmail.com",
+    from: "yourplaces.hyf@gmail.com",
     subject: "Your friend request is accepted",
     text: `Hi ${name} \n 
           You are now friends with ${person}\n`

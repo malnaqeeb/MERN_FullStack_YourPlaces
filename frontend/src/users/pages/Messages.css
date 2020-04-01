@@ -1,0 +1,87 @@
+/* general */
+.messages__card {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Contacts */
+.contacts__container {
+  width: 30%;
+  scroll-behavior: smooth;
+}
+
+.header {
+  background: #f8df00;
+  color: #333;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  cursor: pointer;
+}
+
+.activatedContact {
+  box-shadow: 3px 3px #666;
+  background: rgba(0, 0, 0, 0.13);
+}
+
+.link-text {
+  color: #ff0055;
+}
+
+.user-item__content {
+  padding: 0 !important;
+  margin: 3% 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.user-item__content button {
+  border-radius: 20%;
+  height: 50%;
+  border: none;
+}
+
+.user-item__content button:hover {
+  background: #ff0055;
+}
+
+.cardWidth {
+  width: 92%;
+}
+
+/* Messages */
+.message__box {
+  width: 68%;
+}
+
+.messages__card h2 {
+  padding: 20px 30px;
+  margin: 0;
+}
+
+.msgsContainer {
+  overflow: scroll;
+  height: 60%;
+}
+.mobile-hidden {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-hidden {
+    display: inline;
+    color: #ff0055;
+    text-decoration: underline;
+  }
+  .contact__container-hidden {
+    display: none;
+  }
+  .message__box-hidden {
+    display: none;
+  }
+  .message__box-mobile {
+    width: 100vw;
+  }
+  .contact__container-mobile {
+    width: 100vw;
+  }
+}

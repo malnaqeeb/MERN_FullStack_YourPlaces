@@ -11,7 +11,7 @@ const FriendshipLable = styled(Card)({
   color: "white",
   height: 40,
   width: 175,
-  padding: "10px"
+  padding: "10px",
 });
 
 export default function StyledComponents(props) {

@@ -9,6 +9,7 @@ const {
 } = require("../emails/account");
 
 const JWT_KEY = process.env.JWT_KEY;
+const { accountActivatedEmail, accountVerifyEmail } = require('../register-confirmation/mail-generator')
 
 const getUserFriend = async (req, res, next) => {
   const user = await User.findById(req.userData.userId)
@@ -26,7 +27,7 @@ const getUserFriend = async (req, res, next) => {
           id: friend._id,
           name: friend.name,
           email: friend.email,
-          image: friend.image
+          image: friend.image,
         })),
     friendRequests: !user.friendRequests
       ? []
@@ -36,20 +37,26 @@ const getUserFriend = async (req, res, next) => {
             id: request.user._id,
             email: request.user.email,
             image: request.user.image,
-            name: request.user.name
-          }
-        }))
+            name: request.user.name,
+          },
+        })),
   });
 };
 
 const getUsers = async (req, res, next) => {
+  const sortBy = req.query.sortBy || 'name';
+
   let users;
 
   try {
-    users = await User.find({}, "-password");
+    users = await User.find({}, '-password')
+      .collation({ locale: 'en' })
+      .sort(sortBy);
   } catch (error) {
+    console.log(error);
     return next(
-      new HttpError("Fetching users failed, please try again later.", 500)
+      new HttpError('Fetching users failed, please try again later.', 500),
+
     );
   }
   res
@@ -84,9 +91,15 @@ const signup = async (req, res, next) => {
       image: req.file.url,
       password,
       social: {},
-      places: []
+      places: [],
+      created_at: new Date(),
     });
+    createdUser.generateAccountVerify();
+    // send email
+    let link = req.headers.origin + "/confirm/" + createdUser.verifyAccountToken;
 
+    accountVerifyEmail(createdUser.name, createdUser.email, link);
+    
     await createdUser.save();
   } catch (error) {
     return next(
@@ -107,9 +120,39 @@ const signup = async (req, res, next) => {
       new HttpError("Signing up failed, please try again later", 500)
     );
   }
+
+  if (!createdUser.active) {
+    return next(new HttpError("Verify your account", 500));
+  }
+
   res
     .status(201)
     .json({ userId: createdUser.id, email: createdUser.email, token });
+};
+
+// get the token and check it with the user token and check the time to ensure that it still withen one hour 
+const confirmAccount = async (req, res, next) => {
+  const user = await User.findOne({
+    verifyAccountToken: req.params.token,
+    verifyAccountExpires: { $gt: Date.now() }
+  });
+  try {
+    if (!user) {
+      return next(
+        new HttpError("Verify account token is invalid or has expired. Please sign up once again", 401)
+      );
+    }
+    user.active = true;
+    user.verifyAccountToken = undefined;
+    user.verifyAccountExpires = undefined;
+    accountActivatedEmail(user.name, user.email);
+    user.save();
+    // send email
+    res.status(200).json({ message: "Your account has been activeted." });
+  } catch (error) {
+    return next(new HttpError(error.message, 500));
+  }
+  res.status(201).json({ userId: createdUser.id, email: createdUser.email, token });
 };
 
 const login = async (req, res, next) => {
@@ -135,6 +178,9 @@ const login = async (req, res, next) => {
     return next(
       new HttpError("Logging in failed, please try agein later", 500)
     );
+  }
+  if (!existingUser.active) {
+    return next(new HttpError("We already sent you an eamail, please click the to activate your account", 500));
   }
   res
     .status(201)
@@ -162,7 +208,7 @@ const signJwt = async (req, res, next) => {
 const getUser = async (req, res, next) => {
   let user;
   try {
-    user = await User.findById(req.params.userId, "name image");
+    user = await User.findById(req.params.userId, "name image notifications");
   } catch (error) {
     return next(
       new HttpError("Failed to get the user, please try again later.", 500)
@@ -188,7 +234,7 @@ const updateUser = async (req, res, next) => {
       new HttpError("Updating user failed, please try again later.", 500)
     );
   }
-  res.status(200).json({ user: { name: user.name, image: user.image } });
+  res.status(200).json({ user: { name: user.name, image: user.image, notifications:user.notifications } });
 };
 
 const forgetPassword = async (req, res, next) => {
@@ -256,16 +302,17 @@ const resetPassword = async (req, res, next) => {
 
 const setNotifications = async (req, res, next) => {
   const userId = req.userData.userId;
+  let user;
   try {
-    const user = await User.findById(userId);
-    user.notifications = req.body.notifications;
+    user = await User.findById(userId);
+    user.notifications = !user.notifications;
     await user.save();
   } catch (error) {
     return next(error);
   }
   res
     .status(200)
-    .json({ message: "Your notification preference has been updated." });
+    .json({ message: user.toObject() });
 };
 
 module.exports = {
@@ -278,5 +325,6 @@ module.exports = {
   getUserFriend,
   forgetPassword,
   resetPassword,
-  setNotifications
+  setNotifications,
+  confirmAccount
 };

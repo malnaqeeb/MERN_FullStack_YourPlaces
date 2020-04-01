@@ -43,11 +43,11 @@ const ForgetPassword = () => {
   return (
     <Fragment>
       {sendPassword ? (
-        <Card className='forget_password'>
+        <Card className='forget_password no-select'>
           <p>{sendPassword.message}</p>
         </Card>
       ) : (
-        <Card className='forget_password'>
+        <Card className='forget_password no-select'>
           <form className='place-form' onSubmit={emailSubmitHandler}>
             <Input
               id='email'

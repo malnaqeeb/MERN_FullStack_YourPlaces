@@ -1,0 +1,51 @@
+.mContainer {
+  background: beige;
+  padding: 5%;
+  color: darkblue;
+  padding: 0 2%;
+  margin: 1% 0;
+}
+
+.myMsg {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.msgInfo {
+  display: flex;
+  justify-content: space-between;
+  justify-items: stretch;
+  text-align: right;
+  margin: 0;
+}
+
+.toRyt {
+  justify-content: flex-end;
+}
+
+.toLeft {
+  justify-content: flex-start;
+}
+
+.mContainer h3 {
+  margin: 0;
+}
+
+.mContainer button {
+  border: 1px solid saddlebrown;
+  cursor: pointer;
+  border: none;
+  color: maroon;
+}
+
+.msgInfo p {
+  color: #999;
+  font-size: 0.8rem;
+  margin: 0 1%;
+}
+
+.mContainer button:hover {
+  background: maroon;
+  color: white;
+  border-radius: 50px;
+}
