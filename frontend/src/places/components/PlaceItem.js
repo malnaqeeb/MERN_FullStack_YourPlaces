@@ -1,5 +1,5 @@
 import React, { useState, Fragment, useContext, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import "./PlaceItem.css";
 import Card from "../../shared/component/UIElements/Card";
 import Button from "../../shared/component/formElements/Button";
@@ -231,6 +231,9 @@ const PlaceItem = ({ place, onDeletePlace }) => {
               <Button inverse onClick={openMapHandler}>
                 VIEW ON MAP
               </Button>
+              <Link to={`/places/${id}`}>
+                <Button>DETAILS</Button>
+              </Link>
               {place.creator === auth.userId && (
                 <Button to={`/places/${id}`}>EDIT</Button>
               )}

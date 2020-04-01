@@ -23,8 +23,8 @@ const NewPlace = React.lazy(() => import("./places/pages/NewPlace"));
 const UserPlaces = React.lazy(() => import("./places/pages/UserPlaces"));
 const UpdatePlace = React.lazy(() => import("./places/pages/UpdatePlace"));
 const BucketList = React.lazy(() => import("./places/components/BucketList"));
+const Place = React.lazy(() => import("./places/pages/Place"));
 const RegisterConfirmation = React.lazy(() => import('./users/components/RegisterConfirmation'));
-
 const App = () => {
   const { token, login, logout, userId } = useAuth();
   const [messagesData, setMessagesData] = useState([]);
@@ -48,7 +48,11 @@ const App = () => {
         <Route path='/places/new' exact>
           <NewPlace />
         </Route>
-        <Route path="/places/:placeId">
+
+        <Route path="/places/:placeId" exact>
+          <Place />
+        </Route>
+        <Route path="/places/:placeId/edit">
           <UpdatePlace />
         </Route>
         <Route path='/:userId/friends' exact>
@@ -73,7 +77,10 @@ const App = () => {
         <Route path='/:userId/places' exact>
           <UserPlaces />
         </Route>
-        <Route path='/auth'>
+        <Route path="/places/:placeId" exact>
+          <Place />
+        </Route>
+        <Route path="/auth">
           <Auth />
         </Route>
         <Route path='/social'>

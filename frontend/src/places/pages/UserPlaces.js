@@ -13,7 +13,7 @@ const UserPlaces = () => {
   const history = useHistory();
   const auth = useContext(AuthContext);
   const [user, setUser] = useState();
-  useEffect(() => {
+   useEffect(() => {
     const getUser = async () => {
       try {
         const data = await sendRequest(
