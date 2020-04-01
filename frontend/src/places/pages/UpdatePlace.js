@@ -7,10 +7,7 @@ import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
 import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 import useHttpClient from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
-import {
-  VALIDATOR_REQUIRE,
-  VALIDATOR_MINLENGTH
-} from "../../shared/Util/validators";
+import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from "../../shared/Util/validators";
 import { useFrom } from "../../shared/hooks/form-hook";
 import "./NewPlace.css";
 const UpdatePlace = () => {
@@ -25,35 +22,33 @@ const UpdatePlace = () => {
     {
       title: {
         value: "",
-        isValid: false
+        isValid: false,
       },
       description: {
         value: "",
-        isValid: false
-      }
+        isValid: false,
+      },
     },
-    false
+    false,
   );
 
   useEffect(() => {
     const getPlace = async () => {
       try {
-        const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`
-        );
+        const data = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`);
         setPlace(data.place);
         setFormData(
           {
             title: {
               value: data.place.title,
-              isValid: true
+              isValid: true,
             },
             description: {
               value: data.place.description,
-              isValid: true
-            }
+              isValid: true,
+            },
           },
-          true
+          true,
         );
       } catch (error) {}
     };
@@ -62,14 +57,14 @@ const UpdatePlace = () => {
 
   if (isLoading)
     return (
-      <div className='center'>
+      <div className="center">
         <LoadingSpinner />
       </div>
     );
 
   if (!place && !error) {
     return (
-      <div className='center'>
+      <div className="center">
         <Card>
           <h2>Could not find place!</h2>
         </Card>
@@ -86,12 +81,12 @@ const UpdatePlace = () => {
           "PATCH",
           JSON.stringify({
             title: state.inputs.title.value,
-            description: state.inputs.description.value
+            description: state.inputs.description.value,
           }),
           {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + auth.token
-          }
+            Authorization: "Bearer " + auth.token,
+          },
         );
         history.push("/" + auth.userId + "/places");
       } catch (error) {}
@@ -105,27 +100,27 @@ const UpdatePlace = () => {
       {!isLoading && place && (
         <form className='place-form no-select' onSubmit={placeUpdateSubmitHandler}>
           <Input
-            id='title'
-            element='input'
-            type='text'
-            label='Title'
+            id="title"
+            element="input"
+            type="text"
+            label="Title"
             validators={[VALIDATOR_REQUIRE()]}
-            errorText='Please enter a valid title.'
+            errorText="Please enter a valid title."
             onInput={inputHandler}
             initailValue={place.title}
             initailValid={true}
           />
           <Input
-            id='description'
-            element='textarea'
-            label='Description'
+            id="description"
+            element="textarea"
+            label="Description"
             validators={[VALIDATOR_MINLENGTH(5)]}
-            errorText='Please enter a valid description (min. 5 characters).'
+            errorText="Please enter a valid description (min. 5 characters)."
             onInput={inputHandler}
             initailValue={place.description}
             initailValid={true}
           />
-          <Button type='submit' disabled={!state.isValid}>
+          <Button type="submit" disabled={!state.isValid}>
             UPDATE PLACE
           </Button>
         </form>

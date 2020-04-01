@@ -4,7 +4,7 @@ import useHttpClient from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
 import "./MessageItem.css";
 
-const MessageItem = ({ msg, setAllMessages, allMessages, getUserMessages }) => {
+const MessageItem = ({ msg, messageDeleteHandler, getUserMessages }) => {
   const message = useContext(MessageContext);
   const { sendRequest } = useHttpClient();
   const { token } = useContext(AuthContext);
@@ -18,9 +18,8 @@ const MessageItem = ({ msg, setAllMessages, allMessages, getUserMessages }) => {
         Authorization: "Bearer " + token,
       },
     );
-    const filteredMessages = allMessages.filter(m => m.id !== msgId);
 
-    setAllMessages(filteredMessages);
+    messageDeleteHandler(msgId);
     getUserMessages(userId);
   };
 

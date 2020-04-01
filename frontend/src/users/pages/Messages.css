@@ -23,6 +23,10 @@
   background: rgba(0, 0, 0, 0.13);
 }
 
+.link-text {
+  color: #ff0055;
+}
+
 .user-item__content {
   padding: 0 !important;
   margin: 3% 0;
@@ -58,26 +62,26 @@
   overflow: scroll;
   height: 60%;
 }
-.mobile-hidden{
+.mobile-hidden {
   display: none;
 }
 
-
-
 @media (max-width: 768px) {
   .mobile-hidden {
-    display: inline;;
+    display: inline;
+    color: #ff0055;
+    text-decoration: underline;
   }
-  .contact__container-hidden{
+  .contact__container-hidden {
     display: none;
   }
-  .message__box-hidden{
+  .message__box-hidden {
     display: none;
   }
-  .message__box-mobile{
+  .message__box-mobile {
     width: 100vw;
   }
-  .contact__container-mobile{
+  .contact__container-mobile {
     width: 100vw;
   }
 }

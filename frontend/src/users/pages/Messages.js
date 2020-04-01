@@ -25,7 +25,6 @@ const Messages = () => {
   // scroll to the bottom of the messages box
   const myScrollRef = useRef();
   const scrollToBottom = () => {
-    console.log("scrolling");
     myScrollRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -33,10 +32,10 @@ const Messages = () => {
     {
       message: {
         value: "",
-        isValid: false
-      }
+        isValid: false,
+      },
     },
-    false
+    false,
   );
 
   // fetching contacts (only texted ones not all users)
@@ -47,8 +46,8 @@ const Messages = () => {
         "GET",
         null,
         {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       );
       setContacts(data.corresponders);
       scrollToBottom();
@@ -57,8 +56,7 @@ const Messages = () => {
 
   useEffect(() => {
     fetchContacts();
-    scrollToBottom();
-  }, []);
+  }, [sendRequest, token]);
 
   // Send a message
   const sendMessage = async e => {
@@ -70,43 +68,31 @@ const Messages = () => {
         `${process.env.REACT_APP_BACKEND_URL}/user/messages/${corresponderId}`,
         "POST",
         JSON.stringify({
-          message: messageValue
+          message: messageValue,
         }),
         {
           Authorization: "Bearer " + token,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       );
-      setAllMessages([
-        ...allMessages,
-        { message: messageValue, isSent: true, _id: res.messageId }
-      ]);
+      setAllMessages([...allMessages, { message: messageValue, isSent: true, _id: res.messageId }]);
       scrollToBottom();
     } catch (error) {
       console.error(error);
     }
   };
 
-  // unfinished function to reset the clicked user in the first index of the contacts
-  // const reArrangeContacts = id => {
-  //   let myArr = [...contacts];
-  //   const textedUser = myArr.findIndex(user => user.corresponder._id === id);
-  //   const selectedUser = myArr.splice(textedUser, 1);
-  //   setContacts([...selectedUser, ...myArr]);
-  // };
-
   // Get all messages as per the texted person
   const getUserMessages = async id => {
     const corresponderId = id;
-    // reArrangeContacts(id);
     try {
       const fetchedMessages = await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/user/messages/${corresponderId}`,
         "GET",
         null,
         {
-          Authorization: "Bearer " + token
-        }
+          Authorization: "Bearer " + token,
+        },
       );
       fetchContacts();
       setAllMessages(fetchedMessages.messages);
@@ -118,27 +104,35 @@ const Messages = () => {
 
   // Delete a corresponder
   const dltCorresponder = async id => {
-    await sendRequest(
-      `${process.env.REACT_APP_BACKEND_URL}/user/messages/${id}`,
-      "DELETE",
-      null,
-      {
-        Authorization: "Bearer " + token
-      }
-    );
-    const filteredContacts = contacts.filter(contact => contact._id !== id);
-    setContacts(filteredContacts);
-    setAllMessages([]);
-    fetchContacts();
+    try {
+      await sendRequest(
+        `${process.env.REACT_APP_BACKEND_URL}/user/messages/${id}`,
+        "DELETE",
+        null,
+        {
+          Authorization: "Bearer " + token,
+        },
+      );
+      const filteredContacts = contacts.filter(contact => contact._id !== id);
+      setContacts(filteredContacts);
+      setAllMessages([]);
+      fetchContacts();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const messageDeleteHandler = deletedMsgId => {
+    setAllMessages(prevAllMessages => prevAllMessages.filter(msg => msg.id !== deletedMsgId));
   };
 
   const msgBoxHeight = {
-    height: window.innerHeight - 0.12 * window.innerHeight
+    height: window.innerHeight - 0.12 * window.innerHeight,
   };
 
   return (
     <React.Fragment>
-      {isLoading && <LoadingSpinner />}
+      {isLoading && <LoadingSpinner asOverlay />}
       <ErrorModal error={error} onClear={clearError} />
 
       {!isLoading && (
@@ -158,8 +152,8 @@ const Messages = () => {
                   <Card
                     className="user-item__content"
                     key={contact.corresponder._id}
-                    className={` user-item__content ${message.id ===
-                      contact.corresponder._id && "activatedContact"}`}
+                    className={`user-item__content ${message.id === contact.corresponder._id &&
+                      "activatedContact"}`}
                   >
                     <div
                       onClick={() => {
@@ -178,16 +172,16 @@ const Messages = () => {
                         <h3>{contact.corresponder.name}</h3>
                       </div>
                     </div>
-                    <button
-                      onClick={() => dltCorresponder(contact.corresponder._id)}
-                    >
-                      X
-                    </button>
+                    <button onClick={() => dltCorresponder(contact.corresponder._id)}>X</button>
                   </Card>
                 ))}
             </div>
             <div className="innerBox">
-              {contacts.length === 0 && <Link to="/">Text a user</Link>}
+              {contacts.length === 0 && (
+                <Link className="link-text" to="/">
+                  Text a user!
+                </Link>
+              )}
             </div>
           </div>
 
@@ -200,15 +194,21 @@ const Messages = () => {
             }
           >
             <h2 className="header">Messages</h2>
-            <button onClick={()=>{setMobileContactMode(true)}} className="mobile-hidden"> BACK </button>
+            <a
+              onClick={() => {
+                setMobileContactMode(true);
+              }}
+              className="mobile-hidden"
+            >
+              BACK
+            </a>
             <div className="msgsContainer">
               {allMessages.length > 0 ? (
                 allMessages.map((msg, i) => (
                   <MessageItem
                     key={i}
                     msg={msg}
-                    allMessages={allMessages}
-                    setAllMessages={setAllMessages}
+                    messageDeleteHandler={messageDeleteHandler}
                     getUserMessages={getUserMessages}
                   />
                 ))
