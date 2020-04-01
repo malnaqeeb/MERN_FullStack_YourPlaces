@@ -44,7 +44,7 @@ const getUsers = async (req, res, next) => {
   let users;
 
   try {
-    users = await User.find({}, '-password').sort(sortBy);
+    users = await User.find({}, '-password').collation({locale: "en" }).sort(sortBy);
   } catch (error) {
     return next(
       new HttpError('Fetching users failed, please try again later.', 500),
