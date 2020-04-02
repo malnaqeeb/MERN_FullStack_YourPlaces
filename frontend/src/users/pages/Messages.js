@@ -77,6 +77,7 @@ const Messages = () => {
       );
       setAllMessages([...allMessages, { message: messageValue, isSent: true, _id: res.messageId }]);
       scrollToBottom();
+      getUserMessages(corresponderId);
     } catch (error) {
       console.error(error);
     }

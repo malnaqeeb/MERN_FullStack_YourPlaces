@@ -1,5 +1,5 @@
 import React, { Suspense, useState } from "react";
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect, withRouter } from "react-router-dom";
 import MainNavigation from "./shared/component/Navigation/MainNavigation";
 import { AuthContext } from "./shared/context/auth-context";
 import { MessageContext } from "./shared/context/message-context";
@@ -8,14 +8,11 @@ import LoadingSpinner from "./shared/component/UIElements/LoadingSpinner";
 import Social from "./users/pages/Social";
 import Search from "./search/pages/Search";
 import Messages from "./users/pages/Messages";
-const ForgetPassword = React.lazy(() =>
-  import("./users/components/ForgetPassword")
-);
+const ForgetPassword = React.lazy(() => import("./users/components/ForgetPassword"));
 const ResetEmail = React.lazy(() => import("./users/components/ResetEmail"));
 
-
 const Auth = React.lazy(() => import("./users/pages/Auth"));
-const UserProfileNav = React.lazy(()=>import("./users/components/UserProfileNav"))
+const UserProfileNav = React.lazy(() => import("./users/components/UserProfileNav"));
 const User = React.lazy(() => import("./users/pages/User"));
 const Users = React.lazy(() => import("./users/pages/Users"));
 const Friends = React.lazy(() => import("./friends/pages/Friends"));
@@ -24,7 +21,7 @@ const UserPlaces = React.lazy(() => import("./places/pages/UserPlaces"));
 const UpdatePlace = React.lazy(() => import("./places/pages/UpdatePlace"));
 const BucketList = React.lazy(() => import("./places/components/BucketList"));
 const Place = React.lazy(() => import("./places/pages/Place"));
-const RegisterConfirmation = React.lazy(() => import('./users/components/RegisterConfirmation'));
+const RegisterConfirmation = React.lazy(() => import("./users/components/RegisterConfirmation"));
 const App = () => {
   const { token, login, logout, userId } = useAuth();
   const [messagesData, setMessagesData] = useState([]);
@@ -33,32 +30,31 @@ const App = () => {
   if (token) {
     routes = (
       <Switch>
-        <Route path='/:userId/my'>
+        <Route path="/:userId/my">
           <User />
         </Route>
-        <Route path='/' exact>
+        <Route path="/" exact>
           <Users />
         </Route>
-        <Route path='/search' exact>
-          <Search />
-        </Route>
-        <Route path='/:userId/places' exact>
+        <Route path="/search" exact component={withRouter(Search)} />
+
+        <Route path="/:userId/places" exact>
           <UserPlaces />
         </Route>
-        <Route path='/places/new' exact>
+        <Route path="/places/new" exact>
           <NewPlace />
         </Route>
 
         <Route path="/places/:placeId" exact>
-          <Place/>
+          <Place />
         </Route>
         <Route path="/places/:placeId/edit">
           <UpdatePlace />
         </Route>
-        <Route path='/:userId/friends' exact>
+        <Route path="/:userId/friends" exact>
           <Friends />
         </Route>
-        <Route path='/:userId/bucketlist'>
+        <Route path="/:userId/bucketlist">
           <BucketList />
         </Route>
         <Route path="/:userId/messages">
@@ -71,10 +67,10 @@ const App = () => {
   } else {
     routes = (
       <Switch>
-        <Route path='/' exact>
+        <Route path="/" exact>
           <Users />
         </Route>
-        <Route path='/:userId/places' exact>
+        <Route path="/:userId/places" exact>
           <UserPlaces />
         </Route>
         <Route path="/places/:placeId" exact>
@@ -83,13 +79,13 @@ const App = () => {
         <Route path="/auth">
           <Auth />
         </Route>
-        <Route path='/social'>
+        <Route path="/social">
           <Social />
         </Route>
-        <Route path='/forgetpassword'>
+        <Route path="/forgetpassword">
           <ForgetPassword />
         </Route>
-        <Route path='/resetpassword/:token'>
+        <Route path="/resetpassword/:token">
           <ResetEmail />
         </Route>
         <Route path="/confirm/:token">
@@ -106,7 +102,7 @@ const App = () => {
         token,
         login,
         logout,
-        userId
+        userId,
       }}
     >
       <MessageContext.Provider value={{ messagesData }}>
