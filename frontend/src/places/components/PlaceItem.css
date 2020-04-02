@@ -31,9 +31,17 @@
 }
 
 .place-item__actions {
+  position: relative;
+  z-index: 11;
   padding: 1rem;
   text-align: center;
   border-top: 1px solid #ccc;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+   -khtml-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 .place-item__modal-content {

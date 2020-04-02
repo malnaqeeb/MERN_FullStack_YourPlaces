@@ -45,7 +45,7 @@ const UserProfile = ({user, setUser, notifications}) => {
         },
         false,
       );
-    } else if(editName) {
+    } else if (editName) {
       setFormData(
         {
           name: {
@@ -55,7 +55,7 @@ const UserProfile = ({user, setUser, notifications}) => {
         },
         false,
       );
-    } else {      
+    } else {
       setFormData(
         {
           email: {
@@ -75,11 +75,11 @@ const UserProfile = ({user, setUser, notifications}) => {
   const changeEditName = () => {
     setEditName(currentMode => !currentMode);
     switchModelHandler();
-  }
+  };
   const changeEditImage = () => {
     setEditImage(currentMode => !currentMode);
     switchModelHandler();
-  }
+  };
 
 
   const authSubmitHandler = async () => {
@@ -93,7 +93,7 @@ const UserProfile = ({user, setUser, notifications}) => {
           }),
           {
             "Content-Type": "application/json",
-            "Authorization" : `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           }
         );
         setEditName(false);
@@ -109,7 +109,7 @@ const UserProfile = ({user, setUser, notifications}) => {
           "PATCH",
           formData,
           {
-            "Authorization" : `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           }
         );
         setEditImage(false);
@@ -118,45 +118,75 @@ const UserProfile = ({user, setUser, notifications}) => {
     }
   };
 
-  return (
-    <div className="profile">
-      { isLoading && <LoadingSpinner />}
-      <ErrorModal error={error} onClear={clearError} />
-      {!isLoading && 
-        <Card className="profile__card">
-        {!editName && 
-          <React.Fragment>
-            {editImage ? 
-              <ImageUpload
-                center
-                id={"image"}
-                onInput={inputHandler}
-                errorText='Please provide an image'
-              /> : <Avatar image={image} className="profile__avatar"/>
-            }
-            {editImage && <Button inverse onClick={authSubmitHandler}>Save</Button>}
-            <Button onClick={changeEditImage}>{editImage? 'Cancel' : 'Change Image'}</Button>
-          </React.Fragment>
+  const notificationHandler = async () => {
+    try {
+      await sendRequest(
+        `${process.env.REACT_APP_BACKEND_URL}/users/notifications/${userId}`,
+        "PUT",
+        null,
+        {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
         }
-        {!editImage && 
-          <React.Fragment>
-            { editName ? 
-              <Input
-                id='name'
-                element='input'
-                  type='text'
-                  label='Your Name'
-                  validators={[VALIDATOR_REQUIRE()]}
-                  errorText='Please enter a valid name'
+      );
+    } catch (error) {}
+  };
+
+  return (
+    <div className="profile fade-in no-select">
+      {isLoading && <LoadingSpinner />}
+      <ErrorModal error={error} onClear={clearError} />
+      {!isLoading && (
+        <Card className="profile__card">
+          {!editName && (
+            <React.Fragment>
+              {editImage ? (
+                <ImageUpload
+                  center
+                  id={"image"}
                   onInput={inputHandler}
-                /> : <h4>{name}</h4>
-              }
-              {editName && <Button inverse onClick={authSubmitHandler}>Save</Button>}
-              <Button onClick={changeEditName}>{editName? 'Cancel' : 'Edit Name'}</Button>
+                  errorText="Please provide an image"
+                />
+              ) : (
+                <Avatar image={image} className="profile__avatar" />
+              )}
+              {editImage && (
+                <Button inverse onClick={authSubmitHandler}>
+                  Save
+                </Button>
+              )}
+              <Button onClick={changeEditImage}>
+                {editImage ? "Cancel" : "Change Image"}
+              </Button>
             </React.Fragment>
-          }
+          )}
+          {!editImage && (
+            <React.Fragment>
+              {editName ? (
+                <Input
+                  id="name"
+                  element="input"
+                  type="text"
+                  label="Your Name"
+                  validators={[VALIDATOR_REQUIRE()]}
+                  errorText="Please enter a valid name"
+                  onInput={inputHandler}
+                />
+              ) : (
+                <h4>{name}</h4>
+              )}
+              {editName && (
+                <Button inverse onClick={authSubmitHandler}>
+                  Save
+                </Button>
+              )}
+              <Button onClick={changeEditName}>
+                {editName ? "Cancel" : "Edit Name"}
+              </Button>
+            </React.Fragment>
+          )}
         </Card>
-      }
+      )}
       {user && <div className="notification-box card">
         <p>Do You Want To Receive E-mail Notifications?</p>
         <Button

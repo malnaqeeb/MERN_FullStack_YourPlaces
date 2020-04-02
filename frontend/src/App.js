@@ -18,7 +18,7 @@ const Auth = React.lazy(() => import("./users/pages/Auth"));
 const UserProfileNav = React.lazy(()=>import("./users/components/UserProfileNav"))
 const User = React.lazy(() => import("./users/pages/User"));
 const Users = React.lazy(() => import("./users/pages/Users"));
-const Friends = React.lazy(() => import('./friends/pages/Friends'));
+const Friends = React.lazy(() => import("./friends/pages/Friends"));
 const NewPlace = React.lazy(() => import("./places/pages/NewPlace"));
 const UserPlaces = React.lazy(() => import("./places/pages/UserPlaces"));
 const UpdatePlace = React.lazy(() => import("./places/pages/UpdatePlace"));
@@ -39,10 +39,13 @@ const App = () => {
         <Route path='/' exact>
           <Users />
         </Route>
-        <Route path="/:userId/places" exact>
+        <Route path='/search' exact>
+          <Search />
+        </Route>
+        <Route path='/:userId/places' exact>
           <UserPlaces />
         </Route>
-        <Route path="/places/new" exact>
+        <Route path='/places/new' exact>
           <NewPlace />
         </Route>
         <Route path="/places/:placeId" exact>
@@ -51,10 +54,10 @@ const App = () => {
         <Route path="/places/:placeId/edit">
           <UpdatePlace />
         </Route>
-        <Route path="/:userId/friends" exact>
+        <Route path='/:userId/friends' exact>
           <Friends />
         </Route>
-        <Route path="/:userId/bucketlist">
+        <Route path='/:userId/bucketlist'>
           <BucketList />
         </Route>
         <Route path="/:userId/messages">
@@ -67,10 +70,10 @@ const App = () => {
   } else {
     routes = (
       <Switch>
-        <Route path="/" exact>
+        <Route path='/' exact>
           <Users />
         </Route>
-        <Route path="/:userId/places" exact>
+        <Route path='/:userId/places' exact>
           <UserPlaces />
         </Route>
         <Route path="/places/:placeId" exact>
@@ -79,7 +82,7 @@ const App = () => {
         <Route path="/auth">
           <Auth />
         </Route>
-        <Route path="/social">
+        <Route path='/social'>
           <Social />
         </Route>
         <Route path='/forgetpassword'>
@@ -102,7 +105,7 @@ const App = () => {
         token,
         login,
         logout,
-        userId,
+        userId
       }}
     >
       <MessageContext.Provider value={{ messagesData }}>

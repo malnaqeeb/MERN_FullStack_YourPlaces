@@ -8,7 +8,6 @@ import { AuthContext } from "../../shared/context/auth-context";
 import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 
 const BucketList = () => {
-  const [placesLoading, setPlacesLoading] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const history = useHistory();
   const [places, setPlaces] = useState();
@@ -18,14 +17,12 @@ const BucketList = () => {
     setPlaces(prevPlaces => prevPlaces.filter(place => place.id._id !== id));
   };
   useEffect(() => {
-    setPlacesLoading(true);
     const getBucketList = async () => {
       try {
         const data = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/user/bucketlist?q=${userId}`
         );
         setPlaces(data.userWithBucketList);
-        setPlacesLoading(false);
       } catch (err) {}
     };
     getBucketList();
@@ -42,40 +39,9 @@ const BucketList = () => {
     };
     getUser();
   }, [sendRequest, userId]);
-  const getError = err => {
-    if (userId === auth.userId && !places && !isLoading) {
-      return (
-        <h2
-          className="center yellow-text fade-in"
-          style={{ flexDirection: "column" }}
-        >
-          You don't have any places in your bucket list. Maybe check some
-          places?
-          <Link to="/"> Go to home</Link>
-        </h2>
-      );
-    }
-    if (userId !== auth.userId && !places && !isLoading) {
-      return (
-        <h2 className="center yellow-text fade-in">
-          This user does not have any places in their bucket list
-        </h2>
-      );
-    }else{
-      return (
-        <h2 className="center yellow-text fade-in">
-          {err}
-        </h2>
-      )
-    }
-  };
-  const goHome = () => {
-    clearError();
-    history.push("/");
-  };
 
   if (error) {
-    return <ErrorModal error={getError(error)} onClear={goHome} header={`Hey!`} />;
+    return <ErrorModal error={error} onClear={clearError} header={`Hey!`} />;
   }
   if (isLoading)
     return (
@@ -143,31 +109,10 @@ const BucketList = () => {
                 );
               })}
           </div>
-          <p>SHARE</p>
         </React.Fragment>
-      )}
-      <React.Fragment>
-        <h2 className="center yellow-text">
-          Bucket List of{" "}
-          <span className="pink-text"> {user && user.user.name}</span>{" "}
-        </h2>
-
-        <div className="bucket-list-content">
-          {places &&
-            places.map((bucket, index) => {
-              return (
-                <BucketListItem
-                  bucket={bucket}
-                  key={index}
-                  index={index}
-                  deleteBucket={deleteFromBucketList}
-                />
-              );
-            })}
-        </div>
-      </React.Fragment>
-    </div>
-  );
+      </div>
+    );
+  }
 };
 
 export default BucketList;
