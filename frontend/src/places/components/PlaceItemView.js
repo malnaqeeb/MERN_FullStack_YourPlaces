@@ -7,7 +7,7 @@ const PlaceItemView = (props) => {
   const {name, image, title, address, description} = props.place;
   return (
     <div className="place-item">
-      <Card className="place-item__content">
+      <Card className="place-item__content detailed-view">
 
         <div className="place-item__image">
           <img src={image.imageUrl} alt={name} />

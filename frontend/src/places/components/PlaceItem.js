@@ -263,7 +263,7 @@ const PlaceItem = ({ place, onDeletePlace }) => {
                 <Button>DETAILS</Button>
               </Link>
               {place.creator === auth.userId && (
-                <Button to={`/places/${id}`}>EDIT</Button>
+                <Button to={`/places/${id}/edit`}>EDIT</Button>
               )}
               {place.creator === auth.userId && (
                 <Button danger onClick={showDeleteWaringHandler}>

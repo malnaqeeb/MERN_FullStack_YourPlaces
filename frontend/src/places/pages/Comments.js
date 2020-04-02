@@ -39,10 +39,10 @@ export default function Comments({placeId}) {
     }
 
     return (
-        <div className="center">
+        <div className="center flex-column width-60">
             {isLoading && <LoadingSpinner /> }
             <ErrorModal error={error} onClear={clearError} />   
-            <CommentForm addComment={addComment} placeId={placeId}/>         
+            <CommentForm addComment={addComment} placeId={placeId} className="width-60"/>         
             {!isLoading && <CommentList removeComment={removeComment} updateComment={updateComment} comments={comments}/>}     
         </div>
     );
