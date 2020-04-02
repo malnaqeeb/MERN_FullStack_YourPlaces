@@ -76,7 +76,7 @@
 }
 @media (max-width:950px){
   .nav-links li{
-    margin: 0 0.5em;
+    margin: 1rem 0.5rem;
   }
   .nav-links a{
     padding: 0.1rem;
