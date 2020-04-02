@@ -57,6 +57,13 @@ body {
 .block{
   display: block;
 }
+.flex-column{
+  display: flex;
+  flex-direction: column;
+}
+.width-60{
+  width: 60%;
+}
 .yellow-text{
   color: #F8DF00;
 }

@@ -32,6 +32,7 @@
   margin: 3% 0;
   display: flex;
   justify-content: space-between;
+  max-height: 6em;
 }
 
 .user-item__content button {

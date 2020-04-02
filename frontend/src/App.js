@@ -50,7 +50,7 @@ const App = () => {
         </Route>
 
         <Route path="/places/:placeId" exact>
-          <Place />
+          <Place/>
         </Route>
         <Route path="/places/:placeId/edit">
           <UpdatePlace />

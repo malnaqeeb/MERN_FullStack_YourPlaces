@@ -22,19 +22,22 @@ const MessageItem = ({ msg, messageDeleteHandler, getUserMessages }) => {
     messageDeleteHandler(msgId);
     getUserMessages(userId);
   };
-
+  const formatDate = date=>{
+    const d1= new Date(date);
+    return d1.toLocaleString('en-NL')
+  }
   return (
     <div key={msg._id} className={`mContainer ${msg.isSent ? "myMsg" : "userMsg"}`}>
       <div className={`msgInfo ${msg.isSent ? "toRyt" : "toLeft"}`}>
         {msg.isSent ? (
           <Fragment>
-            <p>{msg.date}</p>
+            <p>{formatDate(msg.date)}</p>
             <button onClick={() => delMessage(message.id, msg._id)}>x</button>
           </Fragment>
         ) : (
           <Fragment>
             <button onClick={() => delMessage(message.id, msg._id)}>x</button>
-            <p>{msg.date}</p>
+            <p>{formatDate(msg.date)}</p>
           </Fragment>
         )}
       </div>

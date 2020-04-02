@@ -62,7 +62,7 @@ export default function CommentForm({addComment, placeId}) {
   };
 
   return (
-    <div>
+    <div className="comment-form-container">
       <Fragment>
         <ErrorModal error={error} onClear={clearError} />
         {isLoading && <LoadingSpinner/>}

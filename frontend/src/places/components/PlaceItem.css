@@ -70,6 +70,11 @@
   display: flex;
 }
 
+.detailed-view{
+  width: 60%;
+  margin: auto;
+}
+
 .evaluation i:hover{
   cursor: pointer;
   opacity: 0.75;
