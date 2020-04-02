@@ -3,8 +3,6 @@ const User = require('../model/user');
 const HttpError = require('../model/http-error');
 const { friendAddedNotification, friendAcceptedNotification } = require("../emails/account");
 
-
-
 const {ObjectId} = mongoose.Types;
 
 // Gets the information about request
@@ -67,7 +65,6 @@ const makeFriendshipFromRequest = async (requestInfo) => {
       {_id: requestInfo.requestingUser.id},
       {$addToSet: {friends: requestInfo.acceptingUser}}
     );
-
   } catch (error) {
     throw new HttpError('Could not add users as friend.', 500);
   }
@@ -187,14 +184,12 @@ const acceptFriendRequest = async (req, res, next) => {
     // Add both users to each others friends arrays (addToSet)
     if (!requestInfo.isAlreadyFriend) {
       await makeFriendshipFromRequest(requestInfo);
-
       const accepting = await User.findById(requestInfo.acceptingUser.id);
       const requesting = await User.findById(requestInfo.requestingUser.id)
       if(user.notifications === true){
         friendAcceptedNotification(requesting.name, accepting.name, requesting.email)
       }
     }
-    
     // return a success message
     res.status(200).json({message: 'Friend request has been approved successfully!'});
   } catch (error) {
