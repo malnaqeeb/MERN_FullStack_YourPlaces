@@ -4,66 +4,75 @@ const HttpError = require('../model/http-error');
 const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
 
-const {ObjectId, Date, String, Boolean} = mongoose.Schema.Types;
+const { ObjectId} = mongoose.Schema.Types;
 
 const userSchema = new Schema({
   name: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   email: {
     type: String,
     required: true,
     trim: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
     required: true,
     trim: true,
-    minlength: 6
+    minlength: 6,
   },
+  verifyAccountToken: String, 
+  verifyAccountExpires: Date,
+  active: { type: Boolean, default: false },
   image: {
-    type: String
+    type: String,
   },
   social: {
-    google: {type: String, default: null},
-    facebook: {type: String, default: null}
+    google: { type: String, default: null },
+    facebook: { type: String, default: null },
   },
   places: [
     {
       type: mongoose.Types.ObjectId,
       required: true,
 
-      ref: 'Place'
-    }
+      ref: 'Place',
+    },
   ],
+  placesCount: { type: Number, default: 0 },
   friends: [
     {
       type: ObjectId,
-      ref: 'User'
-    }
+      ref: 'User',
+    },
   ],
   friendRequests: [
     {
-      user: {type: ObjectId, ref: 'User'},
+      user: { type: ObjectId, ref: 'User' },
       date: Date,
-      isSent: Boolean
-    }
+      isSent: Boolean,
+    },
   ],
   bucketList: [
     {
-      id: {type: mongoose.Types.ObjectId, required: true, ref: 'Place'},
+      id: { type: mongoose.Types.ObjectId, required: true, ref: 'Place' },
       _id: false,
       createdBy: {type: String},
       isVisited: {type: Boolean}
     }
-  ]
+  ],
+  resetPasswordToken: String, // used for after password reset is submitted
+  resetPasswordExpires: Date,
+  notifications: {type:Boolean, default:true},
+  created_at: { type: Date, required: true, default: Date.now },
+
 });
 // I created my own method to handle the login process
 userSchema.statics.findByCredentials = async (email, password) => {
-  const user = await User.findOne({email});
+  const user = await User.findOne({ email });
   if (!user) {
     throw new HttpError('Invalid credentials, could not log you in.', 401);
   }
@@ -75,8 +84,13 @@ userSchema.statics.findByCredentials = async (email, password) => {
   return user;
 };
 
+userSchema.pre('save', function(next) {
+  this.placesCount = this.places.length;
+  next();
+});
+
 // Hash the plain text password before saveing
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function(next) {
   const user = this;
   if (user.isModified('password')) {
     user.password = await bcrypt.hash(user.password, 8);
@@ -84,6 +98,15 @@ userSchema.pre('save', async function (next) {
 
   next();
 });
+userSchema.methods.generatePasswordReset = function() {
+  this.resetPasswordToken = crypto.randomBytes(20).toString("hex");
+  this.resetPasswordExpires = Date.now() + 3600000; //expires in an hour
+};
+
+userSchema.methods.generateAccountVerify = function() {
+  this.verifyAccountToken = crypto.randomBytes(20).toString("hex");
+  this.verifyAccountExpires = Date.now() + 3600000; 
+};
 userSchema.plugin(uniqueValidator);
 const User = mongoose.model('User', userSchema);
 

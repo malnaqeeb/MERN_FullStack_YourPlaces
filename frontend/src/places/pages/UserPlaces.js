@@ -1,22 +1,30 @@
-import React, { Fragment, useState, useEffect } from "react";
+
+import React, { Fragment, useState, useEffect, useContext } from "react";
 import PlaceList from "../components/PlaceList";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import useHttpClient from "../../shared/hooks/http-hook";
 import ErrorModal from "../../shared/component/UIElements/ErrorModal";
-import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
 import "./UserPlaces.css";
+import { AuthContext } from "../../shared/context/auth-context";
+import { Select, Checkbox, MenuItem } from '@material-ui/core';
+import { PLACE_TAGS } from "../../shared/Util/constants";
+
 
 const UserPlaces = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [places, setPlaces] = useState();
   const userId = useParams().userId;
   const history = useHistory();
+  const auth = useContext(AuthContext);
   const [user, setUser] = useState();
+  const [sortBy, setSortBy] = useState('');
+  const [tags, setTags] = useState([]);
+
   useEffect(() => {
     const getUser = async () => {
       try {
         const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/users/${userId}/`
+          `${process.env.REACT_APP_BACKEND_URL}/users/${userId}/`,
         );
         setUser(data);
       } catch (err) {}
@@ -28,31 +36,70 @@ const UserPlaces = () => {
     const getPlaces = async () => {
       try {
         const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/places/user/${userId}`
+          `${
+            process.env.REACT_APP_BACKEND_URL
+          }/places/user/${userId}/?sortBy=${sortBy}&tagFilter=${tags.join(
+            ',',
+          )}`,
         );
         setPlaces(data.userWithPlaces);
       } catch (error) {}
     };
     getPlaces();
-  }, [sendRequest, userId]);
+  }, [sendRequest, userId, sortBy, tags]);
   const placeDeleteHandler = detetedPlaceId => {
     setPlaces(prevPlaces =>
-      prevPlaces.filter(places => places.id !== detetedPlaceId)
+      prevPlaces.filter(places => places.id !== detetedPlaceId),
     );
   };
   const getError = err => {
-    if (!places && !isLoading) {
+    if (!places && auth.userId !== userId) {
       return (
-        <h2 className="center yellow-text fade-in">
+        <h2 className="center gray-text fade-in-faster">
           There is no place shared by this user
         </h2>
+      );
+    }
+    if (!places && auth.userId === userId) {
+      return (
+        <Fragment>
+          <h2 className="center gray-text fade-in-faster">
+            You don't have any shared places. Would you like to add one?
+          </h2>
+          <Link to="/places/new" className="center fade-in-faster add-place-button">ADD A PLACE</Link>
+        </Fragment>
       );
     } else {
       return <h2>{err}</h2>;
     }
   };
+
+  //sort on selected option below
+  const sortByTitleRateDate = event => {
+    const menuItemValue = event.target.value;
+    if (menuItemValue === 'rate') setSortBy('rate');
+    if (menuItemValue === 'title') setSortBy('title');
+    if (menuItemValue === 'created_at') setSortBy('created_at');
+  };
+
+  const handleTagChange = event => {
+    const tagName = event.target.name;
+    const checked = event.target.checked;
+    if (checked) {
+      setTags(oldTags => {
+        return oldTags.includes(tagName) ? oldTags : [...oldTags, tagName];
+      });
+    } else {
+      setTags(oldTags => {
+        return oldTags.includes(tagName)
+          ? oldTags.filter(tag => tag !== tagName)
+          : oldTags;
+      });
+    }
+  };
+
   const goHome = () => {
-    history.push("/");
+    history.push('/');
   };
   if (error)
     return (
@@ -62,23 +109,55 @@ const UserPlaces = () => {
         onClear={goHome}
       />
     );
-  if (isLoading)
-    return (
-      <div className="center">
-        <LoadingSpinner />
-      </div>
+
+  const tagInputs = [];
+
+  PLACE_TAGS.map(tag => {
+    const checked = tags.includes(tag.name);
+    const tagInput = (
+      <span key={tag.name}>
+        <label>
+          <Checkbox
+            name={tag.name}
+            checked={checked}
+            onChange={handleTagChange}
+            inputProps={{ 'aria-label': 'primary checkbox' }}
+          />
+          {tag.title}
+        </label>
+        <span>&nbsp;&nbsp;</span>
+      </span>
     );
+    tagInputs.push(tagInput);
+  });
 
   return (
     <Fragment>
-      <div className="place-overlay-container">
-        <div className="place-overlay animated fadeOut"></div>
-        <h2 className="center yellow-text inline">
-          Places of <span className="pink-text"> {user && user.user.name}</span>{" "}
+      <div className="place-overlay-container fade-in">
+        <h2 className="center white-text inline no-select">
+          Places of <span className="yellow-text fade-in"> {user && user.user.name}</span>{" "}
         </h2>
         <ErrorModal error={error} onClear={clearError} />
         {!isLoading && places && (
-          <PlaceList items={places} onDeletePlace={placeDeleteHandler} />
+          <Fragment>
+            <div className="sort-filter-layout">
+              <Select
+                onChange={sortByTitleRateDate}
+                defaultValue="none"
+                style={{ color: 'white' }}
+              >
+                <MenuItem value="none" disabled>
+                  Choose an option to Sort
+                </MenuItem>
+                <MenuItem value="rate">Sort By Rate</MenuItem>
+                <MenuItem value="title">Sort By Title</MenuItem>
+                <MenuItem value="created_at">Sort By Adding Date</MenuItem>
+              </Select>
+              {tagInputs}
+            </div>
+
+            <PlaceList items={places} onDeletePlace={placeDeleteHandler} />
+          </Fragment>
         )}
       </div>
     </Fragment>

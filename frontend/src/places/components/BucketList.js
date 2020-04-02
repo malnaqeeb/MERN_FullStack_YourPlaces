@@ -16,7 +16,6 @@ const BucketList = () => {
   const auth = useContext(AuthContext);
   const deleteFromBucketList = id => {
     setPlaces(prevPlaces => prevPlaces.filter(place => place.id._id !== id));
-    history.push(`/`);
   };
   useEffect(() => {
     setPlacesLoading(true);
@@ -84,29 +83,68 @@ const BucketList = () => {
         <LoadingSpinner />
       </div>
     );
+  else {
+    return (
+      <div>
+        {userId === auth.userId && (
+          <div className="share-box  no-select">
+            <div className="share-button">
+              <a
+                href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
+                  `${process.env.REACT_APP_PUBLIC_URL}/${userId}/bucketlist`
+                )}&text=My+Travel+Bucket+List%2C+Connect+and+Explore.&hashtags=travelling,wanderlust,yourplacesapp`}
+              >
+                <i className="fab fa-twitter-square"></i>
+              </a>
+              <a
+                href={`https://www.facebook.com/sharer.php?u=${encodeURIComponent(
+                  `${process.env.REACT_APP_PUBLIC_URL}/${userId}/bucketlist`
+                )}`}
+              >
+                <i className="fab fa-facebook-square"></i>
+              </a>
+            </div>
+            <p>SHARE</p>
+          </div>
+        )}
+        <React.Fragment>
+          <div className="bucket-list-content">
+            <div className="m-b-2">
+              <h2 className=" white-text fade-in no-select center">
+                Bucket List of{" "}
+                <span className="m-05 yellow-text"> {user && user.user.name}</span>{" "}
+              </h2>
+            </div>
+            {places && places.length === 0 && auth.userId === userId && (
+              <h2
+                className="center white-text fade-in"
+                style={{ flexDirection: "column" }}
+              >
+                You don't have any places in your bucket list. Maybe check some
+                places?
+                <Link to="/"> Go to home</Link>
+              </h2>
+            )}
+            {auth.userId !== userId && places && places.length === 0 && (
+              <h2 className="center white-text fade-in">
+                This user does not have any places in their bucket list
+              </h2>
+            )}
 
-  return (
-    <div>
-      {userId === auth.userId && (
-        <div className="share-box">
-          <div className="share-button">
-            <a
-              href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                `${process.env.REACT_APP_PUBLIC_URL}/${userId}/bucketlist`
-              )}&text=My%2C+Travel%2C+Bucket%2C+List.&hashtags=travelling,wanderlust,yourplacesapp`}
-            >
-              <i className="fab fa-twitter-square"></i>
-            </a>
-            <a
-              href={`https://www.facebook.com/sharer.php?u=${encodeURIComponent(
-                `${process.env.REACT_APP_PUBLIC_URL}/${userId}/bucketlist`
-              )}`}
-            >
-              <i className="fab fa-facebook-square"></i>
-            </a>
+            {places &&
+              places.map((bucket, index) => {
+                return (
+                  <BucketListItem
+                    bucket={bucket}
+                    key={index}
+                    index={index}
+                    deleteBucket={deleteFromBucketList}
+                  />
+                );
+              })}
           </div>
           <p>SHARE</p>
-        </div>
+        </React.Fragment>
       )}
       <React.Fragment>
         <h2 className="center yellow-text">

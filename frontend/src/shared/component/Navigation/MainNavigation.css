@@ -43,3 +43,8 @@
     display: block;
   }
 }
+@media (max-width:450px){
+  .main-navigation__title{
+    font-size: 1.25em;
+  }
+}

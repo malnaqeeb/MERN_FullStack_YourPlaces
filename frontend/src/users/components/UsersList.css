@@ -2,9 +2,37 @@
   list-style: none;
   margin: 0 auto;
   padding: 0;
-  width: 90%;
+  width: 70%;
   max-width: 50rem;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.profile-banner{
+  width: 100vw;
+  height: 5em;
+  background: #4d4d4d;
+  display: flex;
+}
+
+.profile-banner img {
+  max-width: 5em;
+  max-height: 5em;
+  border: 1px solid #F8DF00;
+  border-radius: 50%;
+  margin: 0 2em;
+}
+
+.profile-banner a {
+  color: black;
+  font-size: 2em;
+}
+
+.profile-banner a:hover{
+  color: #F8DF00;
+}
+
+.profile-banner span{
+  vertical-align: center;
 }

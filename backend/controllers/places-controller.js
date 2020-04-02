@@ -20,17 +20,39 @@ const getPlaceById = async (req, res, next) => {
 
 const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.uid;
-  let userWithPlaces;
+  const sortBy = req.query.sortBy || 'date';
+  const tagFilter = req.query.tagFilter;
 
+  let userWithPlaces;
   try {
-    userWithPlaces = await User.findById(userId).populate('places');
-    if (!userWithPlaces || userWithPlaces.places.length === 0)
-      return next(new HttpError('Could not find a place for the provided user id.', 404));
+    const populateOptions = {
+      path: 'places',
+      options: { collation: {locale: 'en'
+    },sort: { [sortBy]: sortBy === 'title' ? '1' : '-1' } },
+    };
+
+    if (tagFilter) {
+      populateOptions.match = { tags: { $in: tagFilter.split(',') } };
+    }
+    userWithPlaces = await User.findById(userId).populate(populateOptions);
+
+    if (!userWithPlaces)
+      return next(
+        new HttpError('Could not find a place for the provided user id.', 404),
+      );
+    if (userWithPlaces.places.length === 0) {
+      return next(
+        new HttpError('There is no place with selected tag(s) .', 404),
+      );
+    }
 
     res.json({
-      userWithPlaces: userWithPlaces.places.map(place => place.toObject({getters: true}))
+      userWithPlaces: userWithPlaces.places.map(place =>
+        place.toObject({ getters: true }),
+      ),
     });
   } catch (error) {
+    console.log(error);
     return next(
       new HttpError('Something went wrong, could not find a place for the provided id.', 500)
     );
@@ -39,18 +61,20 @@ const getPlacesByUserId = async (req, res, next) => {
 
 const createPlace = async (req, res, next) => {
   const error = validationResult(req);
-  if (!error.isEmpty())
-    return next(new Error('Invalid input passed, please check your data.', 422));
+  if (!error.isEmpty()){
+    return next(new HttpError('Invalid input passed, please check your data.', 422));
+  }
 
-  const {title, description, address} = req.body;
-  // Here I change the coordinatis to object and also reverse the lng becaouse I useed the mapbox  geocode by default it geve us an array [lat, lng].
+  const { title, description, address, tags } = req.body;
+  const tagsSplitted = tags.split(',');
+
   let changeCoordinates;
   let coordinates;
   try {
     changeCoordinates = await getCoordsForAddress(address);
     coordinates = {
       lat: changeCoordinates[1],
-      lng: changeCoordinates[0]
+      lng: changeCoordinates[0],
     };
   } catch (error) {
     return next(error);
@@ -59,7 +83,7 @@ const createPlace = async (req, res, next) => {
   const {url, public_id} = req.file;
   const imageSrc = {
     imageUrl: url,
-    id: public_id
+    id: public_id,
   };
   const createdPlace = new Place({
     title,
@@ -67,7 +91,8 @@ const createPlace = async (req, res, next) => {
     address,
     location: coordinates,
     image: imageSrc,
-    creator: req.userData.userId
+    creator: req.userData.userId,
+    tags: tagsSplitted,
   });
 
   let user;
@@ -94,11 +119,12 @@ const createPlace = async (req, res, next) => {
 };
 
 const updatePlaceById = async (req, res, next) => {
-  const {title, description} = req.body;
+  const { title, description, tags } = req.body;
 
   const error = validationResult(req);
-  if (!error.isEmpty())
-    return next(new Error('Invalid input passed, please check your data.', 422));
+  if (!error.isEmpty()){
+    return next(new HttpError('Invalid input passed, please check your data.', 422));
+  }
 
   const placeId = req.params.pid;
 
@@ -116,6 +142,7 @@ const updatePlaceById = async (req, res, next) => {
 
     place.title = title;
     place.description = description;
+    place.tags = tags;
     place.save();
 
     res.status(200).json({place: place.toObject({getters: true})});
@@ -204,7 +231,7 @@ const disLikeThePlace = async (req, res, next) => {
 
     if (disLiked) {
       const newDisLike = place.disLike.filter(
-        user => user !== req.body.disLike
+        user => user !== req.body.disLike,
       );
       place.disLike = newDisLike;
       place.save();
@@ -245,5 +272,5 @@ module.exports = {
   deletePlaceById,
   likeThePlace,
   disLikeThePlace,
-  placeEvaluation
+  placeEvaluation,
 };

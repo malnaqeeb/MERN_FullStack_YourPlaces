@@ -12,9 +12,8 @@ import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
-} from '../../shared/Util/validators';
-import { AuthContext } from '../../shared/context/auth-context';
-// React Icons
+} from "../../shared/Util/validators";
+import { AuthContext } from "../../shared/context/auth-context";
 import { FaFacebookF, FaGoogle } from 'react-icons/fa';
 
 const Auth = () => {
@@ -26,11 +25,11 @@ const Auth = () => {
   const [state, inputHandler, setFormData] = useFrom(
     {
       email: {
-        value: '',
+        value: "",
         isValid: false,
       },
       password: {
-        value: '',
+        value: "",
         isValid: false,
       },
     },
@@ -51,7 +50,7 @@ const Auth = () => {
         {
           ...state.inputs,
           name: {
-            value: '',
+            value: "",
             isValid: false,
           },
           image: {
@@ -79,7 +78,7 @@ const Auth = () => {
             password: state.inputs.password.value,
           }),
           {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         );
 
