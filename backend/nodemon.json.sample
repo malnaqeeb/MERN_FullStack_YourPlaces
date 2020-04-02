@@ -10,6 +10,7 @@
     "AUTH_GOOGLE_SECRET": "",
     "AUTH_FACEBOOK_CLIENT_ID": "",
     "AUTH_FACEBOOK_SECRET": "",
-    "AUTH_REDIRECT_PATH": ""
+    "AUTH_REDIRECT_PATH": "",
+    "SEND_GRID_API_KEY": ""
   }
 }
