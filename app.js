@@ -20,7 +20,7 @@ connectDB();
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join("public")));
+app.use(express.static("frontend/build"));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -42,7 +42,7 @@ app.use("/api/user", userRoute);
 app.use("/api/search", searchRoute);
 
 app.use((req, res, next) => {
-  res.sendFile(path.resolve(__dirname, "public", "index.html"));
+  res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
 });
 
 // Here I check if the user use a wrong path
