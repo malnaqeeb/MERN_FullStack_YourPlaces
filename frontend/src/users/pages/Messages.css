@@ -61,8 +61,8 @@
 }
 
 .msgsContainer {
-  overflow: scroll;
-  height: 60%;
+  overflow-y: scroll;
+  height: 30vh;
 }
 .mobile-hidden {
   display: none;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams, useHistory, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import BucketListItem from "./BucketListItem";
 import useHttpClient from "../../shared/hooks/http-hook";
 import "./BucketList.css";
@@ -9,12 +9,14 @@ import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 
 const BucketList = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  const history = useHistory();
+
   const [places, setPlaces] = useState();
   const { userId } = useParams();
   const auth = useContext(AuthContext);
-  const deleteFromBucketList = id => {
-    setPlaces(prevPlaces => prevPlaces.filter(place => place.id._id !== id));
+  const deleteFromBucketList = (id) => {
+    setPlaces((prevPlaces) =>
+      prevPlaces.filter((place) => place.id._id !== id)
+    );
   };
   useEffect(() => {
     const getBucketList = async () => {
@@ -78,7 +80,10 @@ const BucketList = () => {
             <div className="m-b-2">
               <h2 className=" white-text fade-in no-select center">
                 Bucket List of{" "}
-                <span className="m-05 yellow-text"> {user && user.user.name}</span>{" "}
+                <span className="m-05 yellow-text">
+                  {" "}
+                  {user && user.user.name}
+                </span>{" "}
               </h2>
             </div>
             {places && places.length === 0 && auth.userId === userId && (

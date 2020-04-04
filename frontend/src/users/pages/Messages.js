@@ -35,7 +35,7 @@ const Messages = () => {
         isValid: false,
       },
     },
-    false,
+    false
   );
 
   // fetching contacts (only texted ones not all users)
@@ -47,7 +47,7 @@ const Messages = () => {
         null,
         {
           Authorization: `Bearer ${token}`,
-        },
+        }
       );
       setContacts(data.corresponders);
       scrollToBottom();
@@ -59,7 +59,7 @@ const Messages = () => {
   }, [sendRequest, token]);
 
   // Send a message
-  const sendMessage = async e => {
+  const sendMessage = async (e) => {
     e.preventDefault();
     const corresponderId = message.id;
     const messageValue = state.inputs.message.value;
@@ -73,9 +73,12 @@ const Messages = () => {
         {
           Authorization: "Bearer " + token,
           "Content-Type": "application/json",
-        },
+        }
       );
-      setAllMessages([...allMessages, { message: messageValue, isSent: true, _id: res.messageId }]);
+      setAllMessages([
+        ...allMessages,
+        { message: messageValue, isSent: true, _id: res.messageId },
+      ]);
       scrollToBottom();
       getUserMessages(corresponderId);
     } catch (error) {
@@ -84,7 +87,7 @@ const Messages = () => {
   };
 
   // Get all messages as per the texted person
-  const getUserMessages = async id => {
+  const getUserMessages = async (id) => {
     const corresponderId = id;
     try {
       const fetchedMessages = await sendRequest(
@@ -93,7 +96,7 @@ const Messages = () => {
         null,
         {
           Authorization: "Bearer " + token,
-        },
+        }
       );
       fetchContacts();
       setAllMessages(fetchedMessages.messages);
@@ -104,7 +107,7 @@ const Messages = () => {
   };
 
   // Delete a corresponder
-  const dltCorresponder = async id => {
+  const dltCorresponder = async (id) => {
     try {
       await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/user/messages/${id}`,
@@ -112,9 +115,9 @@ const Messages = () => {
         null,
         {
           Authorization: "Bearer " + token,
-        },
+        }
       );
-      const filteredContacts = contacts.filter(contact => contact._id !== id);
+      const filteredContacts = contacts.filter((contact) => contact._id !== id);
       setContacts(filteredContacts);
       setAllMessages([]);
       fetchContacts();
@@ -123,8 +126,10 @@ const Messages = () => {
     }
   };
 
-  const messageDeleteHandler = deletedMsgId => {
-    setAllMessages(prevAllMessages => prevAllMessages.filter(msg => msg.id !== deletedMsgId));
+  const messageDeleteHandler = (deletedMsgId) => {
+    setAllMessages((prevAllMessages) =>
+      prevAllMessages.filter((msg) => msg.id !== deletedMsgId)
+    );
   };
 
   const msgBoxHeight = {
@@ -149,12 +154,14 @@ const Messages = () => {
             <h2 className="header">Recent</h2>
             <div className="contacts__box">
               {contacts.length > 0 &&
-                contacts.map(contact => (
+                contacts.map((contact) => (
                   <Card
                     className="user-item__content"
                     key={contact.corresponder._id}
-                    className={`user-item__content ${message.id === contact.corresponder._id &&
-                      "activatedContact"}`}
+                    className={`user-item__content ${
+                      message.id === contact.corresponder._id &&
+                      "activatedContact"
+                    }`}
                   >
                     <div
                       onClick={() => {
@@ -173,7 +180,11 @@ const Messages = () => {
                         <h3>{contact.corresponder.name}</h3>
                       </div>
                     </div>
-                    <button onClick={() => dltCorresponder(contact.corresponder._id)}>X</button>
+                    <button
+                      onClick={() => dltCorresponder(contact.corresponder._id)}
+                    >
+                      X
+                    </button>
                   </Card>
                 ))}
             </div>
@@ -218,14 +229,18 @@ const Messages = () => {
               )}
               <div ref={myScrollRef}></div>
             </div>
-            <Input
-              id="message"
-              type="text"
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="Please enter your message"
-              onInput={inputHandler}
-            />
-            <Button onClick={sendMessage}>Send</Button>
+
+            <form onSubmit={sendMessage}>
+              <Input
+                id="message"
+                element="input"
+                type="text"
+                validators={[VALIDATOR_REQUIRE()]}
+                errorText="Please enter your message"
+                onInput={inputHandler}
+              />
+              <Button type="submit">Send</Button>
+            </form>
           </div>
         </Card>
       )}

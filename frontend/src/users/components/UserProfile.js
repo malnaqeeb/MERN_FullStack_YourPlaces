@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import useHttpClient from "../../shared/hooks/http-hook";
 import { useFrom } from "../../shared/hooks/form-hook";
 import { AuthContext } from "../../shared/context/auth-context";
@@ -13,11 +13,11 @@ import Button from "../../shared/component/formElements/Button";
 import ImageUpload from "../../shared/component/formElements/ImageUpload";
 
 import "./UserProfile.css";
-const UserProfile = ({user, setUser, notifications}) => {
+const UserProfile = ({ user, setUser, notifications }) => {
   const { userId, token } = useContext(AuthContext);
   const [editImage, setEditImage] = useState(false);
   const [editName, setEditName] = useState(false);
-  const [notStyle, setNotStyle] = useState(notifications)
+  const [notStyle, setNotStyle] = useState(notifications);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const { name, image } = user;
   const [state, inputHandler, setFormData] = useFrom(
@@ -31,7 +31,7 @@ const UserProfile = ({user, setUser, notifications}) => {
         isValid: false,
       },
     },
-    false,
+    false
   );
 
   const switchModelHandler = () => {
@@ -43,7 +43,7 @@ const UserProfile = ({user, setUser, notifications}) => {
             isValid: false,
           },
         },
-        false,
+        false
       );
     } else if (editName) {
       setFormData(
@@ -53,7 +53,7 @@ const UserProfile = ({user, setUser, notifications}) => {
             isValid: false,
           },
         },
-        false,
+        false
       );
     } else {
       setFormData(
@@ -67,20 +67,19 @@ const UserProfile = ({user, setUser, notifications}) => {
             isValid: false,
           },
         },
-        false,
+        false
       );
     }
   };
 
   const changeEditName = () => {
-    setEditName(currentMode => !currentMode);
+    setEditName((currentMode) => !currentMode);
     switchModelHandler();
   };
   const changeEditImage = () => {
-    setEditImage(currentMode => !currentMode);
+    setEditImage((currentMode) => !currentMode);
     switchModelHandler();
   };
-
 
   const authSubmitHandler = async () => {
     if (editName) {
@@ -93,7 +92,7 @@ const UserProfile = ({user, setUser, notifications}) => {
           }),
           {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           }
         );
         setEditName(false);
@@ -109,7 +108,7 @@ const UserProfile = ({user, setUser, notifications}) => {
           "PATCH",
           formData,
           {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           }
         );
         setEditImage(false);
@@ -126,7 +125,7 @@ const UserProfile = ({user, setUser, notifications}) => {
         null,
         {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         }
       );
     } catch (error) {}
@@ -187,16 +186,19 @@ const UserProfile = ({user, setUser, notifications}) => {
           )}
         </Card>
       )}
-      {user && <div className="notification-box card">
-        <p>Do You Want To Receive E-mail Notifications?</p>
-        <Button
-          onClick={()=>{
-            setNotStyle(!notStyle)
-            notificationHandler()
-            }}>
-          {notStyle ? "TURN OFF" : "TURN ON"}
-        </Button>
-      </div>}
+      {user && (
+        <div className="notification-box card">
+          <p>Do You Want To Receive E-mail Notifications?</p>
+          <Button
+            onClick={() => {
+              setNotStyle(!notStyle);
+              notificationHandler();
+            }}
+          >
+            {notStyle ? "TURN OFF" : "TURN ON"}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

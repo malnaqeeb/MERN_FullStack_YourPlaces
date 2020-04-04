@@ -9,6 +9,7 @@
 .myMsg {
   justify-content: flex-end;
   text-align: right;
+  word-wrap: break-word;
 }
 
 .msgInfo {

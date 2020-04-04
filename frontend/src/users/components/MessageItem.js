@@ -16,18 +16,21 @@ const MessageItem = ({ msg, messageDeleteHandler, getUserMessages }) => {
       null,
       {
         Authorization: "Bearer " + token,
-      },
+      }
     );
 
     messageDeleteHandler(msgId);
     getUserMessages(userId);
   };
-  const formatDate = date=>{
-    const d1= new Date(date);
-    return d1.toLocaleString('en-NL')
-  }
+  const formatDate = (date) => {
+    const d1 = new Date(date);
+    return d1.toLocaleString("en-NL");
+  };
   return (
-    <div key={msg._id} className={`mContainer ${msg.isSent ? "myMsg" : "userMsg"}`}>
+    <div
+      key={msg._id}
+      className={`mContainer ${msg.isSent ? "myMsg" : "userMsg"}`}
+    >
       <div className={`msgInfo ${msg.isSent ? "toRyt" : "toLeft"}`}>
         {msg.isSent ? (
           <Fragment>
@@ -41,7 +44,7 @@ const MessageItem = ({ msg, messageDeleteHandler, getUserMessages }) => {
           </Fragment>
         )}
       </div>
-      <h3>{msg.message}</h3>
+      <p>{msg.message}</p>
     </div>
   );
 };
