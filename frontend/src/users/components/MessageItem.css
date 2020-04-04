@@ -4,6 +4,7 @@
   color: darkblue;
   padding: 0 2%;
   margin: 1% 0;
+  word-wrap: break-word;
 }
 
 .myMsg {
