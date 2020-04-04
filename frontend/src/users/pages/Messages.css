@@ -82,8 +82,12 @@
   }
   .message__box-mobile {
     width: 100vw;
+    padding: 1rem;
   }
   .contact__container-mobile {
     width: 100vw;
   }
+}
+.card {
+  padding: 0 !important;
 }
