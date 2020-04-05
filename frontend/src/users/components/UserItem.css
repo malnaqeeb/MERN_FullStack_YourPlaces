@@ -29,14 +29,13 @@
   width: 4rem;
   height: 4rem;
   margin-right: 1rem;
-  
 }
 .user-item__info {
   display: flex;
   flex-direction: column;
 }
 .user-item__info h2 {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   margin: 0 0 0.5rem 0;
   font-weight: normal;
   color: #ffd900;
@@ -51,8 +50,9 @@
 
 .user-item__info h3 {
   margin: 0;
+  font-size: 0.8rem;
 }
-.user-item__icon{
+.user-item__icon {
   width: 25%;
   height: auto;
 }
