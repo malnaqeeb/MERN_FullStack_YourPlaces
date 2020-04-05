@@ -43,7 +43,7 @@ const Auth = () => {
         {
           ...state.inputs,
           name: undefined,
-          image: undefined
+          image: undefined,
         },
         state.inputs.email.isValid && state.inputs.password.isValid
       );
@@ -57,17 +57,17 @@ const Auth = () => {
           },
           image: {
             value: null,
-            isValid: false
-          }
+            isValid: false,
+          },
         },
         false
       );
     }
-    setIsLoginMod(prevMode => !prevMode);
-    toggleSocialLogin(socialLogin => !socialLogin);
+    setIsLoginMod((prevMode) => !prevMode);
+    toggleSocialLogin((socialLogin) => !socialLogin);
   };
 
-  const authSubmitHandler = async event => {
+  const authSubmitHandler = async (event) => {
     event.preventDefault();
 
     if (isLoginMod) {
@@ -77,11 +77,11 @@ const Auth = () => {
           "POST",
           JSON.stringify({
             email: state.inputs.email.value,
-            password: state.inputs.password.value
+            password: state.inputs.password.value,
           }),
           {
             "Content-Type": "application/json",
-          },
+          }
         );
 
         auth.login(res.userId, res.token, null, res.friendStatus);
@@ -176,11 +176,7 @@ const Auth = () => {
           <Button type="submit" disabled={!state.isValid}>
             {isLoginMod ? "LOGIN" : "SIGNUP"}
           </Button>
-          {isLoginMod && (
-            <Link to="/forgetpassword">
-              <Button>FORGOT PASSWORD</Button>
-            </Link>
-          )}
+          {isLoginMod && <Button to="/forgetpassword">FORGOT PASSWORD</Button>}
         </form>
         <Button inverse onClick={switchModelHandler}>
           SWITCH TO {isLoginMod ? "SIGNUP" : "LOGIN"}

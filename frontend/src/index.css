@@ -51,32 +51,32 @@ body {
   color: white;
 }
 
-.gray-text{
+.gray-text {
   color: #4d4d4d;
 }
-.block{
+.block {
   display: block;
 }
-.flex-column{
+.flex-column {
   display: flex;
   flex-direction: column;
 }
-.width-60{
+.width-60 {
   width: 60%;
 }
-.yellow-text{
-  color: #F8DF00;
+.yellow-text {
+  color: #f8df00;
 }
 .m-1 {
   margin: 1rem;
 }
-.m-05{
+.m-05 {
   margin: 0.5rem;
 }
 .p-1 {
   padding: 1rem;
 }
-.m-b-2{
+.m-b-2 {
   margin-bottom: 2rem;
 }
 @media (max-width: 600px) {
@@ -86,10 +86,9 @@ body {
   }
 }
 @media (max-width: 768px) {
- .users-mobile{
-   width: 60% !important;
- }
-
+  .users-mobile {
+    width: 60% !important;
+  }
 }
 
 .fade-in {
@@ -154,6 +153,27 @@ body {
 }
 
 .forget_password {
-  width: 30%;
+  width: 40%;
   margin: auto;
+}
+@media (max-width: 750px) {
+  .forget_password {
+    width: 90%;
+  }
+}
+@media (max-width: 750px) {
+  .button {
+    font-size: 12px !important;
+    padding: 0.5rem 0.5rem;
+  }
+  .comment-form {
+    padding: 0.5rem 0.5rem;
+  }
+  h2,
+  h3 {
+    font-size: 1rem;
+  }
+  .span.MuiButton-label {
+    font-size: 1rem;
+  }
 }

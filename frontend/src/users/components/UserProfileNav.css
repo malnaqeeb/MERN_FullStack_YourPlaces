@@ -6,7 +6,7 @@
   border: 1px solid transparent;
   color: white;
 }
-.sideBar a{
+.sideBar a {
   margin-top: 15%;
 }
 .navLink:hover {
@@ -19,36 +19,38 @@
   background: #ff0055;
   float: left;
   display: flex;
-  flex-direction: column ;
+  flex-direction: column;
   padding: 5% 2% 20%;
   color: #ffd900;
   cursor: pointer;
+  max-height: 350px !important;
 }
-.mobile-icon{
+
+.mobile-icon {
   display: none;
 }
-.desktop-hidden-icon{
+.desktop-hidden-icon {
   display: none;
 }
-@media (max-width:600px){
-   .mobile-hidden-menu{
-     display: none;
-   }
-   .mobile-icon{
-     display: block;
-     padding: 1em 1em;
-     font-size: 1.75em;
-     color: #ff0055;
-   }
-   .mobile-icon i {
+@media (max-width: 600px) {
+  .mobile-hidden-menu {
+    display: none;
+  }
+  .mobile-icon {
+    display: block;
+    padding: 1em 1em;
+    font-size: 1.75em;
+    color: #ff0055;
+  }
+  .mobile-icon i {
     font-size: 2em;
-   }
-   .desktop-hidden-icon{
-     display: block;
-     padding: 0.25em 1em;
-     font-size: 1.75em;
-   }
-   .mobile-hidden-icon{
-     display: none;
-   }
+  }
+  .desktop-hidden-icon {
+    display: block;
+    padding: 0.25em 1em;
+    font-size: 1.75em;
+  }
+  .mobile-hidden-icon {
+    display: none;
+  }
 }

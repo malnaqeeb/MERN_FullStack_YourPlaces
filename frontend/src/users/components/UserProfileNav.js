@@ -6,12 +6,12 @@ import "./UserProfileNav.css";
 
 const UserProfileNav = () => {
   const { userId } = useContext(AuthContext);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(true);
   const toggleMenu = () => {
     setUserMenuOpen(!userMenuOpen);
   };
   const navBarHeight = {
-    height: window.innerHeight - 0.11 * window.innerHeight
+    height: window.innerHeight - 0.11 * window.innerHeight,
   };
   return (
     <Fragment>
@@ -26,7 +26,7 @@ const UserProfileNav = () => {
       <Card
         className={
           userMenuOpen
-            ? `sideBar fade-in`
+            ? `sideBar fade-in `
             : `sideBar mobile-hidden-menu fade-in`
         }
         style={navBarHeight}
