@@ -132,9 +132,9 @@ const Messages = () => {
     );
   };
 
-  const msgBoxHeight = {
-    height: window.innerHeight - 0.12 * window.innerHeight,
-  };
+  // const msgBoxHeight = {
+  //   height: window.innerHeight - 0.12 * window.innerHeight,
+  // };
 
   return (
     <React.Fragment>
@@ -142,7 +142,7 @@ const Messages = () => {
       <ErrorModal error={error} onClear={clearError} />
 
       {!isLoading && (
-        <Card className="messages__card" style={msgBoxHeight}>
+        <Card className="messages__card">
           {/* Contacts */}
           <div
             className={
