@@ -7,7 +7,7 @@ import { useAuth } from "./shared/hooks/auth-hook";
 import LoadingSpinner from "./shared/component/UIElements/LoadingSpinner";
 import Social from "./users/pages/Social";
 import Search from "./search/pages/Search";
-import Messages from "./users/pages/Messages";
+const Messages = React.lazy(()=>import("./users/pages/Messages")) ;
 const ForgetPassword = React.lazy(() => import("./users/components/ForgetPassword"));
 const ResetEmail = React.lazy(() => import("./users/components/ResetEmail"));
 
