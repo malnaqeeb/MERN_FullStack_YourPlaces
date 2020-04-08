@@ -140,7 +140,6 @@ const Messages = () => {
     <React.Fragment>
       {isLoading && <LoadingSpinner asOverlay />}
       <ErrorModal error={error} onClear={clearError} />
-
       {!isLoading && (
         <Card className="messages__card">
           {/* Contacts */}
@@ -154,7 +153,7 @@ const Messages = () => {
             <h2 className="header">Recent</h2>
             <div className="contacts__box">
               {contacts.length > 0 &&
-                contacts.map((contact) => (
+                contacts.map((contact) => (( contact.corresponder &&
                   <Card
                     className="user-item__content"
                     key={contact.corresponder._id}
@@ -186,7 +185,7 @@ const Messages = () => {
                       X
                     </button>
                   </Card>
-                ))}
+                )))}
             </div>
             <div className="innerBox">
               {contacts.length === 0 && (
