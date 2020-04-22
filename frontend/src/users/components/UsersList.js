@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import UserItem from "./UserItem";
 import Card from "../../shared/component/UIElements/Card";
 import "./UsersList.css";
@@ -17,17 +17,20 @@ const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
   }
   return (
     <React.Fragment>
-           {items.filter(authUser => authUser._id === auth.userId).map(user => (
-        <div className="profile-banner fade-in">
+      {items
+        .filter((authUser) => authUser._id === auth.userId)
+        .map((user) => (
+          <div className="profile-banner fade-in">
             <img src={user.image} alt={user.name} />
-            <Link to={`/${auth.userId}/my`} ><span>{user.name}</span></Link>
-        </div>
-      ))}
+            <Link to={`/${auth.userId}/my`}>
+              <span>{user.name}</span>
+            </Link>
+          </div>
+        ))}
       <ul className="users-list users-mobile">
-        {
-          items
-          .filter(notAuth => notAuth._id !== auth.userId)
-          .map(user => (
+        {items
+          .filter((notAuth) => notAuth._id !== auth.userId)
+          .map((user) => (
             <UserItem
               user={user}
               auth={auth}
@@ -35,8 +38,7 @@ const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
               sendFriendRequestHandler={sendFriendRequestHandler}
               key={user.id}
             />
-          ))
-        }
+          ))}
       </ul>
     </React.Fragment>
   );

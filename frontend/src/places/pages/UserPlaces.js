@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
 import PlaceList from "../components/PlaceList";
-import { useParams, useHistory, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useHttpClient from "../../shared/hooks/http-hook";
 import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 import "./UserPlaces.css";
@@ -13,11 +13,12 @@ const UserPlaces = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [places, setPlaces] = useState();
   const userId = useParams().userId;
-  const history = useHistory();
+
   const auth = useContext(AuthContext);
   const [user, setUser] = useState();
   const [sortBy, setSortBy] = useState("");
   const [tags, setTags] = useState([]);
+  const [menuItemValue, setMenuItemValue] = useState();
 
   useEffect(() => {
     const getUser = async () => {
@@ -78,14 +79,17 @@ const UserPlaces = () => {
   //sort on selected option below
   const sortByTitleRateDate = (event) => {
     const menuItemValue = event.target.value;
+
     if (menuItemValue === "rate") setSortBy("rate");
     if (menuItemValue === "title") setSortBy("title");
     if (menuItemValue === "created_at") setSortBy("created_at");
+    setMenuItemValue(menuItemValue);
   };
 
   const handleTagChange = (event) => {
     const tagName = event.target.name;
     const checked = event.target.checked;
+
     if (checked) {
       setTags((oldTags) => {
         return oldTags.includes(tagName) ? oldTags : [...oldTags, tagName];
@@ -99,15 +103,12 @@ const UserPlaces = () => {
     }
   };
 
-  const goHome = () => {
-    history.push("/");
-  };
   if (error)
     return (
       <ErrorModal
         error={getError(error)}
         header="Hello there!"
-        onClear={goHome}
+        onClear={clearError}
       />
     );
 
@@ -147,6 +148,7 @@ const UserPlaces = () => {
                 onChange={sortByTitleRateDate}
                 defaultValue="none"
                 style={{ color: "white" }}
+                value={menuItemValue}
               >
                 <MenuItem value="none" disabled>
                   Choose an option to Sort

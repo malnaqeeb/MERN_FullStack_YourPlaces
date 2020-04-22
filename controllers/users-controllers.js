@@ -5,13 +5,13 @@ const User = require("../model/user");
 const HttpError = require("../model/http-error");
 const {
   forgetPasswordEmail,
-  resetPasswordEmail
+  resetPasswordEmail,
 } = require("../emails/account");
 
 const JWT_KEY = process.env.JWT_KEY;
 const {
   accountActivatedEmail,
-  accountVerifyEmail
+  accountVerifyEmail,
 } = require("../register-confirmation/mail-generator");
 
 const getUserFriend = async (req, res, next) => {
@@ -26,23 +26,23 @@ const getUserFriend = async (req, res, next) => {
     name: user.name,
     friends: !user.friends
       ? []
-      : user.friends.toObject().map(friend => ({
+      : user.friends.toObject().map((friend) => ({
           id: friend._id,
           name: friend.name,
           email: friend.email,
-          image: friend.image
+          image: friend.image,
         })),
     friendRequests: !user.friendRequests
       ? []
-      : user.friendRequests.toObject().map(request => ({
+      : user.friendRequests.toObject().map((request) => ({
           ...request,
           user: {
             id: request.user._id,
             email: request.user.email,
             image: request.user.image,
-            name: request.user.name
-          }
-        }))
+            name: request.user.name,
+          },
+        })),
   });
 };
 
@@ -63,7 +63,7 @@ const getUsers = async (req, res, next) => {
   }
   res
     .status(200)
-    .json({ users: users.map(user => user.toObject({ getters: true })) });
+    .json({ users: users.map((user) => user.toObject({ getters: true })) });
 };
 
 const signup = async (req, res, next) => {
@@ -94,7 +94,7 @@ const signup = async (req, res, next) => {
       password,
       social: {},
       places: [],
-      created_at: new Date()
+      created_at: new Date(),
     });
     createdUser.generateAccountVerify();
     // send email
@@ -115,7 +115,7 @@ const signup = async (req, res, next) => {
       { userId: createdUser.id, email: createdUser.email, token },
       JWT_KEY,
       {
-        expiresIn: "1h"
+        expiresIn: "1h",
       }
     );
   } catch (error) {
@@ -137,7 +137,7 @@ const signup = async (req, res, next) => {
 const confirmAccount = async (req, res, next) => {
   const user = await User.findOne({
     verifyAccountToken: req.params.token,
-    verifyAccountExpires: { $gt: Date.now() }
+    verifyAccountExpires: { $gt: Date.now() },
   });
   try {
     if (!user) {
@@ -179,7 +179,7 @@ const login = async (req, res, next) => {
       { userId: existingUser.id, email: existingUser.email, token },
       JWT_KEY,
       {
-        expiresIn: "1h"
+        expiresIn: "1h",
       }
     );
   } catch (error) {
@@ -204,7 +204,7 @@ const signJwt = async (req, res, next) => {
   let token;
   try {
     token = jwt.sign({ userId: req.user._id, email: req.user.email }, JWT_KEY, {
-      expiresIn: "1h"
+      expiresIn: "1h",
     });
   } catch (error) {
     return next(
@@ -253,15 +253,13 @@ const updateUser = async (req, res, next) => {
   } catch (error) {
     return next(new HttpError(`${error}`, 500));
   }
-  res
-    .status(200)
-    .json({
-      user: {
-        name: user.name,
-        image: user.image,
-        notifications: user.notifications
-      }
-    });
+  res.status(200).json({
+    user: {
+      name: user.name,
+      image: user.image,
+      notifications: user.notifications,
+    },
+  });
 };
 
 const forgetPassword = async (req, res, next) => {
@@ -286,7 +284,7 @@ const forgetPassword = async (req, res, next) => {
 
     forgetPasswordEmail(user.name, user.email, link);
     res.status(200).json({
-      message: "A reset email has been sent to " + user.email + "."
+      message: "A reset email has been sent to " + user.email + ".",
     });
   } catch (error) {
     return next(new HttpError(error.message, 500));
@@ -296,7 +294,7 @@ const forgetPassword = async (req, res, next) => {
 const resetPassword = async (req, res, next) => {
   const user = await User.findOne({
     resetPasswordToken: req.params.token,
-    resetPasswordExpires: { $gt: Date.now() }
+    resetPasswordExpires: { $gt: Date.now() },
   });
   try {
     if (!user) {
@@ -350,5 +348,5 @@ module.exports = {
   forgetPassword,
   resetPassword,
   setNotifications,
-  confirmAccount
+  confirmAccount,
 };

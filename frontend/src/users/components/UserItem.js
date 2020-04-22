@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import Avatar from "../../shared/component/UIElements/Avatar";
@@ -17,15 +17,15 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
 
   const FriendButton = () => {
     const isFriend = userData.friends
-      ? userData.friends.filter(friend => {
+      ? userData.friends.filter((friend) => {
           return friend.id === id;
         })
       : [];
     const hasRequest = userData.friendRequests
-      ? userData.friendRequests.filter(req => req.user.id === id)
+      ? userData.friendRequests.filter((req) => req.user.id === id)
       : [];
 
-    const sendFriendRequest = async id => {
+    const sendFriendRequest = async (id) => {
       try {
         await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/user/friends`,
@@ -36,7 +36,7 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
           {
             Authorization: "Bearer " + auth.token,
             "Content-Type": "application/json",
-          },
+          }
         );
         sendFriendRequestHandler(id);
       } catch (error) {
@@ -95,7 +95,7 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
           null,
           {
             Authorization: "Bearer " + auth.token,
-          },
+          }
         );
         message.messagesData = resData.messages;
         message.id = corresponderId;
@@ -116,7 +116,7 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
       <ErrorModal error={error} onClear={clearError} />
       <li className="user-item">
         <Card className="user-item__content">
-          <Link to={`/${id}/places`}>
+          <Link className="user-holder" to={`/${id}/places`}>
             <div className="user-item__image">
               <Avatar image={image} alt={name} />
             </div>

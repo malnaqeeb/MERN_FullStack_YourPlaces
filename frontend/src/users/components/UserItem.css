@@ -41,10 +41,10 @@
   color: #ffd900;
 }
 
-.user-item:hover h2,
-.user-item:active h2,
-.user-item:hover h3,
-.user-item:active h3 {
+.user-holder:hover h2,
+.user-holder:active h2,
+.user-holder:hover h3,
+.user-holder:active h3 {
   color: #292929;
 }
 
