@@ -32,6 +32,10 @@ const MainNavigation = props => {
 					<span />
 				</button>
 				<h1 className="main-navigation__title no-select">
+					<img
+						src="/images/logo-yp-2.png"
+						alt="logo"
+						style={{ width: "3rem", margin: "0 0.5rem" }}/>
 					<Link to="/">YourPlaces</Link>
 				</h1>
 				<nav className="main-navigation__header-nav">
