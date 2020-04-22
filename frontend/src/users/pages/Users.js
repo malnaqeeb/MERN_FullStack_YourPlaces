@@ -1,24 +1,24 @@
-import React, { useEffect, useState, useContext, Fragment } from 'react';
-import UsersList from '../components/UsersList';
-import ErrorModal from '../../shared/component/UIElements/ErrorModal';
-import LoadingSpinner from '../../shared/component/UIElements/LoadingSpinner';
-import useHttpClient from '../../shared/hooks/http-hook';
-import { AuthContext } from '../../shared/context/auth-context';
-import { Select, MenuItem } from '@material-ui/core';
+import React, { useEffect, useState, useContext, Fragment } from "react";
+import UsersList from "../components/UsersList";
+import ErrorModal from "../../shared/component/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
+import useHttpClient from "../../shared/hooks/http-hook";
+import { AuthContext } from "../../shared/context/auth-context";
+import { Select, MenuItem } from "@material-ui/core";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState({});
   const [processedUsers, setProcessedUsers] = useState([]);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  const [sortBy, setSortBy] = useState('');
-
+  const [sortBy, setSortBy] = useState("");
+  const [menuItemValue, setMenuItemValue] = useState();
   const auth = useContext(AuthContext);
   useEffect(() => {
     const getUsers = async () => {
       try {
         const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/users?sortBy=${sortBy}`,
+          `${process.env.REACT_APP_BACKEND_URL}/users?sortBy=${sortBy}`
         );
         setUsers(data.users);
 
@@ -26,11 +26,11 @@ const Users = () => {
         if (auth.token) {
           userData = await sendRequest(
             `${process.env.REACT_APP_BACKEND_URL}/users/me`,
-            'GET',
+            "GET",
             null,
             {
-              Authorization: 'Bearer ' + auth.token,
-            },
+              Authorization: "Bearer " + auth.token,
+            }
           );
         }
         setUser(userData);
@@ -40,27 +40,26 @@ const Users = () => {
       }
     };
     getUsers();
-
   }, [processedUsers, auth.token, sendRequest, sortBy]);
 
-
-  const sendFriendRequestHandler = id => {
-    setProcessedUsers(prevValue => [...prevValue, id]);
+  const sendFriendRequestHandler = (id) => {
+    setProcessedUsers((prevValue) => [...prevValue, id]);
   };
 
   //sort users on selected option below
-  const sortByNameCountDate = event => {
+  const sortByNameCountDate = (event) => {
     const menuItemValue = event.target.value;
-    if (menuItemValue === 'name') setSortBy('name');
-    if (menuItemValue === 'placesCount') setSortBy('-placesCount');
-    if (menuItemValue === 'registration') setSortBy('-created_at');
+    if (menuItemValue === "name") setSortBy("name");
+    if (menuItemValue === "placesCount") setSortBy("-placesCount");
+    if (menuItemValue === "registration") setSortBy("-created_at");
+    setMenuItemValue(menuItemValue);
   };
 
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && (
-        <div className='center'>
+        <div className="center">
           <LoadingSpinner />
         </div>
       )}
@@ -69,7 +68,8 @@ const Users = () => {
           <Select
             onChange={sortByNameCountDate}
             defaultValue="none"
-            style={{ color: 'white', margin: '1rem' }}
+            style={{ color: "white", margin: "1rem" }}
+            value={menuItemValue}
           >
             <MenuItem value="none" disabled>
               Choose an option to Sort

@@ -18,7 +18,7 @@ const ImageUpload = ({ id, center, onInput, errorText }) => {
     fileReader.readAsDataURL(file);
   }, [file]);
 
-  const pickedHandler = event => {
+  const pickedHandler = (event) => {
     if (event.target.files || event.target.files.length === 1) {
       pickedFile = event.target.files[0];
       setFile(pickedFile);
@@ -34,21 +34,21 @@ const ImageUpload = ({ id, center, onInput, errorText }) => {
   const pickImageHandler = () => filePickerRef.current.click();
 
   return (
-    <div className='form-control'>
+    <div className="form-control">
       <input
         ref={filePickerRef}
         id={id}
         style={{ display: "none" }}
-        type='file'
-        accept='.jpg,.png,.jpeg'
+        type="file"
+        accept=".jpg,.png,.jpeg"
         onChange={pickedHandler}
       />
       <div className={`image-upload ${center && "center"}`}>
-        <div className='image-upload__preview'>
-          {previewUrl && <img src={previewUrl} alt='Preview' />}{" "}
+        <div className="image-upload__preview">
+          {previewUrl && <img src={previewUrl} alt="Preview" />}{" "}
           {!previewUrl && <p>Please pick an image.</p>}
         </div>
-        <Button type='button' onClick={pickImageHandler}>
+        <Button type="button" onClick={pickImageHandler}>
           PICK IMAGE
         </Button>
       </div>

@@ -100,6 +100,7 @@ const Messages = () => {
       );
       fetchContacts();
       setAllMessages(fetchedMessages.messages);
+
       message.id = corresponderId;
     } catch (error) {
       console.error(error);
@@ -131,10 +132,6 @@ const Messages = () => {
       prevAllMessages.filter((msg) => msg.id !== deletedMsgId)
     );
   };
-
-  // const msgBoxHeight = {
-  //   height: window.innerHeight - 0.12 * window.innerHeight,
-  // };
 
   return (
     <React.Fragment>
@@ -176,9 +173,9 @@ const Messages = () => {
                           alt={contact.corresponder.name}
                         />
                       </div>
-                      <div className="user-item__info m-1">
-                        <h3>{contact.corresponder.name}</h3>
-                      </div>
+                    </div>
+                    <div className="user-item__info m-1">
+                      <h3>{contact.corresponder.name}</h3>
                     </div>
                     <button
                       onClick={() => dltCorresponder(contact.corresponder._id)}
@@ -222,6 +219,7 @@ const Messages = () => {
                     msg={msg}
                     messageDeleteHandler={messageDeleteHandler}
                     getUserMessages={getUserMessages}
+                    contacts={contacts}
                   />
                 ))
               ) : (

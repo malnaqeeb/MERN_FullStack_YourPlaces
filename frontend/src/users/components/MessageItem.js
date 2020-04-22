@@ -4,7 +4,12 @@ import useHttpClient from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
 import "./MessageItem.css";
 
-const MessageItem = ({ msg, messageDeleteHandler, getUserMessages }) => {
+const MessageItem = ({
+  msg,
+  messageDeleteHandler,
+  getUserMessages,
+  contacts,
+}) => {
   const message = useContext(MessageContext);
   const { sendRequest } = useHttpClient();
   const { token } = useContext(AuthContext);
@@ -26,6 +31,7 @@ const MessageItem = ({ msg, messageDeleteHandler, getUserMessages }) => {
     const d1 = new Date(date);
     return d1.toLocaleString("en-NL");
   };
+
   return (
     <div
       key={msg._id}
@@ -35,6 +41,7 @@ const MessageItem = ({ msg, messageDeleteHandler, getUserMessages }) => {
         {msg.isSent ? (
           <Fragment>
             <p>{formatDate(msg.date)}</p>
+
             <button onClick={() => delMessage(message.id, msg._id)}>x</button>
           </Fragment>
         ) : (
