@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const HttpError = require("../model/http-error");
 const { validationResult } = require("express-validator");
-const { likeNotification } = require("../emails/account");
+const { likeNotification, friendSharedPlace } = require("../emails/account");
 const getCoordsForAddress = require("../util/location");
 const Place = require("../model/place");
 const User = require("../model/user");
@@ -106,8 +106,14 @@ const createPlace = async (req, res, next) => {
   });
 
   let user;
+  let emails;
   try {
     user = await User.findById(req.userData.userId);
+    const userWithFriends = await User.findById(req.userData.userId)
+      .populate({path: 'friends', model: User});
+    const userWithNotifications = userWithFriends.friends.filter(item => item.notifications === true);
+    emails = userWithNotifications.map(item=>{
+      return item.email});   
   } catch (error) {
     return next(new HttpError("Creating place failed, please try again", 500));
   }
@@ -122,6 +128,7 @@ const createPlace = async (req, res, next) => {
     user.places.push(createdPlace);
     await user.save({ session: sess });
     await sess.commitTransaction();
+    friendSharedPlace(user.name, title, emails)
     res.status(201).json({ place: createdPlace });
   } catch (err) {
     const error = new HttpError("Create place failed, place try again.", 500);
