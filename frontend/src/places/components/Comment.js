@@ -1,19 +1,18 @@
 import React, { useContext, useState } from "react";
+import { Button } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
 import { useParams } from "react-router-dom";
 import Input from "../../shared/component/formElements/Input";
-import Button from "../../shared/component/formElements/Button";
 import { useFrom } from "../../shared/hooks/form-hook";
-import {
-  VALIDATOR_REQUIRE,
-  VALIDATOR_MINLENGTH
-} from "../../shared/Util/validators";
+import { VALIDATOR_REQUIRE } from "../../shared/Util/validators";
 import useHttpClient from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
 import "./Comment.css";
 
 export default function Comment(props) {
   const [editMode, setEditMode] = useState(false);
-  const { _id, creator, title, comment, date } = props.comment;
+  const { _id, creator, comment, date } = props.comment;
   const { sendRequest } = useHttpClient();
   const auth = useContext(AuthContext);
   const hasRight =
@@ -21,14 +20,10 @@ export default function Comment(props) {
   const placeId = useParams().placeId;
   const [state, inputHandler] = useFrom(
     {
-      title: {
-        value: title,
-        isValid: false
-      },
       comment: {
         value: comment,
-        isValid: false
-      }
+        isValid: false,
+      },
     },
     false
   );
@@ -46,16 +41,15 @@ export default function Comment(props) {
   };
 
   const editComment = () => {
-    setEditMode(currentMode => !currentMode);
+    setEditMode((currentMode) => !currentMode);
   };
 
-  const submitHandler = async event => {
+  const submitHandler = async (event) => {
     event.preventDefault();
     const handleIt = async () => {
       try {
         const comment = {
-          title: state.inputs.title.value,
-          comment: state.inputs.comment.value
+          comment: state.inputs.comment.value,
         };
         await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}/comments/${_id}`,
@@ -63,7 +57,7 @@ export default function Comment(props) {
           JSON.stringify(comment),
           {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + auth.token
+            Authorization: "Bearer " + auth.token,
           }
         );
         props.updateComment(_id, comment);
@@ -72,83 +66,78 @@ export default function Comment(props) {
     };
     handleIt();
   };
-  console.log(date);
-  console.log(typeof date)
-  const d1= new Date(date);
-  d1.toLocaleDateString('en-US')
-  console.log(d1)
-
-  const formatDate = date=>{
-    const d1= new Date(date);
-    return d1.toLocaleString('en-NL')
-  }
+  const d1 = new Date(date);
+  d1.toLocaleDateString("en-US");
+  const formatDate = (date) => {
+    const d1 = new Date(date);
+    return d1.toLocaleString("en-NL");
+  };
   return (
-    <div>
+    <div className="container">
       {!editMode ? (
-        <div
-          style={{
-            border: "1px solid #008cff",
-            color: "black",
-            backgroundColor: "white",
-            marginBottom: "10px",
-            marginLeft: "10px",
-            padding: "10px"
-          }}
-        >
-          <h5>{title}</h5>
-          <p>{comment}</p>
-          <p>
-            <strong>Date:</strong> {formatDate(date)}
-          </p>
-          <p>
-            <strong>From Whom:</strong> {creator ? creator.name : null}
-          </p>
-          {hasRight && (
-            <button
-              className="edit-delete-button"
-              style={{ margin: "10px" }}
-              type="button"
-              onClick={deleteComment}
-            >
-              Delete
-            </button>
-          )}
-          {hasRight && (
-            <button
-              className="edit-delete-button"
-              type="button"
-              onClick={editComment}
-            >
-              Edit
-            </button>
-          )}
+        <div className="comment-container row">
+          <div className="commenter-info">
+            {creator && (
+              <img
+                src={creator.image}
+                alt={creator.name}
+                width="60"
+                height="60"
+              />
+            )}
+            <h4>{creator && creator.name}</h4>
+
+            <p className="date">{formatDate(date)}</p>
+          </div>
+
+          <div className="comments-holder">
+            <p>{comment}</p>
+          </div>
+          <div className="btn-holder">
+            {hasRight && (
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={deleteComment}
+                startIcon={<DeleteIcon />}
+                size="small"
+                style={{ marginRight: "10px" }}
+              >
+                Delete
+              </Button>
+            )}
+            {hasRight && (
+              <Button
+                variant="contained"
+                onClick={editComment}
+                startIcon={<EditIcon />}
+                size="small"
+              >
+                Edit
+              </Button>
+            )}
+          </div>
         </div>
       ) : (
-        <div>
+        <div className="conatiner">
           <form className="comment-update-form" onSubmit={submitHandler}>
             <Input
-              id="title"
-              element="input"
-              type="text"
-              label="Title"
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="Please enter a valid title."
-              onInput={inputHandler}
-              initailValue={title}
-              initailValid={true}
-            />
-            <Input
               id="comment"
-              element="textarea"
-              label="Message"
-              validators={[VALIDATOR_MINLENGTH(5)]}
+              element="input"
+              label="comment"
+              validators={[VALIDATOR_REQUIRE()]}
               errorText="Please enter a valid message (min. 5 characters)."
               onInput={inputHandler}
               initailValue={comment}
               initailValid={true}
             />
-            <Button type="submit" disabled={!state.isValid}>
-              SAVE
+            <Button
+              variant="contained"
+              color="secondary"
+              type="submit"
+              disabled={!state.isValid}
+            >
+              Update
             </Button>
           </form>
         </div>

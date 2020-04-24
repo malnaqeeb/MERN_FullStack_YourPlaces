@@ -1,5 +1,10 @@
-.comment-list{
-    margin-left:10px;
-    color:white;
-    width: 100%;
+.comment-list {
+  margin-left: 10px;
+  color: white;
+  width: 100%;
+}
+.comments-counter {
+  margin: 0px 0px 7px 0px;
+  color: white;
+  text-align: center;
 }

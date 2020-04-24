@@ -24,10 +24,7 @@ export default function Place() {
   }, [sendRequest, placeId]);
 
   return (
-    <div
-      className="center"
-      style={{ display: "flex", flexDirection: "column" }}
-    >
+    <div>
       {isLoading && <LoadingSpinner />}
       <ErrorModal error={error} onClear={clearError} />
       {!isLoading && place && Object.keys(place).length > 0 && (

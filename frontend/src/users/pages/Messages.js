@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
 import useHttpClient from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
 import Card from "../../shared/component/UIElements/Card";
@@ -39,7 +45,7 @@ const Messages = () => {
   );
 
   // fetching contacts (only texted ones not all users)
-  const fetchContacts = async () => {
+  const fetchContacts = useCallback(async () => {
     try {
       const data = await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/user/messages`,
@@ -52,11 +58,11 @@ const Messages = () => {
       setContacts(data.corresponders);
       scrollToBottom();
     } catch (error) {}
-  };
+  }, [sendRequest, token]);
 
   useEffect(() => {
     fetchContacts();
-  }, [sendRequest, token]);
+  }, [sendRequest, token, fetchContacts]);
 
   // Send a message
   const sendMessage = async (e) => {
@@ -153,7 +159,6 @@ const Messages = () => {
               {contacts.length > 0 &&
                 contacts.map((contact) => (
                   <Card
-                    className="user-item__content"
                     key={contact.corresponder._id}
                     className={`user-item__content ${
                       message.id === contact.corresponder._id &&
@@ -204,6 +209,7 @@ const Messages = () => {
           >
             <h2 className="header">Messages</h2>
             <a
+              href="#!"
               onClick={() => {
                 setMobileContactMode(true);
               }}

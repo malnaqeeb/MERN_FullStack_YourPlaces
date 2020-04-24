@@ -20,7 +20,7 @@ export default function Comments({ placeId }) {
       } catch {}
     };
     getComments();
-  }, [placeId]);
+  }, [placeId, sendRequest]);
 
   const addComment = (comment) => {
     setComments((currentComments) => [...currentComments, comment]);
@@ -50,14 +50,10 @@ export default function Comments({ placeId }) {
   };
 
   return (
-    <div className="center flex-column width-60">
+    <div>
       {isLoading && <LoadingSpinner />}
       <ErrorModal error={error} onClear={clearError} />
-      <CommentForm
-        addComment={addComment}
-        placeId={placeId}
-        className="width-60"
-      />
+      <CommentForm addComment={addComment} placeId={placeId} />
       {!isLoading && (
         <CommentList
           removeComment={removeComment}

@@ -114,7 +114,7 @@ const UserPlaces = () => {
 
   const tagInputs = [];
 
-  PLACE_TAGS.map((tag) => {
+  PLACE_TAGS.forEach((tag) => {
     const checked = tags.includes(tag.name);
     const tagInput = (
       <span key={tag.name}>

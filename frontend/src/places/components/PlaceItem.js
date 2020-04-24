@@ -1,4 +1,3 @@
-
 import React, { useState, Fragment, useContext, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 import "./PlaceItem.css";
@@ -11,11 +10,9 @@ import { AuthContext } from "../../shared/context/auth-context";
 import useHttpClient from "../../shared/hooks/http-hook";
 import { PLACE_TAG_TITLES } from "../../shared/Util/constants";
 import Chip from "@material-ui/core/Chip";
-import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
-
 
 const PlaceItem = ({ place, onDeletePlace }) => {
-  const {error, sendRequest, clearError } = useHttpClient();
+  const { error, sendRequest, clearError } = useHttpClient();
   const auth = useContext(AuthContext);
   const [showMap, setShowMap] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -41,7 +38,7 @@ const PlaceItem = ({ place, onDeletePlace }) => {
     const fetchEvaluation = async () => {
       try {
         const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/places/evaluation/${id}`,
+          `${process.env.REACT_APP_BACKEND_URL}/places/evaluation/${id}`
         );
         setEvaluation(data.place);
       } catch (error) {}
@@ -55,18 +52,18 @@ const PlaceItem = ({ place, onDeletePlace }) => {
         const newData = { likes: auth.userId };
         const data = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/places/like/${id}`,
-          'POST',
+          "POST",
           JSON.stringify(newData),
           {
-            Authorization: 'Bearer ' + auth.token,
-            'Content-Type': 'application/json',
-          },
+            Authorization: "Bearer " + auth.token,
+            "Content-Type": "application/json",
+          }
         );
 
         setAddLikes(data);
       } catch (error) {}
     } else {
-      history.push('/auth');
+      history.push("/auth");
     }
   };
 
@@ -77,19 +74,19 @@ const PlaceItem = ({ place, onDeletePlace }) => {
         const data = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/places/dislike/${id}`,
 
-          'POST',
+          "POST",
 
           JSON.stringify(newData),
           {
-            Authorization: 'Bearer ' + auth.token,
-            'Content-Type': 'application/json',
-          },
+            Authorization: "Bearer " + auth.token,
+            "Content-Type": "application/json",
+          }
         );
 
         setAddDislike(data);
       } catch (error) {}
     } else {
-      history.push('/auth');
+      history.push("/auth");
     }
   };
 
@@ -108,7 +105,7 @@ const PlaceItem = ({ place, onDeletePlace }) => {
         "DELETE",
         null,
         {
-          Authorization: "Bearer " + auth.token
+          Authorization: "Bearer " + auth.token,
         }
       );
       onDeletePlace(id);
@@ -119,11 +116,11 @@ const PlaceItem = ({ place, onDeletePlace }) => {
       setShowTravelWishButton(false);
       await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/user/bucketlist/${id}`,
-        'PATCH',
+        "PATCH",
         null,
         {
-          Authorization: 'Bearer ' + auth.token,
-        },
+          Authorization: "Bearer " + auth.token,
+        }
       );
       setShowTick(true);
     } catch (error) {
@@ -135,7 +132,7 @@ const PlaceItem = ({ place, onDeletePlace }) => {
     const getUsers = async () => {
       try {
         const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/users`,
+          `${process.env.REACT_APP_BACKEND_URL}/users`
         );
         setUsers(data.users);
       } catch (error) {}
@@ -143,12 +140,12 @@ const PlaceItem = ({ place, onDeletePlace }) => {
     getUsers();
   }, [sendRequest]);
 
-  const checkAdded = users => {
+  const checkAdded = (users) => {
     if (!auth.userId) {
       return false;
     }
-    const currentUser = users.find(item => item._id === auth.userId);
-    const nonUniqueArray = currentUser.bucketList.filter(item => {
+    const currentUser = users.find((item) => item._id === auth.userId);
+    const nonUniqueArray = currentUser.bucketList.filter((item) => {
       return item.id === id;
     });
     if (nonUniqueArray.length === 0) {
@@ -214,7 +211,8 @@ const PlaceItem = ({ place, onDeletePlace }) => {
                       className="fas fa-thumbs-up fa-2x"
                       onClick={addLikeAndRemoved}
                       style={{
-                        color: evaluation.likes.includes(auth.userId) && "green"
+                        color:
+                          evaluation.likes.includes(auth.userId) && "green",
                       }}
                     ></i>
                   </div>
@@ -230,7 +228,8 @@ const PlaceItem = ({ place, onDeletePlace }) => {
                       className="fas fa-thumbs-down fa-2x"
                       onClick={addDisLikeAndRemoved}
                       style={{
-                        color: evaluation.disLike.includes(auth.userId) && "red"
+                        color:
+                          evaluation.disLike.includes(auth.userId) && "red",
                       }}
                     ></i>
                   </div>
@@ -241,7 +240,7 @@ const PlaceItem = ({ place, onDeletePlace }) => {
               <h3>{address}</h3>
               <p>{description}</p>
               <div>
-                {tags.map(tag => {
+                {tags.map((tag) => {
                   return (
                     <Chip
                       key={tag}

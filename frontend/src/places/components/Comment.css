@@ -1,34 +1,85 @@
 .comment-update-form {
-    padding: 0.5rem 1.5rem;
-    margin: 1rem auto;
-    border: 1px solid #008cff;
-    border-radius: 4px;
-    color: white;
-    margin-left: 1rem;
+  padding: 0.5rem 1.5rem;
+  width: 50%;
+  margin: auto;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  color: white;
 }
 
 .edit-delete-button {
-
-
-	box-shadow: 0px 1px 0px 0px #ff0055;
-	background-color:#ff0055;
-	border-radius:12px;
-	border:1px solid #ff0055;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Trebuchet MS;
-	font-size:17px;
-	font-weight:bold;
-	font-style:italic;
-	padding:4px 15px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #2f6627;
+  box-shadow: 0px 1px 0px 0px #ff0055;
+  background-color: #ff0055;
+  border-radius: 12px;
+  border: 1px solid #ff0055;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Trebuchet MS;
+  font-size: 17px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 4px 15px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #2f6627;
 }
 .edit-delete-button:hover {
-	background-color:rgba(221, 218, 21, 0.849);
+  background-color: rgba(221, 218, 21, 0.849);
 }
 .edit-delete-button:active {
-	position:relative;
-	top:1px;
+  position: relative;
+  top: 1px;
+}
+.row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+  padding: 6px;
+}
+
+.commenter-info {
+  -ms-flex: 0 0 100%;
+  flex: 0 0 100%;
+  max-width: 100%;
+  text-align: left;
+  padding: 0.2rem;
+}
+.comment-container {
+  background: white;
+  margin: 0.5rem auto;
+  border-radius: 10px;
+  width: 60%;
+}
+.comments-holder {
+  -ms-flex: 0 0 100%;
+  flex: 0 0 100%;
+  max-width: 100%;
+  padding: 0.5rem;
+  background: #f5f5f5;
+}
+.comments-holder p {
+  margin: 0;
+  text-align: left;
+}
+.date {
+  font-size: 12px;
+  padding: 0;
+  margin-left: 4rem;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+.commenter-info h4 {
+  display: inline-block;
+  margin-left: 16px;
+  margin-bottom: 3px;
+  margin-top: 0;
+}
+.commenter-info img {
+  padding: 1px;
+  border: 1px solid red;
+  border-radius: 50%;
+  margin-bottom: -1.3rem;
 }
