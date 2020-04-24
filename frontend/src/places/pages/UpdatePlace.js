@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, Fragment, useContext } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import Input from "../../shared/component/formElements/Input";
@@ -8,7 +7,10 @@ import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
 import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 import useHttpClient from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
-import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from "../../shared/Util/validators";
+import {
+  VALIDATOR_REQUIRE,
+  VALIDATOR_MINLENGTH,
+} from "../../shared/Util/validators";
 import { useFrom } from "../../shared/hooks/form-hook";
 import { PLACE_TAGS } from "../../shared/Util/constants";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -34,13 +36,15 @@ const UpdatePlace = () => {
         isValid: false,
       },
     },
-    false,
+    false
   );
 
   useEffect(() => {
     const getPlace = async () => {
       try {
-        const data = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`);
+        const data = await sendRequest(
+          `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`
+        );
         setPlace(data.place);
         setTags(data.place.tags);
         setFormData(
@@ -54,7 +58,7 @@ const UpdatePlace = () => {
               isValid: true,
             },
           },
-          true,
+          true
         );
       } catch (error) {}
     };
@@ -78,30 +82,30 @@ const UpdatePlace = () => {
     );
   }
 
-  const handleTagChange = event => {
+  const handleTagChange = (event) => {
     const tagName = event.target.name;
 
     const checked = event.target.checked;
     if (checked) {
-      setTags(oldTags => {
+      setTags((oldTags) => {
         return oldTags.includes(tagName) ? oldTags : [...oldTags, tagName];
       });
     } else {
-      setTags(oldTags => {
+      setTags((oldTags) => {
         return oldTags.includes(tagName)
-          ? oldTags.filter(tag => tag !== tagName)
+          ? oldTags.filter((tag) => tag !== tagName)
           : oldTags;
       });
     }
   };
 
-  const placeUpdateSubmitHandler = event => {
+  const placeUpdateSubmitHandler = (event) => {
     event.preventDefault();
     const updatePlace = async () => {
       try {
         await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`,
-          'PATCH',
+          "PATCH",
           JSON.stringify({
             title: state.inputs.title.value,
             description: state.inputs.description.value,
@@ -109,9 +113,9 @@ const UpdatePlace = () => {
           {
             "Content-Type": "application/json",
             Authorization: "Bearer " + auth.token,
-          },
+          }
         );
-        history.push('/' + auth.userId + '/places');
+        history.push("/" + auth.userId + "/places");
       } catch (error) {}
     };
     updatePlace();
@@ -120,7 +124,7 @@ const UpdatePlace = () => {
   const tagInputs = [];
 
   if (place) {
-    PLACE_TAGS.map(tag => {
+    PLACE_TAGS.forEach((tag) => {
       const checked = tags && tags.includes(tag.name);
       const tagInput = (
         <span key={tag.name}>
@@ -129,7 +133,7 @@ const UpdatePlace = () => {
               name={tag.name}
               checked={!!checked}
               onChange={handleTagChange}
-              inputProps={{ 'aria-label': 'primary checkbox' }}
+              inputProps={{ "aria-label": "primary checkbox" }}
             />
             {tag.title}
           </label>
@@ -144,7 +148,10 @@ const UpdatePlace = () => {
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
       {!isLoading && place && (
-        <form className='place-form no-select' onSubmit={placeUpdateSubmitHandler}>
+        <form
+          className="place-form no-select"
+          onSubmit={placeUpdateSubmitHandler}
+        >
           <Input
             id="title"
             element="input"

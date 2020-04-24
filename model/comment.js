@@ -1,30 +1,25 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const thisSchema = new mongoose.Schema({
   placeId: {
     type: mongoose.Types.ObjectId,
     required: true,
-    ref: "Place"
+    ref: "Place",
   },
   creator: {
     type: mongoose.Types.ObjectId,
     required: true,
-    ref: "User"
+    ref: "User",
   },
-  title: { 
+  comment: {
     type: String,
-    required: true
-  },
-  comment: { 
-    type: String,
-    required: true
+    required: true,
   },
   date: {
     type: Date,
     required: true,
-    default: Date.now()
-    
-  }
+    default: Date.now(),
+  },
 });
 
-module.exports = mongoose.model('Comment', thisSchema);
+module.exports = mongoose.model("Comment", thisSchema);

@@ -24,13 +24,13 @@ export default function Search() {
       }
     };
     getResults();
-  }, [query]);
+  }, [query, sendRequest]);
 
   return (
-    <div className='search__page'>
+    <div className="search__page">
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && (
-        <div className='center'>
+        <div className="center">
           <LoadingSpinner />
         </div>
       )}
