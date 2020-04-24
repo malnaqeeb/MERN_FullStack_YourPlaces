@@ -1,7 +1,7 @@
 import React from 'react';
 import FriendItem from './FriendItem';
 import Card from '../shared/component/UIElements/Card';
-
+/// heloo
 const FriendList = ({
   friends,
 }) => {
