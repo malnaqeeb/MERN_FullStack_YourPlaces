@@ -1,16 +1,38 @@
 .mContainer {
-  background: beige;
   padding: 5%;
   color: darkblue;
   padding: 0 2%;
-  margin: 1% 0;
+  margin: 0 0;
   word-wrap: break-word;
+  border-radius: 10px;
+  font-size: 1.2em;
+}
+
+.mContainer p {
+  margin: 1% 0;
 }
 
 .myMsg {
   justify-content: flex-end;
   text-align: right;
   word-wrap: break-word;
+  background: #0077ffbe;
+}
+
+.myMsg p:nth-child(2) {
+  color: wheat;
+}
+
+.myMsg p:nth-child(1) {
+  color: wheat;
+}
+
+.userMsg {
+  background: rgba(128, 128, 128, 0.3);
+}
+
+.userMsg p {
+  /* color: black; */
 }
 
 .msgInfo {
@@ -37,11 +59,12 @@
   border: 1px solid saddlebrown;
   cursor: pointer;
   border: none;
+  border-radius: 50px;
   color: maroon;
 }
 
 .msgInfo p {
-  color: #999;
+  color: darkblue;
   font-size: 0.8rem;
   margin: 0 1%;
 }

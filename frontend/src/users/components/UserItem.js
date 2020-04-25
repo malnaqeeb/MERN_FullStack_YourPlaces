@@ -36,7 +36,7 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
           {
             Authorization: "Bearer " + auth.token,
             "Content-Type": "application/json",
-          }
+          },
         );
         sendFriendRequestHandler(id);
       } catch (error) {
@@ -70,11 +70,7 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
       }
 
       return (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => sendFriendRequest(id)}
-        >
+        <Button variant="contained" color="primary" onClick={() => sendFriendRequest(id)}>
           Add Friend
         </Button>
       );
@@ -95,7 +91,7 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
           null,
           {
             Authorization: "Bearer " + auth.token,
-          }
+          },
         );
         message.messagesData = resData.messages;
         message.id = corresponderId;
@@ -105,7 +101,14 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
       }
     };
     return (
-      <Button variant="contained" color="primary" onClick={getMessages}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => {
+          getMessages();
+          message.textedUser = name;
+        }}
+      >
         Message
       </Button>
     );
@@ -130,11 +133,7 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
           {auth.isLoggedIn && (
             <div className="user-item__icon">
               <Link to={`/${id}/bucketlist`}>
-                <img
-                  src="/images/bucketicon.png"
-                  style={{ width: "100%" }}
-                  alt=""
-                />
+                <img src="/images/bucketicon.png" style={{ width: "100%" }} alt="" />
               </Link>
             </div>
           )}
