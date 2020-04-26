@@ -27,11 +27,10 @@ const User = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/users/${userId}`
-        );
+        const data = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/users/${userId}`);
         setUser(data.user);
         setNotifications(data.user.notifications);
+
       } catch (error) {
         console.log(error);
       }
@@ -52,23 +51,11 @@ const User = () => {
           <UserProfileNav />
           <Switch>
             <Route path={`/:userId/my`} exact>
-              <img
-                className="fade-in"
-                src="/images/my-page.png"
-                alt="my-page"
-              />
+              <img className="fade-in" src="/images/my-page.png" alt="my-page" />
             </Route>
-            <Route
-              path={`/:userId/places`}
-              exact
-              component={withRouter(UserPlaces)}
-            />
+            <Route path={`/:userId/places`} exact component={withRouter(UserPlaces)} />
             <Route path={`/:userId/profile`} exact>
-              <UserProfile
-                user={user}
-                setUser={setUser}
-                notifications={notifications}
-              />
+              <UserProfile user={user} setUser={setUser} notifications={notifications} />
             </Route>
             <Route path={`/:userId/messages`} exact>
               <Messages />

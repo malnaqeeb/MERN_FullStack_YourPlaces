@@ -69,6 +69,18 @@
 }
 
 @media (max-width: 768px) {
+  .myMsg p:nth-child(2) {
+    color: white;
+  }
+
+  .myMsg p:nth-child(1) {
+    color: rgba(0, 0, 139, 0.5);
+  }
+
+  .userMsg {
+    background: rgba(128, 128, 128, 0.3);
+  }
+
   .mobile-hidden {
     display: inline;
     color: #ff0055;
