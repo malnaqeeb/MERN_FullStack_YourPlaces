@@ -322,6 +322,7 @@ const resetPassword = async (req, res, next) => {
 
     //Set the new password
     user.password = req.body.password;
+    user.active = true;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     // Save
