@@ -24,15 +24,15 @@ const RegisterConfirmation = () => {
     };
     confirmAccount();
   }, [token, sendRequest]);
-  console.log(account);
+
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
       {account && (
-        <Card className='forget_password'>
+        <Card className="forget_password">
           <p>{account.message}</p>
-          <Button to='/auth'>AUTHENTICATE</Button>
+          <Button to="/auth">AUTHENTICATE</Button>
         </Card>
       )}
     </Fragment>

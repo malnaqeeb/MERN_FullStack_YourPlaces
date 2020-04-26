@@ -3,7 +3,12 @@ import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
 import useHttpClient from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
-import { BrowserRouter as Router, Route, Switch, withRouter } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  withRouter,
+} from "react-router-dom";
 import UserProfile from "../components/UserProfile";
 import Messages from "../pages/Messages";
 import UserPlaces from "../../places/pages/UserPlaces";
@@ -27,7 +32,6 @@ const User = () => {
         );
         setUser(data.user);
         setNotifications(data.user.notifications);
-        console.log(data.user.notifications);
       } catch (error) {
         console.log(error);
       }
@@ -47,10 +51,18 @@ const User = () => {
         <Router>
           <UserProfileNav />
           <Switch>
-          <Route path={`/:userId/my`} exact>
-            <img  className= "fade-in" src="/images/my-page.png" alt="my-page" />
-          </Route>
-          <Route path={`/:userId/places`} exact component={withRouter(UserPlaces)}/>
+            <Route path={`/:userId/my`} exact>
+              <img
+                className="fade-in"
+                src="/images/my-page.png"
+                alt="my-page"
+              />
+            </Route>
+            <Route
+              path={`/:userId/places`}
+              exact
+              component={withRouter(UserPlaces)}
+            />
             <Route path={`/:userId/profile`} exact>
               <UserProfile
                 user={user}

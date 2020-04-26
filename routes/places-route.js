@@ -12,7 +12,7 @@ route.get("/user/:uid", placessControllers.getPlacesByUserId);
 route.get("/evaluation/:id", placessControllers.placeEvaluation);
 
 route.get("/:pid/comments", commentsControllers.getComments);
-
+route.get("/", placessControllers.getPlaces);
 route.use(checkAuth);
 
 route.post(

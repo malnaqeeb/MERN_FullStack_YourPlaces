@@ -5,51 +5,91 @@ import useHttpClient from "../../shared/hooks/http-hook";
 import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 import "./UserPlaces.css";
 import { AuthContext } from "../../shared/context/auth-context";
-import { Select, Checkbox, MenuItem } from "@material-ui/core";
+import {
+  Select,
+  Checkbox,
+  MenuItem,
+  Grid,
+  Container,
+  Paper,
+  InputBase,
+  IconButton,
+  FormControlLabel,
+  FormGroup,
+} from "@material-ui/core";
 import { PLACE_TAGS } from "../../shared/Util/constants";
 import Button from "../../shared/component/formElements/Button";
+import SearchIcon from "@material-ui/icons/Search";
+import { makeStyles } from "@material-ui/core/styles";
+const useStyles = makeStyles((theme) => ({
+  root: {
+    padding: "2px 4px",
+    display: "flex",
+    alignItems: "center",
+    width: "100%",
+  },
+  input: {
+    marginLeft: theme.spacing(1),
+    flex: 1,
+  },
+  iconButton: {
+    padding: 5,
+  },
+  centerd: {
+    display: "flex",
+    justifyContent: "center",
+  },
+  end: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  selectStyle: {
+    background: "white",
+    width: "100%",
+    padding: "4px",
+    borderRadius: "4px",
+  },
+}));
 
 const UserPlaces = () => {
+  const classes = useStyles();
+  const userId = useParams().userId;
+  const auth = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [places, setPlaces] = useState();
-  const userId = useParams().userId;
-
-  const auth = useContext(AuthContext);
-  const [user, setUser] = useState();
+  const [searchValue, setSearchValue] = useState(" ");
   const [sortBy, setSortBy] = useState("");
   const [tags, setTags] = useState([]);
   const [menuItemValue, setMenuItemValue] = useState();
 
+  const getPlaces = async () => {
+    try {
+      const data = await sendRequest(
+        `${
+          process.env.REACT_APP_BACKEND_URL
+        }/places/user/${userId}/?sortBy=${sortBy}&tagFilter=${tags.join(",")}`
+      );
+      setPlaces(data.userWithPlaces);
+    } catch (error) {}
+  };
   useEffect(() => {
-    const getUser = async () => {
-      try {
-        const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/users/${userId}/`
-        );
-        setUser(data);
-      } catch (err) {}
-    };
-    getUser();
-  }, [sendRequest, userId]);
-
-  useEffect(() => {
-    const getPlaces = async () => {
-      try {
-        const data = await sendRequest(
-          `${
-            process.env.REACT_APP_BACKEND_URL
-          }/places/user/${userId}/?sortBy=${sortBy}&tagFilter=${tags.join(",")}`
-        );
-        setPlaces(data.userWithPlaces);
-      } catch (error) {}
-    };
     getPlaces();
+    // eslint-disable-next-line
   }, [sendRequest, userId, sortBy, tags]);
   const placeDeleteHandler = (detetedPlaceId) => {
     setPlaces((prevPlaces) =>
       prevPlaces.filter((places) => places.id !== detetedPlaceId)
     );
   };
+  const searchPlaces = async (searchValue) => {
+    try {
+      const data = await sendRequest(
+        `${process.env.REACT_APP_BACKEND_URL}/places/?search=${searchValue}`
+      );
+      setPlaces(data.places);
+    } catch (error) {}
+  };
+
   const getError = (err) => {
     if (!places && auth.userId !== userId) {
       return (
@@ -117,37 +157,40 @@ const UserPlaces = () => {
   PLACE_TAGS.forEach((tag) => {
     const checked = tags.includes(tag.name);
     const tagInput = (
-      <span key={tag.name}>
-        <label>
+      <FormControlLabel
+        key={tag.name}
+        control={
           <Checkbox
-            name={tag.name}
             checked={checked}
             onChange={handleTagChange}
-            inputProps={{ "aria-label": "primary checkbox" }}
+            name={tag.name}
           />
-          {tag.title}
-        </label>
-        <span>&nbsp;&nbsp;</span>
-      </span>
+        }
+        label={tag.title}
+      />
     );
     tagInputs.push(tagInput);
   });
 
+  const onSubmitSearchHandler = (e) => {
+    e.preventDefault();
+    searchPlaces(searchValue);
+  };
+  const inputSearchHandler = (e) => {
+    setSearchValue(e.target.value);
+  };
+
   return (
-    <Fragment>
-      <div className="place-overlay-container fade-in">
-        <h2 className="center white-text inline no-select">
-          Places of{" "}
-          <span className="yellow-text fade-in"> {user && user.user.name}</span>{" "}
-        </h2>
-        <ErrorModal error={error} onClear={clearError} />
-        {!isLoading && places && (
-          <Fragment>
-            <div className="sort-filter-layout">
+    <div className="place-overlay-container fade-in">
+      <ErrorModal error={error} onClear={clearError} />
+      {!isLoading && places && (
+        <Container maxWidth="md">
+          <Grid className={classes.centerd} container spacing={3}>
+            <Grid item md={4} xs={12} sm={3}>
               <Select
                 onChange={sortByTitleRateDate}
                 defaultValue="none"
-                style={{ color: "white" }}
+                className={classes.selectStyle}
                 value={menuItemValue}
               >
                 <MenuItem value="none" disabled>
@@ -157,14 +200,37 @@ const UserPlaces = () => {
                 <MenuItem value="title">Sort By Title</MenuItem>
                 <MenuItem value="created_at">Sort By Adding Date</MenuItem>
               </Select>
-              {tagInputs}
-            </div>
-
+            </Grid>
+            <Grid item md={4} xs={12} sm={3}>
+              <Paper
+                component="form"
+                className={classes.root}
+                onSubmit={onSubmitSearchHandler}
+              >
+                <InputBase
+                  className={classes.input}
+                  placeholder="Search"
+                  inputProps={{ "aria-label": "" }}
+                  value={searchValue}
+                  onChange={inputSearchHandler}
+                />
+                <IconButton
+                  type="submit"
+                  className={classes.iconButton}
+                  aria-label="search"
+                >
+                  <SearchIcon />
+                </IconButton>
+              </Paper>
+            </Grid>
+            <FormGroup>
+              <Paper>{tagInputs}</Paper>
+            </FormGroup>
             <PlaceList items={places} onDeletePlace={placeDeleteHandler} />
-          </Fragment>
-        )}
-      </div>
-    </Fragment>
+          </Grid>
+        </Container>
+      )}
+    </div>
   );
 };
 
