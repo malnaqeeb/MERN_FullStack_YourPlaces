@@ -4,12 +4,7 @@ import useHttpClient from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
 import "./MessageItem.css";
 
-const MessageItem = ({
-  msg,
-  messageDeleteHandler,
-  getUserMessages,
-  contacts,
-}) => {
+const MessageItem = ({ msg, messageDeleteHandler, getUserMessages, contacts }) => {
   const message = useContext(MessageContext);
   const { sendRequest } = useHttpClient();
   const { token } = useContext(AuthContext);
@@ -21,7 +16,7 @@ const MessageItem = ({
       null,
       {
         Authorization: "Bearer " + token,
-      }
+      },
     );
 
     messageDeleteHandler(msgId);
@@ -33,10 +28,7 @@ const MessageItem = ({
   };
 
   return (
-    <div
-      key={msg._id}
-      className={`mContainer ${msg.isSent ? "myMsg" : "userMsg"}`}
-    >
+    <div key={msg._id} className={`mContainer ${msg.isSent ? "myMsg" : "userMsg"}`}>
       <div className={`msgInfo ${msg.isSent ? "toRyt" : "toLeft"}`}>
         {msg.isSent ? (
           <Fragment>
