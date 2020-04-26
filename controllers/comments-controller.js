@@ -49,7 +49,6 @@ const createComment = async (req, res, next) => {
       .exec();
     res.json({ comment: doc });
   } catch (e) {
-    console.log(e);
     return next(
       new HttpError("Something went wrong, could not create comment.", 500)
     );

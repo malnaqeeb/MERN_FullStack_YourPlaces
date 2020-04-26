@@ -1,50 +1,65 @@
-import React, { useEffect, useState, useContext, Fragment } from "react";
+import React, { useState, useContext, Fragment } from "react";
 import UsersList from "../components/UsersList";
 import ErrorModal from "../../shared/component/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
-import useHttpClient from "../../shared/hooks/http-hook";
+import UsersContext from "../../shared/context/users/usersContext";
 import { AuthContext } from "../../shared/context/auth-context";
 import { Select, MenuItem } from "@material-ui/core";
+import {
+  InputBase,
+  Paper,
+  IconButton,
+  Grid,
+  Container,
+} from "@material-ui/core";
+import SearchIcon from "@material-ui/icons/Search";
+import { makeStyles } from "@material-ui/core/styles";
+const useStyles = makeStyles((theme) => ({
+  root: {
+    padding: "2px 4px",
+    display: "flex",
+    alignItems: "center",
+    width: "100%",
+  },
+  input: {
+    marginLeft: theme.spacing(1),
+    flex: 1,
+  },
+  iconButton: {
+    padding: 5,
+  },
+  centerd: {
+    display: "flex",
+    justifyContent: "center",
+  },
+  end: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  selectStyle: {
+    background: "white",
+    width: "100%",
+    padding: "4px",
+    borderRadius: "4px",
+  },
+}));
 
 const Users = () => {
-  const [users, setUsers] = useState([]);
-  const [user, setUser] = useState({});
-  const [processedUsers, setProcessedUsers] = useState([]);
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  const [sortBy, setSortBy] = useState("");
+  const usersContext = useContext(UsersContext);
+  const {
+    isLoading,
+    error,
+    clearError,
+    users,
+    user,
+    setSortBy,
+    sendFriendRequestHandler,
+    getUsers,
+  } = usersContext;
+  const classes = useStyles();
+  const [searchValue, setSearchValue] = useState("");
   const [menuItemValue, setMenuItemValue] = useState();
   const auth = useContext(AuthContext);
-  useEffect(() => {
-    const getUsers = async () => {
-      try {
-        const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/users?sortBy=${sortBy}`
-        );
-        setUsers(data.users);
-
-        let userData;
-        if (auth.token) {
-          userData = await sendRequest(
-            `${process.env.REACT_APP_BACKEND_URL}/users/me`,
-            "GET",
-            null,
-            {
-              Authorization: "Bearer " + auth.token,
-            }
-          );
-        }
-        setUser(userData);
-        setUsers(data.users);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getUsers();
-  }, [processedUsers, auth.token, sendRequest, sortBy]);
-
-  const sendFriendRequestHandler = (id) => {
-    setProcessedUsers((prevValue) => [...prevValue, id]);
-  };
 
   //sort users on selected option below
   const sortByNameCountDate = (event) => {
@@ -53,6 +68,13 @@ const Users = () => {
     if (menuItemValue === "placesCount") setSortBy("-placesCount");
     if (menuItemValue === "registration") setSortBy("-created_at");
     setMenuItemValue(menuItemValue);
+  };
+  const onSubmitSearchHandler = (e) => {
+    e.preventDefault();
+    getUsers(searchValue);
+  };
+  const inputSearchHandler = (e) => {
+    setSearchValue(e.target.value);
   };
 
   return (
@@ -64,27 +86,54 @@ const Users = () => {
         </div>
       )}
       {!isLoading && users && (
-        <Fragment>
-          <Select
-            onChange={sortByNameCountDate}
-            defaultValue="none"
-            style={{ color: "white", margin: "1rem" }}
-            value={menuItemValue}
-          >
-            <MenuItem value="none" disabled>
-              Choose an option to Sort
-            </MenuItem>
-            <MenuItem value="placesCount">Place Count</MenuItem>
-            <MenuItem value="name">Name</MenuItem>
-            <MenuItem value="registration">Registration Date</MenuItem>
-          </Select>
-          <UsersList
-            items={users}
-            userData={user}
-            auth={auth}
-            sendFriendRequestHandler={sendFriendRequestHandler}
-          />
-        </Fragment>
+        <Container maxWidth="md">
+          <Grid className={classes.centerd} container spacing={3}>
+            <Grid item md={3} xs={12} sm={3}>
+              <Select
+                onChange={sortByNameCountDate}
+                defaultValue="none"
+                className={classes.selectStyle}
+                value={menuItemValue}
+              >
+                <MenuItem value="none" disabled>
+                  Choose an option to Sort
+                </MenuItem>
+                <MenuItem value="placesCount">Place Count</MenuItem>
+                <MenuItem value="name">Name</MenuItem>
+                <MenuItem value="registration">Registration Date</MenuItem>
+              </Select>
+            </Grid>
+
+            <Grid item md={3} xs={12} sm={3}>
+              <Paper
+                component="form"
+                className={classes.root}
+                onSubmit={onSubmitSearchHandler}
+              >
+                <InputBase
+                  className={classes.input}
+                  placeholder="Search"
+                  inputProps={{ "aria-label": "" }}
+                  value={searchValue}
+                  onChange={inputSearchHandler}
+                />
+                <IconButton
+                  type="submit"
+                  className={classes.iconButton}
+                  aria-label="search"
+                >
+                  <SearchIcon />
+                </IconButton>
+              </Paper>
+            </Grid>
+            <UsersList
+              items={users}
+              userData={user}
+              auth={auth}
+              sendFriendRequestHandler={sendFriendRequestHandler}
+            />
+          </Grid>
+        </Container>
       )}
     </Fragment>
   );

@@ -6,7 +6,7 @@ const getCoordsForAddress = require("../util/location");
 const Place = require("../model/place");
 const User = require("../model/user");
 const cloudinary = require("../uploads/cloudinary");
-
+const escapeRegex = require("../util/escapeRegex");
 const getPlaceById = async (req, res, next) => {
   const placeId = req.params.pid;
   try {
@@ -23,42 +23,64 @@ const getPlaceById = async (req, res, next) => {
     );
   }
 };
+// places searching
+const getPlaces = async (req, res, next) => {
+  const search = req.query.search;
+  let places;
+  try {
+    if (search) {
+      const regex = new RegExp(escapeRegex(search), "gi");
+      places = await Place.find({ title: regex });
 
+      res.json({
+        places: places.map((place) => place.toObject({ getters: true })),
+      });
+    } else {
+      return next(new HttpError("please enter something", 404));
+    }
+  } catch (error) {
+    return next(
+      new HttpError("Something went wrong, could not find a place.", 500)
+    );
+  }
+};
 const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.uid;
-  const sortBy = req.query.sortBy || 'date';
+  const sortBy = req.query.sortBy || "date";
   const tagFilter = req.query.tagFilter;
 
   let userWithPlaces;
+
   try {
     const populateOptions = {
-      path: 'places',
-      options: { collation: {locale: 'en'
-    },sort: { [sortBy]: sortBy === 'title' ? '1' : '-1' } },
+      path: "places",
+      options: {
+        collation: { locale: "en" },
+        sort: { [sortBy]: sortBy === "title" ? "1" : "-1" },
+      },
     };
 
     if (tagFilter) {
-      populateOptions.match = { tags: { $in: tagFilter.split(',') } };
+      populateOptions.match = { tags: { $in: tagFilter.split(",") } };
     }
     userWithPlaces = await User.findById(userId).populate(populateOptions);
 
     if (!userWithPlaces)
       return next(
-        new HttpError('Could not find a place for the provided user id.', 404),
+        new HttpError("Could not find a place for the provided user id.", 404)
       );
     if (userWithPlaces.places.length === 0) {
       return next(
-        new HttpError('There is no place with selected tag(s) .', 404),
+        new HttpError("There is no place with selected tag(s) .", 404)
       );
     }
 
     res.json({
-      userWithPlaces: userWithPlaces.places.map(place =>
-        place.toObject({ getters: true }),
+      userWithPlaces: userWithPlaces.places.map((place) =>
+        place.toObject({ getters: true })
       ),
     });
   } catch (error) {
-    console.log(error);
     return next(
       new HttpError(
         "Something went wrong, could not find a place for the provided id.",
@@ -72,11 +94,11 @@ const createPlace = async (req, res, next) => {
   const error = validationResult(req);
   if (!error.isEmpty())
     return next(
-      new Error('Invalid input passed, please check your data.', 422),
+      new Error("Invalid input passed, please check your data.", 422)
     );
 
   const { title, description, address, tags } = req.body;
-  const tagsSplitted = tags.split(',');
+  const tagsSplitted = tags.split(",");
   // Here I change the coordinatis to object and also reverse the lng becaouse I useed the mapbox  geocode by default it geve us an array [lat, lng].
   let changeCoordinates;
   let coordinates;
@@ -109,11 +131,16 @@ const createPlace = async (req, res, next) => {
   let emails;
   try {
     user = await User.findById(req.userData.userId);
-    const userWithFriends = await User.findById(req.userData.userId)
-      .populate({path: 'friends', model: User});
-    const userWithNotifications = userWithFriends.friends.filter(item => item.notifications === true);
-    emails = userWithNotifications.map(item=>{
-      return item.email});   
+    const userWithFriends = await User.findById(req.userData.userId).populate({
+      path: "friends",
+      model: User,
+    });
+    const userWithNotifications = userWithFriends.friends.filter(
+      (item) => item.notifications === true
+    );
+    emails = userWithNotifications.map((item) => {
+      return item.email;
+    });
   } catch (error) {
     return next(new HttpError("Creating place failed, please try again", 500));
   }
@@ -128,7 +155,7 @@ const createPlace = async (req, res, next) => {
     user.places.push(createdPlace);
     await user.save({ session: sess });
     await sess.commitTransaction();
-    friendSharedPlace(user.name, title, emails)
+    friendSharedPlace(user.name, title, emails);
     res.status(201).json({ place: createdPlace });
   } catch (err) {
     const error = new HttpError("Create place failed, place try again.", 500);
@@ -141,7 +168,7 @@ const updatePlaceById = async (req, res, next) => {
   const error = validationResult(req);
   if (!error.isEmpty())
     return next(
-      new Error('Invalid input passed, please check your data.', 422),
+      new Error("Invalid input passed, please check your data.", 422)
     );
 
   const placeId = req.params.pid;
@@ -219,16 +246,17 @@ const likeThePlace = async (req, res, next) => {
   const placeId = req.params.id;
   const place = await Place.findById({ _id: placeId });
   const placeOwner = await User.findById(place.creator);
-  const userLiked = await User.findById(req.userData.userId);  if (!place) {
+  const userLiked = await User.findById(req.userData.userId);
+  if (!place) {
     return next(new HttpError("Could not like this place!", 404));
   }
 
   try {
     const clicked = place.likes.includes(req.body.likes);
-    const newDisLike = place.disLike.filter(user => user !== req.body.likes);
+    const newDisLike = place.disLike.filter((user) => user !== req.body.likes);
 
     if (clicked) {
-      const newLike = place.likes.filter(user => user !== req.body.likes);
+      const newLike = place.likes.filter((user) => user !== req.body.likes);
       place.likes = newLike;
       place.save();
     } else {
@@ -260,11 +288,11 @@ const disLikeThePlace = async (req, res, next) => {
   }
   try {
     const disLiked = place.disLike.includes(req.body.disLike);
-    const newLike = place.likes.filter(user => user !== req.body.disLike);
+    const newLike = place.likes.filter((user) => user !== req.body.disLike);
 
     if (disLiked) {
       const newDisLike = place.disLike.filter(
-        user => user !== req.body.disLike,
+        (user) => user !== req.body.disLike
       );
       place.disLike = newDisLike;
       place.save();
@@ -291,6 +319,7 @@ const placeEvaluation = async (req, res, next) => {
 
     res.json({ place: place.toObject({ getters: true }) });
   } catch (error) {
+    console.log(error);
     return next(
       new HttpError("Somthing went wrong, could not find a place.", 500)
     );
@@ -306,4 +335,5 @@ module.exports = {
   likeThePlace,
   disLikeThePlace,
   placeEvaluation,
+  getPlaces,
 };

@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
-
+const escapeRegex = require("../util/escapeRegex");
 const User = require("../model/user");
 const HttpError = require("../model/http-error");
 const {
@@ -52,18 +52,28 @@ const getUsers = async (req, res, next) => {
   let users;
 
   try {
-    users = await User.find({}, "-password")
-      .collation({ locale: "en" })
-      .sort(sortBy);
+    const search = req.query.search;
+
+    if (search) {
+      const regex = new RegExp(escapeRegex(search), "gi");
+      users = await User.find({ name: regex }, "-password");
+
+      res
+        .status(200)
+        .json({ users: users.map((user) => user.toObject({ getters: true })) });
+    } else {
+      users = await User.find({}, "-password")
+        .collation({ locale: "en" })
+        .sort(sortBy);
+      res
+        .status(200)
+        .json({ users: users.map((user) => user.toObject({ getters: true })) });
+    }
   } catch (error) {
-    console.log(error);
     return next(
       new HttpError("Fetching users failed, please try again later.", 500)
     );
   }
-  res
-    .status(200)
-    .json({ users: users.map((user) => user.toObject({ getters: true })) });
 };
 
 const signup = async (req, res, next) => {

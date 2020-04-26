@@ -74,11 +74,11 @@
     color: #292929;
   }
 }
-@media (max-width:950px){
-  .nav-links li{
+@media (max-width: 950px) {
+  .nav-links li {
     margin: 1rem 0.5rem;
   }
-  .nav-links a{
+  .nav-links a {
     padding: 0.1rem;
   }
 }

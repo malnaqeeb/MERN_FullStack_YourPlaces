@@ -4,7 +4,6 @@ import {
   Switch,
   Route,
   Redirect,
-  withRouter,
 } from "react-router-dom";
 import MainNavigation from "./shared/component/Navigation/MainNavigation";
 import { AuthContext } from "./shared/context/auth-context";
@@ -12,8 +11,8 @@ import { MessageContext } from "./shared/context/message-context";
 import { useAuth } from "./shared/hooks/auth-hook";
 import LoadingSpinner from "./shared/component/UIElements/LoadingSpinner";
 import Social from "./users/pages/Social";
-import Search from "./search/pages/Search";
 
+import UsersState from "./shared/context/users/UsersState";
 const Messages = React.lazy(() => import("./users/pages/Messages"));
 const ForgetPassword = React.lazy(() =>
   import("./users/components/ForgetPassword")
@@ -49,7 +48,6 @@ const App = () => {
         <Route path="/" exact>
           <Users />
         </Route>
-        <Route path="/search" exact component={withRouter(Search)} />
 
         <Route path="/:userId/places" exact>
           <UserPlaces />
@@ -118,20 +116,22 @@ const App = () => {
       }}
     >
       <MessageContext.Provider value={{ messagesData }}>
-        <Router>
-          <MainNavigation />
-          <main>
-            <Suspense
-              fallback={
-                <div className="center">
-                  <LoadingSpinner asOverlay />
-                </div>
-              }
-            >
-              {routes}
-            </Suspense>
-          </main>
-        </Router>
+        <UsersState>
+          <Router>
+            <MainNavigation />
+            <main>
+              <Suspense
+                fallback={
+                  <div className="center">
+                    <LoadingSpinner asOverlay />
+                  </div>
+                }
+              >
+                {routes}
+              </Suspense>
+            </main>
+          </Router>
+        </UsersState>
       </MessageContext.Provider>
     </AuthContext.Provider>
   );
