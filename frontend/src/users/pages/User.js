@@ -38,42 +38,9 @@ const User = () => {
     getUser();
   }, [sendRequest, userId]);
 
-  return (
-    <Fragment>
-      <ErrorModal error={error} onClear={clearError} />
-      {isLoading && (
-        <div className="center">
-          <LoadingSpinner />
-        </div>
-      )}
-      {!isLoading && (
-        <Router>
-          <UserProfileNav />
-          <Switch>
-            <Route path={`/:userId/my`} exact>
-              <img className="fade-in" src="/images/my-page.png" alt="my-page" />
-            </Route>
-            <Route path={`/:userId/places`} exact component={withRouter(UserPlaces)} />
-            <Route path={`/:userId/profile`} exact>
-              <UserProfile user={user} setUser={setUser} notifications={notifications} />
-            </Route>
-            <Route path={`/:userId/messages`} exact>
-              <Messages />
-            </Route>
-            <Route path={`/:userId/bucketlist`} exact>
-              <BucketList />
-            </Route>
-            <Route path={`/:userId/friends`} exact>
-              <Friends />
-            </Route>
-            <Route path="/" exact>
-              <Users />
-            </Route>
-          </Switch>
-        </Router>
-      )}
-    </Fragment>
-  );
+  return <UserProfile user={user} setUser={setUser} notifications={notifications} />
+
+     
 };
 
 export default User;

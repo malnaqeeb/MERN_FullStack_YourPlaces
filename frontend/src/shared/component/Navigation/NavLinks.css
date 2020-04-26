@@ -23,12 +23,27 @@
 
 .nav-links a:hover,
 .nav-links a:active,
-.nav-links a.active {
+.nav-links a.active,
+.avatar-holder:hover {
   background: #f8df00;
   border-color: #292929;
   color: #292929;
+  cursor: pointer;
 }
-
+.avatar-holder{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  color: #292929;
+  border: 1px solid;
+}
+.mobile-links{
+  margin-left: 2rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+}
 .nav-links button {
   cursor: pointer;
   border: 1px solid #292929;
@@ -46,6 +61,16 @@
 .nav-links button:active {
   background: #292929;
   color: white;
+}
+.desktop-menu{
+  display: none;
+}
+.mobile-submenu{
+  display: flex;
+  flex-direction: column;
+}
+.mobile-submenu p{
+  text-align: center;
 }
 
 @media (min-width: 768px) {
@@ -73,6 +98,16 @@
     background: #f8df00;
     color: #292929;
   }
+
+  .avatar-holder{
+    color: white;
+  }
+  .desktop-menu{
+    display: block;
+  }
+  .mobile-submenu{
+    display: none;
+  }
 }
 @media (max-width: 950px) {
   .nav-links li {
@@ -82,3 +117,4 @@
     padding: 0.1rem;
   }
 }
+
