@@ -124,9 +124,9 @@ const signup = async (req, res, next) => {
     );
   }
 
-  if (!createdUser.active) {
-    return next(new HttpError("Verify your account", 500));
-  }
+  // if (!createdUser.active) {
+  //   return next(new HttpError("Verify your account", 500));
+  // }
 
   res
     .status(201)
@@ -187,14 +187,14 @@ const login = async (req, res, next) => {
       new HttpError("Logging in failed, please try agein later", 500)
     );
   }
-  if (!existingUser.active) {
-    return next(
-      new HttpError(
-        "We already sent you an eamail, please click the to activate your account",
-        500
-      )
-    );
-  }
+  // if (!existingUser.active) {
+  //   return next(
+  //     new HttpError(
+  //       "We already sent you an eamail, please click the to activate your account",
+  //       500
+  //     )
+  //   );
+  // }
   res
     .status(201)
     .json({ userId: existingUser.id, email: existingUser.email, token });

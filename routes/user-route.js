@@ -19,6 +19,7 @@ router.post('/friends', friendsControllers.createFriendRequest);
 router.get('/friends/requests', friendsControllers.getFriendRequests);
 router.put('/friends/requests/:requestId', friendsControllers.acceptFriendRequest);
 router.delete('/friends/requests/:requestId', friendsControllers.rejectFriendRequest);
+router.delete('/friends/:friendId', friendsControllers.deletingFriend);
 
 router.get("/messages", 
   messageController.getUserCorresponders);
