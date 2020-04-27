@@ -30,7 +30,7 @@
   color: #292929;
   cursor: pointer;
 }
-.avatar-holder{
+.avatar-holder {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,7 +38,7 @@
   color: #292929;
   border: 1px solid;
 }
-.mobile-links{
+.mobile-links {
   margin-left: 2rem;
   margin-top: 1rem;
   display: flex;
@@ -62,14 +62,14 @@
   background: #292929;
   color: white;
 }
-.desktop-menu{
+.desktop-menu {
   display: none;
 }
-.mobile-submenu{
+.mobile-submenu {
   display: flex;
   flex-direction: column;
 }
-.mobile-submenu p{
+.mobile-submenu p {
   text-align: center;
 }
 
@@ -99,13 +99,13 @@
     color: #292929;
   }
 
-  .avatar-holder{
+  .avatar-holder {
     color: white;
   }
-  .desktop-menu{
+  .desktop-menu {
     display: block;
   }
-  .mobile-submenu{
+  .mobile-submenu {
     display: none;
   }
 }
@@ -117,4 +117,3 @@
     padding: 0.1rem;
   }
 }
-
