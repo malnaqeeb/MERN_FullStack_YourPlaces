@@ -8,17 +8,17 @@ const UserProfileNav = ({ setDrawerOpen }) => {
   return (
     <Fragment>
       <div className="dropdown-content">
-        <Link className="navLink" to={`/${userId}/bucketlist`}>
-          <span onClick={() => setDrawerOpen(false)}>My Bucket List</span>
+        <Link onClick={() => setDrawerOpen(false)} className="navLink" to={`/${userId}/bucketlist`}>
+          <span>My Bucket List</span>
         </Link>
-        <Link className="navLink" to={`/${userId}/my`}>
-          <span onClick={() => setDrawerOpen(false)}>Profile</span>
+        <Link onClick={() => setDrawerOpen(false)} className="navLink" to={`/${userId}/my`}>
+          <span>Profile</span>
         </Link>
-        <Link className="navLink" to={`/${userId}/friends`}>
-          <span onClick={() => setDrawerOpen(false)}>My Friends</span>
+        <Link  onClick={() => setDrawerOpen(false)} className="navLink" to={`/${userId}/friends`}>
+          <span>My Friends</span>
         </Link>
-        <Link className="navLink" to={`/${userId}/messages`}>
-          <span onClick={() => setDrawerOpen(false)}>Messages</span>
+        <Link onClick={() => setDrawerOpen(false)} className="navLink" to={`/${userId}/messages`}>
+          <span>Messages</span>
         </Link>
       </div>
     </Fragment>
