@@ -1,14 +1,16 @@
-import React, { useContext, useState } from "react";
-import { Button } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
-import { useParams } from "react-router-dom";
-import Input from "../../shared/component/formElements/Input";
-import { useFrom } from "../../shared/hooks/form-hook";
-import { VALIDATOR_REQUIRE } from "../../shared/Util/validators";
-import useHttpClient from "../../shared/hooks/http-hook";
-import { AuthContext } from "../../shared/context/auth-context";
-import "./Comment.css";
+import React, { useContext, useState } from 'react';
+import { Button } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import { useParams } from 'react-router-dom';
+import Input from '../../shared/component/formElements/Input';
+import { useFrom } from '../../shared/hooks/form-hook';
+import { VALIDATOR_REQUIRE } from '../../shared/Util/validators';
+import useHttpClient from '../../shared/hooks/http-hook';
+import { AuthContext } from '../../shared/context/auth-context';
+import Moment from 'react-moment';
+
+import './Comment.css';
 
 export default function Comment(props) {
   const [editMode, setEditMode] = useState(false);
@@ -25,16 +27,16 @@ export default function Comment(props) {
         isValid: false,
       },
     },
-    false
+    false,
   );
 
   const deleteComment = async () => {
     try {
       await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}/comments/${_id}`,
-        "DELETE",
+        'DELETE',
         null,
-        { Authorization: `Bearer ${auth.token}` }
+        { Authorization: `Bearer ${auth.token}` },
       );
       props.removeComment(_id);
     } catch {}
@@ -53,12 +55,12 @@ export default function Comment(props) {
         };
         await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}/comments/${_id}`,
-          "PATCH",
+          'PATCH',
           JSON.stringify(comment),
           {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + auth.token,
-          }
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + auth.token,
+          },
         );
         props.updateComment(_id, comment);
         setEditMode(false);
@@ -67,10 +69,10 @@ export default function Comment(props) {
     handleIt();
   };
   const d1 = new Date(date);
-  d1.toLocaleDateString("en-US");
+  d1.toLocaleDateString('en-US');
   const formatDate = (date) => {
     const d1 = new Date(date);
-    return d1.toLocaleString("en-NL");
+    return d1.toLocaleString('en-NL');
   };
   return (
     <div className="container">
@@ -87,7 +89,10 @@ export default function Comment(props) {
             )}
             <h4>{creator && creator.name}</h4>
 
-            <p className="date">{formatDate(date)}</p>
+            {/* <p className="date">{formatDate(date)}</p> */}
+            <Moment className="date" format="MMMM Do YYYY, h:mm:ss a">
+              {date}
+            </Moment>
           </div>
 
           <div className="comments-holder">
@@ -101,7 +106,7 @@ export default function Comment(props) {
                 onClick={deleteComment}
                 startIcon={<DeleteIcon />}
                 size="small"
-                style={{ marginRight: "10px" }}
+                style={{ marginRight: '10px' }}
               >
                 Delete
               </Button>
