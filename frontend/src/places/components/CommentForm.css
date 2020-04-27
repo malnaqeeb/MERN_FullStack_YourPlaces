@@ -1,3 +1,7 @@
+.add_comment-container {
+  width: 100%;
+}
+
 .comment-form {
   padding: 0.5rem 1.5rem;
   width: 50%;
@@ -5,8 +9,11 @@
   border: 1px solid #ffffff;
   border-radius: 4px;
   color: white;
+  display: flex;
+  flex-direction: column;
 }
-.comment-form-container {
-  width: 50%;
-  margin: auto;
+
+#comment-button {
+  align-self: flex-end;
+  margin: 0;
 }

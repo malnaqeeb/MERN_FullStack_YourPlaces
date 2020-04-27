@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import "./PlaceItem.css";
-import Card from "../../shared/component/UIElements/Card";
+import './PlaceItem.css';
+import Card from '../../shared/component/UIElements/Card';
 
 const PlaceItemView = (props) => {
   const { name, image, title, address, description } = props.place;
