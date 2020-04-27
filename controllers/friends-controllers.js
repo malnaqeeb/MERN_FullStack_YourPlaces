@@ -213,11 +213,82 @@ const rejectFriendRequest = async (req, res, next) => {
     return next(error);
   }
 };
+// check friend by ID (get information about friend)
+const checkFriendById = async (deletedFriendId, userId) => {
+  const response = {
+    IsFriendFound: false,
+    deletedFriend: null,
+    deleterFriend: null,
+    friend: null,
+  };
+  try {
+    let deletedFriend = await User.findOne(
+      { _id: deletedFriendId },
+      "-password"
+    )
+      .populate({ path: "friends", model: User })
+      .populate({ path: "friends._id", model: User });
+
+    let friend = deletedFriend.friends
+      .map((item) => item._id)
+      .map((item) => item.map((item) => item._id))
+      .map((item) => item[0])
+      .filter((id) => id == userId)[0];
+    response.IsFriendFound = friend !== null;
+    response.deletedFriend = deletedFriend;
+    response.deleterFriend = friend;
+    response.friend = friend;
+    return response;
+  } catch (error) {
+    throw new HttpError(
+      "Fetching the request information failed, try again later",
+      500
+    );
+  }
+};
+
+
+// Remove the request from the arrays
+const removeFriend = async (friendInfo) => {
+  try {
+    // Remove from the deleted friend array
+    await User.updateOne(
+      { _id: friendInfo.deletedFriend._id },
+      { $pull: { friends: friendInfo.deleterFriend } }
+    );
+    // Remove from the deleter user array
+    await User.updateOne(
+      { _id: friendInfo.deleterFriend },
+      { $pull: { friends: friendInfo.deletedFriend._id } }
+    );
+  } catch (error) {
+    throw new HttpError("Could not remove friend from users information.", 500);
+  }
+};
+
+const deletingFriend = async (req, res, next) => {
+  const { friendId } = req.params;
+  const { userId } = req.userData;
+
+  try {
+    // Check if there is a request
+    const friendInfo = await checkFriendById(friendId, userId);
+    if (friendInfo.IsFriendFound) {
+      await removeFriend(friendInfo);
+    }
+    // return a success message
+    res.status(200).json({ message: "Friend has been removed successfully!" });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 
 module.exports = {
   getFriends,
   createFriendRequest,
   getFriendRequests,
   acceptFriendRequest,
-  rejectFriendRequest
+  rejectFriendRequest,
+  deletingFriend
 };

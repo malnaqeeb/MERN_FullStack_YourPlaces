@@ -10,6 +10,7 @@ const Friends = () => {
   const [friends, setFriends] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
   const [processedRequests, setProcessedRequests] = useState([]);
+  const [processedFriends, setProcessedFriends] = useState([]);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   useEffect(() => {
     const getFriends = async () => {
@@ -40,11 +41,15 @@ const Friends = () => {
     };
     getFriends();
     getFriendRequests();
-  }, [processedRequests,auth.token,sendRequest]);
+  }, [processedRequests,processedFriends,auth.token,sendRequest]);
 
   const processFriendRequest = userId => {
     setProcessedRequests(prevValue => [...prevValue, userId]);
-  }
+     }
+////////////////////////////////////////////////////////////////////////
+  const processFriend = userId => {
+    setProcessedFriends(prevValue => [...prevValue, userId]);
+   }
 
   return (
     <Fragment>
@@ -53,6 +58,8 @@ const Friends = () => {
         {!isLoading && friends && (
           <FriendList
             friends={friends}
+            unfriendHandler={processFriend}
+            auth={auth}
           />
         )}
         <ErrorModal error={error} onClear={clearError} />
@@ -61,7 +68,7 @@ const Friends = () => {
             auth={auth}
             friendRequests={friendRequests}
             acceptFriendHandler={processFriendRequest}
-            cancelFriendHandler={processFriendRequest}
+            cancelFriendHandler={processFriendRequest}     
           />
         )}
         </div>
