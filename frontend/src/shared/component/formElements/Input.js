@@ -1,15 +1,15 @@
-import React, { useReducer, useEffect } from "react";
-import { validate } from "../../Util/validators";
-import "./Input.css";
+import React, { useReducer, useEffect } from 'react';
+import { validate } from '../../Util/validators';
+import './Input.css';
 const inputReducer = (state, action) => {
   switch (action.type) {
-    case "CHANGE":
+    case 'CHANGE':
       return {
         ...state,
         value: action.val,
         isValid: validate(action.val, action.validators),
       };
-    case "TOUCH":
+    case 'TOUCH':
       return {
         ...state,
         isTouched: true,
@@ -20,19 +20,19 @@ const inputReducer = (state, action) => {
   }
 };
 
-const Input = props => {
-  const changeHandeler = event => {
+const Input = (props) => {
+  const changeHandeler = (event) => {
     dispatch({
-      type: "CHANGE",
+      type: 'CHANGE',
       val: event.target.value,
       validators: props.validators,
     });
   };
-  const touchHandler = event => {
-    dispatch({ type: "TOUCH" });
+  const touchHandler = (event) => {
+    dispatch({ type: 'TOUCH' });
   };
   const inaialState = {
-    value: props.initailValue || "",
+    value: props.initailValue || '',
     isValid: props.initailValid || false,
     isTouched: false,
   };
@@ -45,7 +45,7 @@ const Input = props => {
   }, [id, value, isValid, onInput]);
 
   const element =
-    props.element === "input" ? (
+    props.element === 'input' ? (
       <input
         id={props.id}
         type={props.type}
@@ -61,11 +61,16 @@ const Input = props => {
         onChange={changeHandeler}
         onBlur={touchHandler}
         value={state.value}
+        placeholder={props.placeholder}
       />
     );
 
   return (
-    <div className={`form-control ${!state.isValid && state.isTouched && "form-control--invalid"}`}>
+    <div
+      className={`form-control ${
+        !state.isValid && state.isTouched && 'form-control--invalid'
+      }`}
+    >
       <label htmlFor={props.id}>{props.label}</label>
       {element}
       {!state.isValid && state.isTouched && <p>{props.errorText}</p>}

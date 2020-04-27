@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import Comments from "./Comments";
-import useHttpClient from "../../shared/hooks/http-hook";
-import ErrorModal from "../../shared/component/UIElements/ErrorModal";
-import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
-import PlaceItemView from "../components/PlaceItemView";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import Comments from './Comments';
+import useHttpClient from '../../shared/hooks/http-hook';
+import ErrorModal from '../../shared/component/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/component/UIElements/LoadingSpinner';
+import PlaceItemView from '../components/PlaceItemView';
+import './Place.css';
 
 export default function Place() {
   const [place, setPlace] = useState({});
@@ -15,7 +16,7 @@ export default function Place() {
     const getPlace = async () => {
       try {
         const placeData = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`
+          `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`,
         );
         setPlace(placeData.place);
       } catch {}
@@ -24,7 +25,7 @@ export default function Place() {
   }, [sendRequest, placeId]);
 
   return (
-    <div>
+    <div className="spinner-justify">
       {isLoading && <LoadingSpinner />}
       <ErrorModal error={error} onClear={clearError} />
       {!isLoading && place && Object.keys(place).length > 0 && (

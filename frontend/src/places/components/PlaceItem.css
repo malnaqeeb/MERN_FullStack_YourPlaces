@@ -38,10 +38,10 @@
   border-top: 1px solid #ccc;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
-   -khtml-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .place-item__modal-content {
@@ -70,12 +70,12 @@
   display: flex;
 }
 
-.detailed-view{
+.detailed-view {
   width: 60%;
   margin: auto;
 }
 
-.evaluation i:hover{
+.evaluation i:hover {
   cursor: pointer;
   opacity: 0.75;
 }
@@ -89,6 +89,44 @@
   .place-item__image {
     height: 20rem;
   }
+}
+
+@media (max-width: 768px) {
+  .place-item__content {
+    width: 90%;
+  }
+
+  .place-item__image {
+    height: 24rem;
+  }
+
+  .comment-form {
+    padding: 1rem 0rem;
+    width: 90%
+  }
+
+  .comment-container {
+    width: 85%
+  }
+
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (max-width: 497px) {
+  .place-item__image {
+    height: 20rem;
+  }
+
+  .place-item__content {
+    width: 97%;
+  }
+
+  .comment-container {
+    width: 100%;
+  }
+
 }
 
 p.like-count {
