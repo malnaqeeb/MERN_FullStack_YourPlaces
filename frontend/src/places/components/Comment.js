@@ -89,7 +89,6 @@ export default function Comment(props) {
             )}
             <h4>{creator && creator.name}</h4>
 
-            {/* <p className="date">{formatDate(date)}</p> */}
             <Moment className="date" format="MMMM Do YYYY, h:mm:ss a">
               {date}
             </Moment>
