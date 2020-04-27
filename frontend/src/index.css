@@ -16,6 +16,7 @@ body {
 .slide-in-left-enter {
   transform: translateX(-100%);
 }
+
 .no-select {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -24,6 +25,7 @@ body {
   -ms-user-select: none;
   user-select: none;
 }
+
 .slide-in-left-enter-active {
   transform: translateX(0);
   opacity: 1;
@@ -47,6 +49,7 @@ body {
   justify-content: center;
   align-items: center;
 }
+
 .white-text {
   color: white;
 }
@@ -54,42 +57,57 @@ body {
 .gray-text {
   color: #4d4d4d;
 }
+
 .block {
   display: block;
 }
+
 .flex-column {
   display: flex;
   flex-direction: column;
 }
+
 .width-60 {
   width: 60%;
 }
+
 .yellow-text {
   color: #f8df00;
 }
+
 .m-1 {
   margin: 1rem;
 }
+
 .m-05 {
   margin: 0.5rem;
 }
+
 .p-1 {
   padding: 1rem;
 }
+
 .m-b-2 {
   margin-bottom: 2rem;
 }
+
+
+
 @media (max-width: 600px) {
+
   h2,
   h3 {
     font-size: 1.25rem;
   }
 }
+
 @media (max-width: 768px) {
   .users-mobile {
     width: 60% !important;
   }
 }
+
+
 
 .fade-in {
   animation: fadeIn ease 3s;
@@ -111,6 +129,7 @@ body {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
@@ -120,6 +139,7 @@ body {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
@@ -129,6 +149,7 @@ body {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
@@ -138,6 +159,7 @@ body {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
@@ -147,6 +169,7 @@ body {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
@@ -156,23 +179,28 @@ body {
   width: 40%;
   margin: auto;
 }
+
 @media (max-width: 750px) {
   .forget_password {
     width: 90%;
   }
 }
+
 @media (max-width: 750px) {
   .button {
     font-size: 12px !important;
     padding: 0.5rem 0.5rem;
   }
+
   .comment-form {
     padding: 0.5rem 0.5rem;
   }
+
   h2,
   h3 {
     font-size: 1rem;
   }
+
   .span.MuiButton-label {
     font-size: 1rem;
   }
@@ -199,17 +227,12 @@ body {
   }
 }
 
-@media (min-width: 992px) {
-  .container {
-    max-width: 960px;
-  }
-}
-
 @media (min-width: 1200px) {
   .container {
     max-width: 1140px;
   }
 }
+
 .container {
   width: 100%;
   padding-right: 15px;
@@ -223,14 +246,9 @@ body {
     max-width: 540px;
   }
 }
+
 /*  */
 @media (min-width: 768px) {
-  .container {
-    max-width: 720px;
-  }
-}
-
-@media (min-width: 992px) {
   .container {
     max-width: 960px;
   }

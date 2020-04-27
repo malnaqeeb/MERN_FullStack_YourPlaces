@@ -53,7 +53,6 @@ export default function CommentForm({ addComment, placeId }) {
         setCommentText('');
       } catch (error) {}
     };
-
     createComment();
   };
   const commentHandler = (e) => setCommentText(e.target.value);
@@ -66,6 +65,10 @@ export default function CommentForm({ addComment, placeId }) {
         {auth.isLoggedIn && (
           <form className="comment-form">
             <TextField
+              style={{
+                backgroundColor: 'white',
+                borderRadius: '4px',
+              }}
               label="Write your comment here ..."
               onChange={commentHandler}
             ></TextField>
