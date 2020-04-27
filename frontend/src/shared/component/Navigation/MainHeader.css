@@ -21,3 +21,9 @@ main {
     justify-content: space-between;
   }
 }
+
+@media (max-width: 497px) {
+  main {
+    margin-top: 70px;
+  }
+}

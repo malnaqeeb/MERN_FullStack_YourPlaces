@@ -1,6 +1,6 @@
-import React from "react";
-import Comment from "./Comment";
-import "./CommentList.css";
+import React from 'react';
+import Comment from './Comment';
+import './CommentList.css';
 export default function CommentList({
   comments,
   removeComment,
@@ -12,7 +12,7 @@ export default function CommentList({
         <React.Fragment>
           <h5 className="comments-counter">
             <span>{comments.length}</span> Comment
-            {comments.length === 1 ? " " : "s"}
+            {comments.length === 1 ? ' ' : 's'}
           </h5>
           {comments.map((comment) => (
             <Comment
@@ -23,9 +23,7 @@ export default function CommentList({
             />
           ))}
         </React.Fragment>
-      ) : (
-        <div className="comment-list">Be the first to comment</div>
-      )}
+      ) : null}
     </div>
   );
 }
