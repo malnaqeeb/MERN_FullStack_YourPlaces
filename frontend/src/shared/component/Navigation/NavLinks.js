@@ -1,13 +1,15 @@
-import React, { useContext, Fragment } from "react";
+import React, { useContext, useState, Fragment } from "react";
 import { NavLink } from "react-router-dom";
 import { Avatar } from "@material-ui/core";
 import "./NavLinks.css";
 import { AuthContext } from "../../context/auth-context";
+import UserProfileNav from "../../../users/components/UserProfileNav";
 import UsersContext from "../../context/users/usersContext";
 const NavLinks = (props) => {
   const auth = useContext(AuthContext);
   const usersContext = useContext(UsersContext);
   const { user } = usersContext;
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <ul className="nav-links no-select">
@@ -28,12 +30,48 @@ const NavLinks = (props) => {
       )}
       {auth.isLoggedIn && (
         <Fragment>
-          <li>
-            <NavLink className="avatar-holder" to={`/${auth.userId}/my`}>
+          <li className="desktop-menu">
+            <div
+              className="avatar-holder"
+              onClick={() => setDrawerOpen(!drawerOpen)}
+            >
               MY
-            </NavLink>
+              {user && (
+                <Avatar
+                  src={user.image}
+                  alt={user.name}
+                  style={{ margin: "0 1rem" }}
+                />
+              )}
+            </div>
+            {drawerOpen && <UserProfileNav setDrawerOpen={setDrawerOpen} />}
           </li>
-          {user && <Avatar src={user.image} alt={user.name} />}
+          <li className="mobile-submenu">
+            <div className="avatar-holder"> 
+              <p>MY</p>
+              {user && (
+                <Avatar
+                  src={user.image}
+                  alt={user.name}
+                  style={{ margin: "0 1rem" }}
+                />
+              )}
+            </div>
+            <div className="mobile-links">
+            <NavLink to={`/${auth.userId}/bucketlist`}>
+              <span>My Bucket List</span>
+            </NavLink>
+            <NavLink to={`/${auth.userId}/my`}>
+              <span>Profile</span>
+            </NavLink>
+            <NavLink to={`/${auth.userId}/friends`}>
+              <span> My Friends</span>
+            </NavLink>
+            <NavLink to={`/${auth.userId}/messages`}>
+              <span>Messages</span>
+            </NavLink>
+            </div>
+          </li>
         </Fragment>
       )}
 

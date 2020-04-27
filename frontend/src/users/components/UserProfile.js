@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, Fragment } from "react";
 import useHttpClient from "../../shared/hooks/http-hook";
 import { useFrom } from "../../shared/hooks/form-hook";
 import { AuthContext } from "../../shared/context/auth-context";
@@ -17,7 +17,7 @@ const UserProfile = ({ user, setUser, notifications }) => {
   const { userId, token } = useContext(AuthContext);
   const [editImage, setEditImage] = useState(false);
   const [editName, setEditName] = useState(false);
-  const [notStyle, setNotStyle] = useState(notifications);
+  const [notStyle, setNotStyle] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const { name, image } = user;
   const [state, inputHandler, setFormData] = useFrom(
@@ -188,15 +188,24 @@ const UserProfile = ({ user, setUser, notifications }) => {
       )}
       {user && (
         <div className="notification-box card">
-          <p>Do You Want To Receive E-mail Notifications?</p>
-          <Button
-            onClick={() => {
-              setNotStyle(!notStyle);
-              notificationHandler();
-            }}
-          >
-            {notStyle ? "TURN OFF" : "TURN ON"}
-          </Button>
+          {!notStyle && (
+            <Fragment>
+              <p>Do You Want To Receive E-mail Notifications?</p>
+              <Button
+                onClick={() => {
+                  setNotStyle(true);
+                  notificationHandler();
+                }}
+              >
+                {notifications ? "TURN OFF" : "TURN ON"}
+              </Button>
+            </Fragment>
+          )}
+          {notStyle && (
+            <p className="fade-in">
+              Your notification preference has been changed.
+            </p>
+          )}
         </div>
       )}
     </div>
