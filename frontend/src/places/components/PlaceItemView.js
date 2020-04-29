@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 
-import './PlaceItem.css';
-import Card from '../../shared/component/UIElements/Card';
-
+import "./PlaceItem.css";
+import { makeStyles } from "@material-ui/core/styles";
+import { Container, Card } from "@material-ui/core";
 const PlaceItemView = (props) => {
   const { name, image, title, address, description } = props.place;
   return (
-    <div className="place-item">
-      <Card className="place-item__content detailed-view">
+    <Container>
+      <Card className="place-item-comment">
         <div className="place-item__image">
           <img src={image.imageUrl} alt={name} />
         </div>
@@ -17,7 +17,7 @@ const PlaceItemView = (props) => {
           <p>{description}</p>
         </div>
       </Card>
-    </div>
+    </Container>
   );
 };
 
