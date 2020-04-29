@@ -31,7 +31,7 @@ const UserProfile = ({ user, setUser, notifications }) => {
         isValid: false,
       },
     },
-    false
+    false,
   );
 
   const switchModelHandler = () => {
@@ -43,7 +43,7 @@ const UserProfile = ({ user, setUser, notifications }) => {
             isValid: false,
           },
         },
-        false
+        false,
       );
     } else if (editName) {
       setFormData(
@@ -53,7 +53,7 @@ const UserProfile = ({ user, setUser, notifications }) => {
             isValid: false,
           },
         },
-        false
+        false,
       );
     } else {
       setFormData(
@@ -67,7 +67,7 @@ const UserProfile = ({ user, setUser, notifications }) => {
             isValid: false,
           },
         },
-        false
+        false,
       );
     }
   };
@@ -93,7 +93,7 @@ const UserProfile = ({ user, setUser, notifications }) => {
           {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
-          }
+          },
         );
         setEditName(false);
         setUser(res.user);
@@ -109,7 +109,7 @@ const UserProfile = ({ user, setUser, notifications }) => {
           formData,
           {
             Authorization: `Bearer ${token}`,
-          }
+          },
         );
         setEditImage(false);
         setUser(res.user);
@@ -126,7 +126,7 @@ const UserProfile = ({ user, setUser, notifications }) => {
         {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
-        }
+        },
       );
     } catch (error) {}
   };
@@ -154,9 +154,7 @@ const UserProfile = ({ user, setUser, notifications }) => {
                   Save
                 </Button>
               )}
-              <Button onClick={changeEditImage}>
-                {editImage ? "Cancel" : "Change Image"}
-              </Button>
+              <Button onClick={changeEditImage}>{editImage ? "Cancel" : "Change Image"}</Button>
             </React.Fragment>
           )}
           {!editImage && (
@@ -179,9 +177,7 @@ const UserProfile = ({ user, setUser, notifications }) => {
                   Save
                 </Button>
               )}
-              <Button onClick={changeEditName}>
-                {editName ? "Cancel" : "Edit Name"}
-              </Button>
+              <Button onClick={changeEditName}>{editName ? "Cancel" : "Edit Name"}</Button>
             </React.Fragment>
           )}
         </Card>
@@ -201,11 +197,7 @@ const UserProfile = ({ user, setUser, notifications }) => {
               </Button>
             </Fragment>
           )}
-          {notStyle && (
-            <p className="fade-in">
-              Your notification preference has been changed.
-            </p>
-          )}
+          {notStyle && <p className="fade-in">Your notification preference has been changed</p>}
         </div>
       )}
     </div>

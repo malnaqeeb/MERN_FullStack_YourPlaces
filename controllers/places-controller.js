@@ -321,7 +321,7 @@ const placeEvaluation = async (req, res, next) => {
   } catch (error) {
     console.log(error);
     return next(
-      new HttpError("Somthing went wrong, could not find a place.", 500)
+      new HttpError("Something went wrong, could not find a place.", 500)
     );
   }
 };

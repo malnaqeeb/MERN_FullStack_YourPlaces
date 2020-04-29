@@ -9,16 +9,16 @@ const PlaceList = ({ items, onDeletePlace }) => {
     return (
       <div className="place-list center">
         <Card>
-          <h2>No places found maybe create one ?</h2>
-          <Button to='/places/new'>Share place</Button>
+          <h2>No places found, maybe create one ?</h2>
+          <Button to="/places/new">Share place</Button>
         </Card>
       </div>
     );
   }
   return (
     <ul className="place-list">
-      {items.map(place => (
-        <PlaceItem key={place.id} place={place} onDeletePlace={onDeletePlace}/>
+      {items.map((place) => (
+        <PlaceItem key={place.id} place={place} onDeletePlace={onDeletePlace} />
       ))}
     </ul>
   );

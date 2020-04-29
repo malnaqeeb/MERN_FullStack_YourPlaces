@@ -7,7 +7,7 @@ const FriendList = ({ friends, unfriendHandler, auth }) => {
     return (
       <div className="center m-1">
         <Card>
-          <h2 className="gray-text">No friend found.</h2>
+          <h2 className="gray-text">No friend found</h2>
         </Card>
       </div>
     );
@@ -15,12 +15,7 @@ const FriendList = ({ friends, unfriendHandler, auth }) => {
   return (
     <ul className="users-list">
       {friends.map((user) => (
-        <FriendItem
-         auth={auth}
-          user={user}
-          key={user.id}
-          unfriendHandler={unfriendHandler}
-        />
+        <FriendItem auth={auth} user={user} key={user.id} unfriendHandler={unfriendHandler} />
       ))}
     </ul>
   );

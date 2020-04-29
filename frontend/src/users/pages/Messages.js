@@ -203,7 +203,9 @@ const Messages = () => {
                 : `message__box message__box-mobile`
             }
           >
-            <h2 className="header">{`Messages ${textedUser && `with ${textedUser}`}`}</h2>
+            <h2 className="header">
+              Messages {textedUser && textedUser !== undefined && `with ${textedUser}`}
+            </h2>
             <a
               onClick={() => {
                 setMobileContactMode(true);
