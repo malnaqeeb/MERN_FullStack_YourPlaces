@@ -55,11 +55,11 @@ const UserItem = ({ user, userData, auth, sendFriendRequestHandler }) => {
 
       if (hasRequest.length > 0) {
         if (hasRequest[0].isSent) {
-          return <FriendshipLable>Wait for response</FriendshipLable>;
+          return <FriendshipLable>Requested</FriendshipLable>;
         } else {
           return (
             <FriendshipLable variant="contained" color="secondary">
-              Asked to be friend
+              Friend request
             </FriendshipLable>
           );
         }

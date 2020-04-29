@@ -9,13 +9,13 @@ const UserProfileNav = ({ setDrawerOpen }) => {
     <Fragment>
       <div className="dropdown-content">
         <Link onClick={() => setDrawerOpen(false)} className="navLink" to={`/${userId}/bucketlist`}>
-          <span>My Bucket List</span>
+          <span>Bucket List</span>
         </Link>
         <Link onClick={() => setDrawerOpen(false)} className="navLink" to={`/${userId}/my`}>
           <span>Profile</span>
         </Link>
-        <Link  onClick={() => setDrawerOpen(false)} className="navLink" to={`/${userId}/friends`}>
-          <span>My Friends</span>
+        <Link onClick={() => setDrawerOpen(false)} className="navLink" to={`/${userId}/friends`}>
+          <span>Friends</span>
         </Link>
         <Link onClick={() => setDrawerOpen(false)} className="navLink" to={`/${userId}/messages`}>
           <span>Messages</span>

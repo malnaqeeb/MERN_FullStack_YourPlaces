@@ -13,7 +13,7 @@ const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
         <Grid item md={12}>
           <Card>
             <Typography style={{ textAlign: "center" }} variant="h6">
-              No users found.
+              No users found
             </Typography>
           </Card>
         </Grid>

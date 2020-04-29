@@ -3,10 +3,7 @@ const { validationResult } = require("express-validator");
 const escapeRegex = require("../util/escapeRegex");
 const User = require("../model/user");
 const HttpError = require("../model/http-error");
-const {
-  forgetPasswordEmail,
-  resetPasswordEmail,
-} = require("../emails/account");
+const { forgetPasswordEmail, resetPasswordEmail } = require("../emails/account");
 
 const JWT_KEY = process.env.JWT_KEY;
 const {
@@ -60,16 +57,12 @@ const getUsers = async (req, res, next) => {
       });
     } else {
       res.status(200).json({
-        users: res.paginatios.results.map((user) =>
-          user.toObject({ getters: true })
-        ),
+        users: res.paginatios.results.map((user) => user.toObject({ getters: true })),
         totalPages: res.paginatios.totalPages,
       });
     }
   } catch (error) {
-    return next(
-      new HttpError("Fetching users failed, please try again later.", 500)
-    );
+    return next(new HttpError("Fetching users failed, please try again later.", 500));
   }
 };
 
@@ -77,9 +70,7 @@ const signup = async (req, res, next) => {
   const error = validationResult(req);
 
   if (!error.isEmpty()) {
-    return next(
-      new Error("Invalid input passed, please check your data.", 422)
-    );
+    return next(new Error("Invalid input passed, please check your data.", 422));
   }
 
   const { name, email, password } = req.body;
@@ -89,9 +80,7 @@ const signup = async (req, res, next) => {
     const existingUser = await User.findOne({ email: email });
 
     if (existingUser) {
-      return next(
-        new HttpError("User exists already, please login instead.", 422)
-      );
+      return next(new HttpError("User exists already, please login instead.", 422));
     }
 
     createdUser = new User({
@@ -105,39 +94,28 @@ const signup = async (req, res, next) => {
     });
     createdUser.generateAccountVerify();
     // send email
-    let link =
-      req.headers.origin + "/confirm/" + createdUser.verifyAccountToken;
+    let link = req.headers.origin + "/confirm/" + createdUser.verifyAccountToken;
 
     accountVerifyEmail(createdUser.name, createdUser.email, link);
 
     await createdUser.save();
   } catch (error) {
-    return next(
-      new HttpError("Signin up  failed, please try again later.", 500)
-    );
+    return next(new HttpError("Signin up  failed, please try again later.", 500));
   }
   let token;
   try {
-    token = jwt.sign(
-      { userId: createdUser.id, email: createdUser.email, token },
-      JWT_KEY,
-      {
-        expiresIn: "1h",
-      }
-    );
+    token = jwt.sign({ userId: createdUser.id, email: createdUser.email, token }, JWT_KEY, {
+      expiresIn: "1h",
+    });
   } catch (error) {
-    return next(
-      new HttpError("Signing up failed, please try again later", 500)
-    );
+    return next(new HttpError("Signing up failed, please try again later", 500));
   }
 
   if (!createdUser.active) {
     return next(new HttpError("Verify your account", 500));
   }
 
-  res
-    .status(201)
-    .json({ userId: createdUser.id, email: createdUser.email, token });
+  res.status(201).json({ userId: createdUser.id, email: createdUser.email, token });
 };
 
 // get the token and check it with the user token and check the time to ensure that it still withen one hour
@@ -151,8 +129,8 @@ const confirmAccount = async (req, res, next) => {
       return next(
         new HttpError(
           "Verify account token is invalid or has expired. Please sign up once again",
-          401
-        )
+          401,
+        ),
       );
     }
     user.active = true;
@@ -161,13 +139,11 @@ const confirmAccount = async (req, res, next) => {
     accountActivatedEmail(user.name, user.email);
     user.save();
     // send email
-    res.status(200).json({ message: "Your account has been activeted." });
+    res.status(200).json({ message: "Your account has been activated." });
   } catch (error) {
     return next(new HttpError(error.message, 500));
   }
-  res
-    .status(201)
-    .json({ userId: createdUser.id, email: createdUser.email, token });
+  res.status(201).json({ userId: createdUser.id, email: createdUser.email, token });
 };
 
 const login = async (req, res, next) => {
@@ -182,29 +158,21 @@ const login = async (req, res, next) => {
 
   let token;
   try {
-    token = jwt.sign(
-      { userId: existingUser.id, email: existingUser.email, token },
-      JWT_KEY,
-      {
-        expiresIn: "1h",
-      }
-    );
+    token = jwt.sign({ userId: existingUser.id, email: existingUser.email, token }, JWT_KEY, {
+      expiresIn: "1h",
+    });
   } catch (error) {
-    return next(
-      new HttpError("Logging in failed, please try agein later", 500)
-    );
+    return next(new HttpError("Logging in failed, please try again later", 500));
   }
   if (!existingUser.active) {
     return next(
       new HttpError(
-        "We already sent you an eamail, please click the to activate your account",
-        500
-      )
+        "We have sent you an e-mail, please click the link to activate your account",
+        500,
+      ),
     );
   }
-  res
-    .status(201)
-    .json({ userId: existingUser.id, email: existingUser.email, token });
+  res.status(201).json({ userId: existingUser.id, email: existingUser.email, token });
 };
 
 const signJwt = async (req, res, next) => {
@@ -214,15 +182,11 @@ const signJwt = async (req, res, next) => {
       expiresIn: "1h",
     });
   } catch (error) {
-    return next(
-      new HttpError("Logging in failed, please try again later", 500)
-    );
+    return next(new HttpError("Logging in failed, please try again later", 500));
   }
   res
     .status(201)
-    .redirect(
-      `${process.env.AUTH_REDIRECT_PATH}/social?userId=${req.user._id}&token=${token}`
-    );
+    .redirect(`${process.env.AUTH_REDIRECT_PATH}/social?userId=${req.user._id}&token=${token}`);
 };
 
 const getUser = async (req, res, next) => {
@@ -230,9 +194,7 @@ const getUser = async (req, res, next) => {
   try {
     user = await User.findById(req.params.userId, "name image notifications");
   } catch (error) {
-    return next(
-      new HttpError("Failed to get the user, please try again later.", 500)
-    );
+    return next(new HttpError("Failed to get the user, please try again later.", 500));
   }
   res.status(201).json({ user });
 };
@@ -278,8 +240,8 @@ const forgetPassword = async (req, res, next) => {
       return next(
         new HttpError(
           `The email address ${req.body.email} is not associated with any account. Double-check your email address and try again.`,
-          401
-        )
+          401,
+        ),
       );
     }
     //Generate and set password reset token
@@ -291,7 +253,7 @@ const forgetPassword = async (req, res, next) => {
 
     forgetPasswordEmail(user.name, user.email, link);
     res.status(200).json({
-      message: "A reset email has been sent to " + user.email + ".",
+      message: "A reset e-mail has been sent to " + user.email + ".",
     });
   } catch (error) {
     return next(new HttpError(error.message, 500));
@@ -305,17 +267,10 @@ const resetPassword = async (req, res, next) => {
   });
   try {
     if (!user) {
-      return next(
-        new HttpError("Password reset token is invalid or has expired.", 401)
-      );
+      return next(new HttpError("Password reset token is invalid or has expired.", 401));
     }
     if (req.body.password !== req.body.confirmpassword)
-      return next(
-        new HttpError(
-          "The password and confirmation password do not match.",
-          400
-        )
-      );
+      return next(new HttpError("The password and confirmation password do not match.", 400));
 
     //Set the new password
     user.password = req.body.password;

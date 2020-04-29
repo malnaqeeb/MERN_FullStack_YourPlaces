@@ -6,13 +6,7 @@ import UsersContext from "../../shared/context/users/usersContext";
 import { AuthContext } from "../../shared/context/auth-context";
 import { Select, MenuItem } from "@material-ui/core";
 
-import {
-  InputBase,
-  Paper,
-  IconButton,
-  Grid,
-  Container,
-} from "@material-ui/core";
+import { InputBase, Paper, IconButton, Grid, Container } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import { makeStyles } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
@@ -105,20 +99,16 @@ const Users = () => {
                 value={menuItemValue}
               >
                 <MenuItem value="none" disabled>
-                  Choose an option to Sort
+                  Sort by
                 </MenuItem>
-                <MenuItem value="placesCount">Place Count</MenuItem>
                 <MenuItem value="name">Name</MenuItem>
+                <MenuItem value="placesCount">Places Count</MenuItem>
                 <MenuItem value="registration">Registration Date</MenuItem>
               </Select>
             </Grid>
 
             <Grid item md={3} xs={12} sm={3}>
-              <Paper
-                component="form"
-                className={classes.root}
-                onSubmit={onSubmitSearchHandler}
-              >
+              <Paper component="form" className={classes.root} onSubmit={onSubmitSearchHandler}>
                 <InputBase
                   className={classes.input}
                   placeholder="Search"
@@ -126,11 +116,7 @@ const Users = () => {
                   value={searchValue}
                   onChange={inputSearchHandler}
                 />
-                <IconButton
-                  type="submit"
-                  className={classes.iconButton}
-                  aria-label="search"
-                >
+                <IconButton type="submit" className={classes.iconButton} aria-label="search">
                   <SearchIcon />
                 </IconButton>
               </Paper>

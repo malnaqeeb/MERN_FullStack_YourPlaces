@@ -16,7 +16,7 @@ const RegisterConfirmation = () => {
     const confirmAccount = async () => {
       try {
         const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/users/confirm/${token}`
+          `${process.env.REACT_APP_BACKEND_URL}/users/confirm/${token}`,
         );
 
         setAccount(data);

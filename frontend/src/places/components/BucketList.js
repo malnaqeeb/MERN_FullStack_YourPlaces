@@ -14,15 +14,13 @@ const BucketList = () => {
   const { userId } = useParams();
   const auth = useContext(AuthContext);
   const deleteFromBucketList = (id) => {
-    setPlaces((prevPlaces) =>
-      prevPlaces.filter((place) => place.id._id !== id)
-    );
+    setPlaces((prevPlaces) => prevPlaces.filter((place) => place.id._id !== id));
   };
   useEffect(() => {
     const getBucketList = async () => {
       try {
         const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/user/bucketlist?q=${userId}`
+          `${process.env.REACT_APP_BACKEND_URL}/user/bucketlist?q=${userId}`,
         );
         setPlaces(data.userWithBucketList);
       } catch (err) {}
@@ -33,9 +31,7 @@ const BucketList = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/users/${userId}/`
-        );
+        const data = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/users/${userId}/`);
         setUser(data);
       } catch (err) {}
     };
@@ -59,14 +55,14 @@ const BucketList = () => {
             <div className="share-button">
               <a
                 href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                  `${process.env.REACT_APP_PUBLIC_URL}/${userId}/bucketlist`
+                  `${process.env.REACT_APP_PUBLIC_URL}/${userId}/bucketlist`,
                 )}&text=My+Travel+Bucket+List%2C+Connect+and+Explore.&hashtags=travelling,wanderlust,yourplacesapp`}
               >
                 <i className="fab fa-twitter-square"></i>
               </a>
               <a
                 href={`https://www.facebook.com/sharer.php?u=${encodeURIComponent(
-                  `${process.env.REACT_APP_PUBLIC_URL}/${userId}/bucketlist`
+                  `${process.env.REACT_APP_PUBLIC_URL}/${userId}/bucketlist`,
                 )}`}
               >
                 <i className="fab fa-facebook-square"></i>
@@ -79,27 +75,17 @@ const BucketList = () => {
           <div className="bucket-list-content">
             <div className="m-b-2">
               <h2 className=" white-text fade-in no-select center">
-                Bucket List of{" "}
-                <span className="m-05 yellow-text">
-                  {" "}
-                  {user && user.user.name}
-                </span>{" "}
+                Bucket List of <span className="m-05 yellow-text"> {user && user.user.name}</span>{" "}
               </h2>
             </div>
             {places && places.length === 0 && auth.userId === userId && (
-              <h2
-                className="center white-text fade-in"
-                style={{ flexDirection: "column" }}
-              >
-                You don't have any places in your bucket list. Maybe check some
-                places?
+              <h2 className="center white-text fade-in" style={{ flexDirection: "column" }}>
+                No places in your bucket list, check some?
                 <Link to="/"> Go to home</Link>
               </h2>
             )}
             {auth.userId !== userId && places && places.length === 0 && (
-              <h2 className="center white-text fade-in">
-                This user does not have any places in their bucket list
-              </h2>
+              <h2 className="center white-text fade-in">No places added!</h2>
             )}
 
             {places &&

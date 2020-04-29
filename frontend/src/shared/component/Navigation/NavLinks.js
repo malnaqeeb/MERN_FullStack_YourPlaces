@@ -31,45 +31,30 @@ const NavLinks = (props) => {
       {auth.isLoggedIn && (
         <Fragment>
           <li className="desktop-menu">
-            <div
-              className="avatar-holder"
-              onClick={() => setDrawerOpen(!drawerOpen)}
-            >
+            <div className="avatar-holder" onClick={() => setDrawerOpen(!drawerOpen)}>
               MY
-              {user && (
-                <Avatar
-                  src={user.image}
-                  alt={user.name}
-                  style={{ margin: "0 1rem" }}
-                />
-              )}
+              {user && <Avatar src={user.image} alt={user.name} style={{ margin: "0 1rem" }} />}
             </div>
             {drawerOpen && <UserProfileNav setDrawerOpen={setDrawerOpen} />}
           </li>
           <li className="mobile-submenu">
-            <div className="avatar-holder"> 
+            <div className="avatar-holder">
               <p>MY</p>
-              {user && (
-                <Avatar
-                  src={user.image}
-                  alt={user.name}
-                  style={{ margin: "0 1rem" }}
-                />
-              )}
+              {user && <Avatar src={user.image} alt={user.name} style={{ margin: "0 1rem" }} />}
             </div>
             <div className="mobile-links">
-            <NavLink to={`/${auth.userId}/bucketlist`}>
-              <span>My Bucket List</span>
-            </NavLink>
-            <NavLink to={`/${auth.userId}/my`}>
-              <span>Profile</span>
-            </NavLink>
-            <NavLink to={`/${auth.userId}/friends`}>
-              <span> My Friends</span>
-            </NavLink>
-            <NavLink to={`/${auth.userId}/messages`}>
-              <span>Messages</span>
-            </NavLink>
+              <NavLink to={`/${auth.userId}/bucketlist`}>
+                <span>Bucket List</span>
+              </NavLink>
+              <NavLink to={`/${auth.userId}/my`}>
+                <span>Profile</span>
+              </NavLink>
+              <NavLink to={`/${auth.userId}/friends`}>
+                <span>Friends</span>
+              </NavLink>
+              <NavLink to={`/${auth.userId}/messages`}>
+                <span>Messages</span>
+              </NavLink>
             </div>
           </li>
         </Fragment>
@@ -77,12 +62,12 @@ const NavLinks = (props) => {
 
       {!auth.isLoggedIn && (
         <li>
-          <NavLink to="/auth">AUTHENTICATE</NavLink>
+          <NavLink to="/auth">Register</NavLink>
         </li>
       )}
       {auth.isLoggedIn && (
         <li>
-          <button onClick={auth.logout}>LOGOUT</button>
+          <button onClick={auth.logout}>LOG OUT</button>
         </li>
       )}
     </ul>
