@@ -1,28 +1,26 @@
-import React, { useContext, Fragment, useState } from 'react';
-import { TextField } from '@material-ui/core';
+import React, { useContext, Fragment, useState } from "react";
+import { TextField } from "@material-ui/core";
 
-import Input from '../../shared/component/formElements/Input';
-import { VALIDATOR_REQUIRE } from '../../shared/Util/validators';
-import useHttpClient from '../../shared/hooks/http-hook';
-import { useFrom } from '../../shared/hooks/form-hook';
-import { AuthContext } from '../../shared/context/auth-context';
-import ErrorModal from '../../shared/component/UIElements/ErrorModal';
-import LoadingSpinner from '../../shared/component/UIElements/LoadingSpinner';
-import Button from '../../shared/component/formElements/Button';
+import useHttpClient from "../../shared/hooks/http-hook";
+import { useFrom } from "../../shared/hooks/form-hook";
+import { AuthContext } from "../../shared/context/auth-context";
+import ErrorModal from "../../shared/component/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
+import Button from "../../shared/component/formElements/Button";
 
-import './CommentForm.css';
+import "./CommentForm.css";
 export default function CommentForm({ addComment, placeId }) {
   const auth = useContext(AuthContext);
-  const [commentText, setCommentText] = useState('');
+  const [commentText, setCommentText] = useState("");
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [state, setFormData] = useFrom(
     {
       comment: {
-        value: '',
+        value: "",
         isValid: false,
       },
     },
-    false,
+    false
   );
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -31,26 +29,26 @@ export default function CommentForm({ addComment, placeId }) {
       try {
         const data = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}/comments`,
-          'POST',
+          "POST",
           JSON.stringify({
             comment: commentText,
           }),
           {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + auth.token,
-          },
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
         );
         addComment(data.comment);
         setFormData(
           {
             comment: {
-              value: '',
+              value: "",
               isValid: false,
             },
           },
-          false,
+          false
         );
-        setCommentText('');
+        setCommentText("");
       } catch (error) {}
     };
     createComment();
@@ -66,8 +64,8 @@ export default function CommentForm({ addComment, placeId }) {
           <form className="comment-form">
             <TextField
               style={{
-                backgroundColor: 'white',
-                borderRadius: '4px',
+                backgroundColor: "white",
+                borderRadius: "4px",
               }}
               label="Write your comment here ..."
               onChange={commentHandler}

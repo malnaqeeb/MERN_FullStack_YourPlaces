@@ -5,6 +5,7 @@ import LoadingSpinner from "../../shared/component/UIElements/LoadingSpinner";
 import UsersContext from "../../shared/context/users/usersContext";
 import { AuthContext } from "../../shared/context/auth-context";
 import { Select, MenuItem } from "@material-ui/core";
+
 import {
   InputBase,
   Paper,
@@ -14,6 +15,7 @@ import {
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import { makeStyles } from "@material-ui/core/styles";
+import Pagination from "@material-ui/lab/Pagination";
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: "2px 4px",
@@ -55,6 +57,9 @@ const Users = () => {
     setSortBy,
     sendFriendRequestHandler,
     getUsers,
+    totalPages,
+    currentPage,
+    setCurrentPage,
   } = usersContext;
   const classes = useStyles();
   const [searchValue, setSearchValue] = useState("");
@@ -75,6 +80,10 @@ const Users = () => {
   };
   const inputSearchHandler = (e) => {
     setSearchValue(e.target.value);
+  };
+
+  const handleChange = (event, value) => {
+    setCurrentPage(value);
   };
 
   return (
@@ -133,6 +142,14 @@ const Users = () => {
               sendFriendRequestHandler={sendFriendRequestHandler}
             />
           </Grid>
+
+          <Pagination
+            className={classes.centerd}
+            color="secondary"
+            count={totalPages}
+            page={currentPage}
+            onChange={handleChange}
+          />
         </Container>
       )}
     </Fragment>

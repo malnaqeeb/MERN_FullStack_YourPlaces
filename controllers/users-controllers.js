@@ -47,8 +47,6 @@ const getUserFriend = async (req, res, next) => {
 };
 
 const getUsers = async (req, res, next) => {
-  const sortBy = req.query.sortBy || "name";
-
   let users;
 
   try {
@@ -57,17 +55,16 @@ const getUsers = async (req, res, next) => {
     if (search) {
       const regex = new RegExp(escapeRegex(search), "gi");
       users = await User.find({ name: regex }, "-password");
-
-      res
-        .status(200)
-        .json({ users: users.map((user) => user.toObject({ getters: true })) });
+      res.status(200).json({
+        users: users.map((user) => user.toObject({ getters: true })),
+      });
     } else {
-      users = await User.find({}, "-password")
-        .collation({ locale: "en" })
-        .sort(sortBy);
-      res
-        .status(200)
-        .json({ users: users.map((user) => user.toObject({ getters: true })) });
+      res.status(200).json({
+        users: res.paginatios.results.map((user) =>
+          user.toObject({ getters: true })
+        ),
+        totalPages: res.paginatios.totalPages,
+      });
     }
   } catch (error) {
     return next(
@@ -134,9 +131,9 @@ const signup = async (req, res, next) => {
     );
   }
 
-  // if (!createdUser.active) {
-  //   return next(new HttpError("Verify your account", 500));
-  // }
+  if (!createdUser.active) {
+    return next(new HttpError("Verify your account", 500));
+  }
 
   res
     .status(201)
@@ -197,14 +194,14 @@ const login = async (req, res, next) => {
       new HttpError("Logging in failed, please try agein later", 500)
     );
   }
-  // if (!existingUser.active) {
-  //   return next(
-  //     new HttpError(
-  //       "We already sent you an eamail, please click the to activate your account",
-  //       500
-  //     )
-  //   );
-  // }
+  if (!existingUser.active) {
+    return next(
+      new HttpError(
+        "We already sent you an eamail, please click the to activate your account",
+        500
+      )
+    );
+  }
   res
     .status(201)
     .json({ userId: existingUser.id, email: existingUser.email, token });
