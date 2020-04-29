@@ -16,7 +16,7 @@ async function getCoordsForAddress(address) {
     throw error;
   }
 
-  const coordinates = data.features[1].geometry.coordinates;
+  const coordinates = data.features[0].geometry.coordinates;
   return coordinates;
 }
 
