@@ -118,7 +118,7 @@ export default function Comment(props) {
           </div>
         </div>
       ) : (
-        <div className="conatiner">
+        <div className="comment-container">
           <form className="comment-update-form" onSubmit={submitHandler}>
             <Input
               id="comment"
@@ -130,13 +130,23 @@ export default function Comment(props) {
               initailValue={comment}
               initailValid={true}
             />
+
             <Button
+              style={{ marginRight: "10px" }}
               variant="contained"
               color="secondary"
               type="submit"
               disabled={!state.isValid}
             >
               Update
+            </Button>
+
+            <Button
+              color="default"
+              onClick={() => setEditMode(false)}
+              variant="contained"
+            >
+              Cancel
             </Button>
           </form>
         </div>
