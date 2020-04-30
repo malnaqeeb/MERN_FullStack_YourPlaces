@@ -15,12 +15,12 @@ const ForgetPassword = () => {
     {
       email: {
         value: "",
-        isValid: false
-      }
+        isValid: false,
+      },
     },
-    false
+    false,
   );
-  const emailSubmitHandler = async event => {
+  const emailSubmitHandler = async (event) => {
     const email = { email: state.inputs.email.value };
     try {
       event.preventDefault();
@@ -30,8 +30,8 @@ const ForgetPassword = () => {
         "POST",
         JSON.stringify(email),
         {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       );
 
       setSendPassword(data);
@@ -43,22 +43,22 @@ const ForgetPassword = () => {
   return (
     <Fragment>
       {sendPassword ? (
-        <Card className='forget_password no-select'>
+        <Card className="forget_password no-select">
           <p>{sendPassword.message}</p>
         </Card>
       ) : (
-        <Card className='forget_password no-select'>
-          <form className='place-form' onSubmit={emailSubmitHandler}>
+        <Card className="forget_password no-select">
+          <form className="place-form" onSubmit={emailSubmitHandler}>
             <Input
-              id='email'
-              element='input'
-              type='email'
-              label='Email'
+              id="email"
+              element="input"
+              type="email"
+              label="Email"
               validators={[VALIDATOR_EMAIL()]}
-              errorText='Please enter a valid email address'
+              errorText="Please enter a valid email address"
               onInput={inputHandler}
             />
-            <Button type='submit' disabled={!state.isValid}>
+            <Button type="submit" disabled={!state.isValid}>
               Send Email
             </Button>
           </form>

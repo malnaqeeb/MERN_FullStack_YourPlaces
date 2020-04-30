@@ -18,21 +18,21 @@ const ResetEmail = () => {
     {
       password: {
         value: "",
-        isValid: false
+        isValid: false,
       },
       confirmpassword: {
         value: "",
-        isValid: false
-      }
+        isValid: false,
+      },
     },
-    false
+    false,
   );
-  const resetPasswordSubmitHandler = async event => {
+  const resetPasswordSubmitHandler = async (event) => {
     event.preventDefault();
 
     const newPassword = {
       password: state.inputs.password.value,
-      confirmpassword: state.inputs.confirmpassword.value
+      confirmpassword: state.inputs.confirmpassword.value,
     };
     try {
       event.preventDefault();
@@ -42,8 +42,8 @@ const ResetEmail = () => {
         "POST",
         JSON.stringify(newPassword),
         {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       );
 
       setSendPassword(data);
@@ -56,32 +56,32 @@ const ResetEmail = () => {
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
       {sendPassword ? (
-        <Card className='forget_password no-select'>
+        <Card className="forget_password no-select">
           <p>{sendPassword.message}</p>
-          <Button to='/auth'>AUTHENTICATE</Button>
+          <Button to="/auth">AUTHENTICATE</Button>
         </Card>
       ) : (
-        <Card className='forget_password no-select'>
-          <form className='place-form' onSubmit={resetPasswordSubmitHandler}>
+        <Card className="forget_password no-select">
+          <form className="place-form" onSubmit={resetPasswordSubmitHandler}>
             <Input
-              id='password'
-              element='input'
-              type='password'
-              label='New password'
+              id="password"
+              element="input"
+              type="password"
+              label="New password"
               validators={[VALIDATOR_MINLENGTH(6)]}
-              errorText='Please enter a valid password, at least 6 characters.'
+              errorText="Please enter a valid password, at least 6 characters."
               onInput={inputHandler}
             />
             <Input
-              id='confirmpassword'
-              element='input'
-              type='password'
-              label='confirm password'
+              id="confirmpassword"
+              element="input"
+              type="password"
+              label="Confirm password"
               validators={[VALIDATOR_MINLENGTH(6)]}
-              errorText='Please enter a valid password, at least 6 characters.'
+              errorText="Please enter a valid password, at least 6 characters."
               onInput={inputHandler}
             />
-            <Button type='submit' disabled={!state.isValid}>
+            <Button type="submit" disabled={!state.isValid}>
               Reset Password
             </Button>
           </form>
