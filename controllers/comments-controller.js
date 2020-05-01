@@ -26,7 +26,7 @@ const createComment = async (req, res, next) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
     return next(
-      new Error("Invalid input passed, please check your data.", 422)
+      new Error("This field cannot be empty. Please enter your comment.", 422)
     );
   }
 

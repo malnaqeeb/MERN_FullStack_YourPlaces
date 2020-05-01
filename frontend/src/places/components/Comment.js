@@ -18,7 +18,11 @@ export default function Comment(props) {
   const { sendRequest } = useHttpClient();
   const auth = useContext(AuthContext);
   const hasRight =
-    creator && auth && auth.userId && creator._id === auth.userId;
+    creator &&
+    auth &&
+    auth.userId &&
+    creator._id === auth.userId &&
+    auth.isLoggedIn;
   const placeId = useParams().placeId;
   const [state, inputHandler] = useFrom(
     {
