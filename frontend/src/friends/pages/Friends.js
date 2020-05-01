@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useContext, Fragment } from 'react';
-import FriendList from '../FriendList';
-import { AuthContext } from '../../shared/context/auth-context';
-import useHttpClient from '../../shared/hooks/http-hook';
-import ErrorModal from '../../shared/component/UIElements/ErrorModal';
-import FriendRequestList from '../FriendRequestList';
+import React, { useEffect, useState, useContext, Fragment } from "react";
+import FriendList from "../FriendList";
+import { AuthContext } from "../../shared/context/auth-context";
+import useHttpClient from "../../shared/hooks/http-hook";
+import ErrorModal from "../../shared/component/UIElements/ErrorModal";
+import FriendRequestList from "../FriendRequestList";
 
 const Friends = () => {
   const auth = useContext(AuthContext);
-  const [friends, setFriends] = useState([]);
-  const [friendRequests, setFriendRequests] = useState([]);
+  const [friends, setFriends] = useState();
+  const [friendRequests, setFriendRequests] = useState();
   const [processedRequests, setProcessedRequests] = useState([]);
   const [processedFriends, setProcessedFriends] = useState([]);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -17,39 +17,39 @@ const Friends = () => {
       try {
         const userData = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/user/friends`,
-          'GET',
+          "GET",
           null,
           {
-            Authorization: 'Bearer ' + auth.token,
-          },
+            Authorization: "Bearer " + auth.token,
+          }
         );
         setFriends(userData.friends);
-      } catch (error) { }
+      } catch (error) {}
     };
     const getFriendRequests = async () => {
       try {
         const userData = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/user/friends/requests`,
-          'GET',
+          "GET",
           null,
           {
-            Authorization: 'Bearer ' + auth.token,
-          },
+            Authorization: "Bearer " + auth.token,
+          }
         );
         setFriendRequests(userData.friendRequests);
-      } catch (error) { }
+      } catch (error) {}
     };
     getFriends();
     getFriendRequests();
-  }, [processedRequests,processedFriends,auth.token,sendRequest]);
+  }, [processedRequests, processedFriends, auth.token, sendRequest]);
 
-  const processFriendRequest = userId => {
-    setProcessedRequests(prevValue => [...prevValue, userId]);
-     }
-////////////////////////////////////////////////////////////////////////
-  const processFriend = userId => {
-    setProcessedFriends(prevValue => [...prevValue, userId]);
-   }
+  const processFriendRequest = (userId) => {
+    setProcessedRequests((prevValue) => [...prevValue, userId]);
+  };
+  ////////////////////////////////////////////////////////////////////////
+  const processFriend = (userId) => {
+    setProcessedFriends((prevValue) => [...prevValue, userId]);
+  };
 
   return (
     <Fragment>
@@ -68,10 +68,10 @@ const Friends = () => {
             auth={auth}
             friendRequests={friendRequests}
             acceptFriendHandler={processFriendRequest}
-            cancelFriendHandler={processFriendRequest}     
+            cancelFriendHandler={processFriendRequest}
           />
         )}
-        </div>
+      </div>
     </Fragment>
   );
 };

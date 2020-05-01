@@ -10,11 +10,14 @@ import "./CommentForm.css";
 export default function CommentForm({ addComment, placeId }) {
   const auth = useContext(AuthContext);
   const [commentText, setCommentText] = useState("");
+  const [inputError, setInputError] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const submitHandler = async (event) => {
     event.preventDefault();
-
+    if (commentText === "") {
+      setInputError(true);
+    }
     const createComment = async () => {
       try {
         const data = await sendRequest(
@@ -50,6 +53,8 @@ export default function CommentForm({ addComment, placeId }) {
                 label="Write your comment here ..."
                 onChange={commentHandler}
                 value={commentText}
+                error={inputError}
+                required
               ></TextField>
               <Button id="comment-button" onClick={submitHandler}>
                 Add Comment

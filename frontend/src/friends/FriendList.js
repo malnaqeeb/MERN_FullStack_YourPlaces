@@ -1,7 +1,7 @@
 import React from "react";
 import FriendItem from "./FriendItem";
 import Card from "../shared/component/UIElements/Card";
-
+import "../users/components/UsersList.css";
 const FriendList = ({ friends, unfriendHandler, auth }) => {
   if (friends.length === 0) {
     return (
@@ -15,7 +15,12 @@ const FriendList = ({ friends, unfriendHandler, auth }) => {
   return (
     <ul className="users-list">
       {friends.map((user) => (
-        <FriendItem auth={auth} user={user} key={user.id} unfriendHandler={unfriendHandler} />
+        <FriendItem
+          auth={auth}
+          user={user}
+          key={user.id}
+          unfriendHandler={unfriendHandler}
+        />
       ))}
     </ul>
   );
