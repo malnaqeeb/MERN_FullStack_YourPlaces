@@ -5,6 +5,7 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
+
 import MainNavigation from "./shared/component/Navigation/MainNavigation";
 import { AuthContext } from "./shared/context/auth-context";
 import { MessageContext } from "./shared/context/message-context";
@@ -34,6 +35,7 @@ const Place = React.lazy(() => import("./places/pages/Place"));
 const RegisterConfirmation = React.lazy(() =>
   import("./users/components/RegisterConfirmation")
 );
+
 const App = () => {
   const { token, login, logout, userId } = useAuth();
   const [messagesData] = useState([]);
@@ -101,10 +103,11 @@ const App = () => {
         <Route path="/confirm/:token">
           <RegisterConfirmation />
         </Route>
-        <Redirect to="/auth" />
+        <Route path="*" component={Auth} />
       </Switch>
     );
   }
+
   return (
     <AuthContext.Provider
       value={{

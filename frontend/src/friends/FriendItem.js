@@ -4,15 +4,11 @@ import Avatar from "../shared/component/UIElements/Avatar";
 import Card from "../shared/component/UIElements/Card";
 import useHttpClient from "../shared/hooks/http-hook";
 import Button from "@material-ui/core/Button";
-
-const FriendItem = ({
-  user: { id, name, image },
-  auth,
-  unfriendHandler,
-}) => {
+import "../users/components/UserItem.css";
+const FriendItem = ({ user: { id, name, image }, auth, unfriendHandler }) => {
   const { error, sendRequest, clearError } = useHttpClient();
   const unfriend = async (userID) => {
-    console.log(auth.token)
+    console.log(auth.token);
     try {
       await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/user/friends/${id}`,
@@ -23,8 +19,6 @@ const FriendItem = ({
         }
       );
       unfriendHandler(userID);
-      console.log(userID)
-
     } catch (error) {
       console.error(error);
     }
@@ -42,12 +36,12 @@ const FriendItem = ({
         </Link>
       </Card>
       <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => unfriend(id)}
-        >
-          <i className="fas fa-window-close"></i>unfriend
-        </Button>
+        variant="contained"
+        color="secondary"
+        onClick={() => unfriend(id)}
+      >
+        <i className="fas fa-window-close"></i>unfriend
+      </Button>
     </li>
   );
 };
