@@ -1,10 +1,11 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "../shared/component/UIElements/Avatar";
 import Card from "../shared/component/UIElements/Card";
 import useHttpClient from "../shared/hooks/http-hook";
 import Button from "@material-ui/core/Button";
 import "../users/components/UserItem.css";
+import ErrorModal from "../shared/component/UIElements/ErrorModal";
 const FriendItem = ({ user: { id, name, image }, auth, unfriendHandler }) => {
   const { error, sendRequest, clearError } = useHttpClient();
   const unfriend = async (userID) => {
@@ -24,25 +25,28 @@ const FriendItem = ({ user: { id, name, image }, auth, unfriendHandler }) => {
     }
   };
   return (
-    <li className="user-item">
-      <Card className="user-item__content">
-        <Link className="user-holder" to={`/${id}/places`}>
-          <div className="user-item__image">
-            <Avatar image={image} alt={name} />
-          </div>
-          <div className="user-item__info">
-            <h2>{name}</h2>
-          </div>
-        </Link>
-      </Card>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => unfriend(id)}
-      >
-        <i className="fas fa-window-close"></i>unfriend
-      </Button>
-    </li>
+    <Fragment>
+      <ErrorModal error={error} onClear={clearError} />
+      <li className="user-item">
+        <Card className="user-item__content">
+          <Link className="user-holder" to={`/${id}/places`}>
+            <div className="user-item__image">
+              <Avatar image={image} alt={name} />
+            </div>
+            <div className="user-item__info">
+              <h2>{name}</h2>
+            </div>
+          </Link>
+        </Card>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => unfriend(id)}
+        >
+          <i className="fas fa-window-close"></i>unfriend
+        </Button>
+      </li>
+    </Fragment>
   );
 };
 

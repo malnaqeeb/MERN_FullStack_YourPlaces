@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useRef, useCallback } from "react";
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
 import useHttpClient from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
 import Card from "../../shared/component/UIElements/Card";
@@ -12,7 +18,7 @@ import { useFrom } from "../../shared/hooks/form-hook";
 import { VALIDATOR_REQUIRE } from "../../shared/Util/validators";
 import Button from "../../shared/component/formElements/Button";
 import MessageItem from "../components/MessageItem";
-import Avatar from "../../shared/component/UIElements/Avatar";
+import { Avatar } from "@material-ui/core";
 
 const Messages = () => {
   const [contacts, setContacts] = useState([]);
@@ -36,11 +42,11 @@ const Messages = () => {
         isValid: false,
       },
     },
-    false,
+    false
   );
 
   // fetching contacts (only texted ones not all users)
-  const fetchContacts = async () => {
+  const fetchContacts = useCallback(async () => {
     try {
       const data = await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/user/messages`,
@@ -48,16 +54,16 @@ const Messages = () => {
         null,
         {
           Authorization: `Bearer ${token}`,
-        },
+        }
       );
       setContacts(data.corresponders);
       scrollToBottom();
     } catch (error) {}
-  };
+  }, [sendRequest, token]);
 
   useEffect(() => {
     fetchContacts();
-  }, [sendRequest, token, message.textedUser]);
+  }, [sendRequest, token, message.textedUser, fetchContacts]);
 
   // Send a message
   const sendMessage = async (e) => {
@@ -74,9 +80,12 @@ const Messages = () => {
         {
           Authorization: "Bearer " + token,
           "Content-Type": "application/json",
-        },
+        }
       );
-      setAllMessages([...allMessages, { message: messageValue, isSent: true, _id: res.messageId }]);
+      setAllMessages([
+        ...allMessages,
+        { message: messageValue, isSent: true, _id: res.messageId },
+      ]);
       scrollToBottom();
       getUserMessages(corresponderId);
     } catch (error) {
@@ -96,7 +105,7 @@ const Messages = () => {
         null,
         {
           Authorization: "Bearer " + token,
-        },
+        }
       );
       fetchContacts();
       setAllMessages(fetchedMessages.messages);
@@ -116,7 +125,7 @@ const Messages = () => {
         null,
         {
           Authorization: "Bearer " + token,
-        },
+        }
       );
       const filteredContacts = contacts.filter((contact) => contact._id !== id);
       setContacts(filteredContacts);
@@ -132,7 +141,9 @@ const Messages = () => {
   };
 
   const messageDeleteHandler = (deletedMsgId) => {
-    setAllMessages((prevAllMessages) => prevAllMessages.filter((msg) => msg.id !== deletedMsgId));
+    setAllMessages((prevAllMessages) =>
+      prevAllMessages.filter((msg) => msg.id !== deletedMsgId)
+    );
   };
 
   return (
@@ -155,10 +166,10 @@ const Messages = () => {
               {contacts.length > 0 &&
                 contacts.map((contact) => (
                   <Card
-                    className="user-item__content"
                     key={contact.corresponder._id}
                     className={`user-item__content ${
-                      message.id === contact.corresponder._id && "activatedContact"
+                      message.id === contact.corresponder._id &&
+                      "activatedContact"
                     }`}
                   >
                     <div
@@ -174,7 +185,7 @@ const Messages = () => {
                     >
                       <div className="user-item__image m-1">
                         <Avatar
-                          image={contact.corresponder.image}
+                          src={contact.corresponder.image}
                           alt={contact.corresponder.name}
                         />
                       </div>
@@ -182,7 +193,11 @@ const Messages = () => {
                     <div className="user-item__info m-1">
                       <h3>{contact.corresponder.name}</h3>
                     </div>
-                    <button onClick={() => dltCorresponder(contact.corresponder._id)}>X</button>
+                    <button
+                      onClick={() => dltCorresponder(contact.corresponder._id)}
+                    >
+                      X
+                    </button>
                   </Card>
                 ))}
             </div>
@@ -204,9 +219,11 @@ const Messages = () => {
             }
           >
             <h2 className="header">
-              Messages {textedUser && textedUser !== undefined && `with ${textedUser}`}
+              Messages{" "}
+              {textedUser && textedUser !== undefined && `with ${textedUser}`}
             </h2>
             <a
+              href="#!"
               onClick={() => {
                 setMobileContactMode(true);
               }}
