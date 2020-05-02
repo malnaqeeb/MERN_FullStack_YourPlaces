@@ -152,17 +152,17 @@ const Messages = () => {
       <ErrorModal error={error} onClear={clearError} />
 
       {!isLoading && (
-        <Card className="messages__card">
+        <Card className="messages__card fade-in">
           {/* Contacts */}
           <div
             className={
               mobileContactMode
-                ? `contacts__container contact__container-mobile`
-                : `contacts__container contact__container-hidden`
+                ? `contacts__container contact__container-mobile fade-in`
+                : `contacts__container contact__container-hidden fade-in`
             }
           >
-            <h2 className="header">Recent</h2>
-            <div className="contacts__box">
+            <h2 className="header fade-in">Recent</h2>
+            <div className="contacts__box fade-in">
               {contacts.length > 0 &&
                 contacts.map((contact) => (
                   <Card
@@ -181,16 +181,16 @@ const Messages = () => {
                         }
                         setMobileContactMode(false);
                       }}
-                      className={`cardWidth`}
+                      className={`cardWidth fade-in`}
                     >
-                      <div className="user-item__image m-1">
+                      <div className="user-item__image m-1 fade-in">
                         <Avatar
                           src={contact.corresponder.image}
                           alt={contact.corresponder.name}
                         />
                       </div>
-                      <div className="user-item__info m-1">
-                        <h3>{contact.corresponder.name}</h3>
+                      <div className="user-item__info m-1 fade-in">
+                        <h3 className="fade-in">{contact.corresponder.name}</h3>
                       </div>
                     </div>
 
@@ -202,9 +202,9 @@ const Messages = () => {
                   </Card>
                 ))}
             </div>
-            <div className="innerBox">
+            <div className="innerBox fade-in">
               {contacts.length === 0 && (
-                <Link className="link-text" to="/">
+                <Link className="link-text fade-in" to="/">
                   Text a user!
                 </Link>
               )}
@@ -215,11 +215,11 @@ const Messages = () => {
           <div
             className={
               mobileContactMode
-                ? `message__box message__box-hidden`
-                : `message__box message__box-mobile`
+                ? `message__box message__box-hidden fade-in`
+                : `message__box message__box-mobile fade-in`
             }
           >
-            <h2 className="header">
+            <h2 className="header fade-in">
               Messages{" "}
               {textedUser && textedUser !== undefined && `with ${textedUser}`}
             </h2>
@@ -232,7 +232,7 @@ const Messages = () => {
             >
               BACK
             </a>
-            <div className="msgsContainer">
+            <div className="msgsContainer fade-in">
               {allMessages.length > 0 ? (
                 allMessages.map((msg, i) => (
                   <MessageItem
