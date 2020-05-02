@@ -6,7 +6,13 @@ import UsersContext from "../../shared/context/users/usersContext";
 import { AuthContext } from "../../shared/context/auth-context";
 import { Select, MenuItem } from "@material-ui/core";
 
-import { InputBase, Paper, IconButton, Grid, Container } from "@material-ui/core";
+import {
+  InputBase,
+  Paper,
+  IconButton,
+  Grid,
+  Container,
+} from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import { makeStyles } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
@@ -108,15 +114,23 @@ const Users = () => {
             </Grid>
 
             <Grid item md={3} xs={12} sm={3}>
-              <Paper component="form" className={classes.root} onSubmit={onSubmitSearchHandler}>
+              <Paper
+                component="form"
+                className={classes.root}
+                onSubmit={onSubmitSearchHandler}
+              >
                 <InputBase
                   className={classes.input}
-                  placeholder="Search"
+                  placeholder=" Search users"
                   inputProps={{ "aria-label": "" }}
                   value={searchValue}
                   onChange={inputSearchHandler}
                 />
-                <IconButton type="submit" className={classes.iconButton} aria-label="search">
+                <IconButton
+                  type="submit"
+                  className={classes.iconButton}
+                  aria-label="search"
+                >
                   <SearchIcon />
                 </IconButton>
               </Paper>

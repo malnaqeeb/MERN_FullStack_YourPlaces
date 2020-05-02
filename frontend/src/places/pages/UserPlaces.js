@@ -57,7 +57,7 @@ const UserPlaces = () => {
   const auth = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [places, setPlaces] = useState();
-  const [searchValue, setSearchValue] = useState(" ");
+  const [searchValue, setSearchValue] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [tags, setTags] = useState([]);
   const [menuItemValue, setMenuItemValue] = useState();
@@ -67,7 +67,7 @@ const UserPlaces = () => {
       const data = await sendRequest(
         `${
           process.env.REACT_APP_BACKEND_URL
-        }/places/user/${userId}/?sortBy=${sortBy}&tagFilter=${tags.join(",")}`,
+        }/places/user/${userId}/?sortBy=${sortBy}&tagFilter=${tags.join(",")}`
       );
       setPlaces(data.userWithPlaces);
     } catch (error) {}
@@ -77,12 +77,14 @@ const UserPlaces = () => {
     // eslint-disable-next-line
   }, [sendRequest, userId, sortBy, tags]);
   const placeDeleteHandler = (detetedPlaceId) => {
-    setPlaces((prevPlaces) => prevPlaces.filter((places) => places.id !== detetedPlaceId));
+    setPlaces((prevPlaces) =>
+      prevPlaces.filter((places) => places.id !== detetedPlaceId)
+    );
   };
   const searchPlaces = async (searchValue) => {
     try {
       const data = await sendRequest(
-        `${process.env.REACT_APP_BACKEND_URL}/places/?search=${searchValue}`,
+        `${process.env.REACT_APP_BACKEND_URL}/places/?search=${searchValue}`
       );
       setPlaces(data.places);
     } catch (error) {}
@@ -90,12 +92,16 @@ const UserPlaces = () => {
 
   const getError = (err) => {
     if (!places && auth.userId !== userId) {
-      return <h2 className="center gray-text fade-in-faster">No places shared!</h2>;
+      return (
+        <h2 className="center gray-text fade-in-faster">No places shared!</h2>
+      );
     }
     if (!places && auth.userId === userId) {
       return (
         <Fragment>
-          <h2 className="center gray-text fade-in-faster">No shared places yet, maybe add one?</h2>
+          <h2 className="center gray-text fade-in-faster">
+            No shared places yet, maybe add one?
+          </h2>
           <div className="center fade-in-faster">
             <Button inverse to="/places/new">
               ADD A PLACE
@@ -128,13 +134,21 @@ const UserPlaces = () => {
       });
     } else {
       setTags((oldTags) => {
-        return oldTags.includes(tagName) ? oldTags.filter((tag) => tag !== tagName) : oldTags;
+        return oldTags.includes(tagName)
+          ? oldTags.filter((tag) => tag !== tagName)
+          : oldTags;
       });
     }
   };
 
   if (error)
-    return <ErrorModal error={getError(error)} header="Hello there!" onClear={clearError} />;
+    return (
+      <ErrorModal
+        error={getError(error)}
+        header="Hello there!"
+        onClear={clearError}
+      />
+    );
 
   const tagInputs = [];
 
@@ -143,7 +157,13 @@ const UserPlaces = () => {
     const tagInput = (
       <FormControlLabel
         key={tag.name}
-        control={<Checkbox checked={checked} onChange={handleTagChange} name={tag.name} />}
+        control={
+          <Checkbox
+            checked={checked}
+            onChange={handleTagChange}
+            name={tag.name}
+          />
+        }
         label={tag.title}
       />
     );
@@ -180,15 +200,23 @@ const UserPlaces = () => {
               </Select>
             </Grid>
             <Grid item md={4} xs={12} sm={3}>
-              <Paper component="form" className={classes.root} onSubmit={onSubmitSearchHandler}>
+              <Paper
+                component="form"
+                className={classes.root}
+                onSubmit={onSubmitSearchHandler}
+              >
                 <InputBase
                   className={classes.input}
-                  placeholder="Search"
+                  placeholder="Search places"
                   inputProps={{ "aria-label": "" }}
                   value={searchValue}
                   onChange={inputSearchHandler}
                 />
-                <IconButton type="submit" className={classes.iconButton} aria-label="search">
+                <IconButton
+                  type="submit"
+                  className={classes.iconButton}
+                  aria-label="search"
+                >
                   <SearchIcon />
                 </IconButton>
               </Paper>
