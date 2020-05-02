@@ -20,9 +20,9 @@ import { FaFacebookF, FaGoogle } from "react-icons/fa";
 
 const Auth = () => {
   const auth = useContext(AuthContext);
-  const [isLoginMod, setIsLoginMod] = useState(true);
+  const [isLoginMod, setIsLoginMod] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  const [socialLogin, toggleSocialLogin] = useState(true);
+  const [socialLogin, toggleSocialLogin] = useState(false);
 
   const [state, inputHandler, setFormData] = useFrom(
     {
@@ -35,7 +35,7 @@ const Auth = () => {
         isValid: false,
       },
     },
-    false,
+    false
   );
   const switchModelHandler = () => {
     if (!isLoginMod) {
@@ -45,7 +45,7 @@ const Auth = () => {
           name: undefined,
           image: undefined,
         },
-        state.inputs.email.isValid && state.inputs.password.isValid,
+        state.inputs.email.isValid && state.inputs.password.isValid
       );
     } else {
       setFormData(
@@ -60,7 +60,7 @@ const Auth = () => {
             isValid: false,
           },
         },
-        false,
+        false
       );
     }
     setIsLoginMod((prevMode) => !prevMode);
@@ -81,7 +81,7 @@ const Auth = () => {
           }),
           {
             "Content-Type": "application/json",
-          },
+          }
         );
 
         auth.login(res.userId, res.token, null, res.friendStatus);
@@ -97,7 +97,7 @@ const Auth = () => {
         const res = await sendRequest(
           `${process.env.REACT_APP_BACKEND_URL}/users/signup`,
           "POST",
-          formData,
+          formData
         );
 
         auth.login(res.userId, res.token);
@@ -110,19 +110,25 @@ const Auth = () => {
       <ErrorModal error={error} onClear={clearError} />
       <Card className="authentication no-select">
         {isLoading && <LoadingSpinner asOverlay />}
-        <h2>Log in Required</h2>
+        <h2>{isLoginMod ? `LOGIN` : `SIGN UP`}</h2>
         <hr />
         <form onSubmit={authSubmitHandler}>
           {/* social login */}
           {socialLogin && (
             <div>
               <h3>Log in with</h3>
-              <a className="socialBtn" href={`${process.env.REACT_APP_BACKEND_URL}/users/facebook`}>
+              <a
+                className="socialBtn"
+                href={`${process.env.REACT_APP_BACKEND_URL}/users/facebook`}
+              >
                 <FaFacebookF />
                 <span className="socialName">Facebook</span>
               </a>
               {/*  */}
-              <a className="socialBtn" href={`${process.env.REACT_APP_BACKEND_URL}/users/google`}>
+              <a
+                className="socialBtn"
+                href={`${process.env.REACT_APP_BACKEND_URL}/users/google`}
+              >
                 <FaGoogle />
                 <span className="socialName">Google</span>
               </a>
@@ -172,8 +178,11 @@ const Auth = () => {
           </Button>
           {isLoginMod && <Button to="/forgetpassword">FORGOT PASSWORD</Button>}
         </form>
+        <div style={{marginBottom:"1rem", color:"#4d4d4d"}}>
+          <em>{!isLoginMod ? `If you are an existing user, login` : `Create an account`}</em>
+        </div>
         <Button inverse onClick={switchModelHandler}>
-          SWITCH TO {isLoginMod ? "SIGN UP" : "LOG IN"}
+          SWITCH TO {isLoginMod ? "SIGN UP" : "LOGIN"}
         </Button>
       </Card>
     </Fragment>
