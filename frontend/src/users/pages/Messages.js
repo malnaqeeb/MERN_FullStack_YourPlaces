@@ -189,10 +189,11 @@ const Messages = () => {
                           alt={contact.corresponder.name}
                         />
                       </div>
+                      <div className="user-item__info m-1">
+                        <h3>{contact.corresponder.name}</h3>
+                      </div>
                     </div>
-                    <div className="user-item__info m-1">
-                      <h3>{contact.corresponder.name}</h3>
-                    </div>
+
                     <button
                       onClick={() => dltCorresponder(contact.corresponder._id)}
                     >
