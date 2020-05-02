@@ -10,13 +10,15 @@ const UsersList = ({ items, userData, auth, sendFriendRequestHandler }) => {
   if (items.length === 0) {
     return (
       <Grid container>
-        <Grid item md={12}>
-          <Card>
-            <Typography style={{ textAlign: "center" }} variant="h6">
-              No users found
-            </Typography>
-          </Card>
-        </Grid>
+        <div style={{ margin: "2rem auto" }}>
+          <Grid item md={12}>
+            <Card>
+              <Typography style={{ textAlign: "center", padding:"1rem" }} variant="h6">
+                No users found
+              </Typography>
+            </Card>
+          </Grid>
+        </div>
       </Grid>
     );
   }
