@@ -224,7 +224,7 @@ const UserPlaces = () => {
             <FormGroup>
               <Paper>{tagInputs}</Paper>
             </FormGroup>
-            <PlaceList items={places} onDeletePlace={placeDeleteHandler} />
+            <PlaceList items={places} onDeletePlace={placeDeleteHandler} userId={userId} />
           </Grid>
         </Container>
       )}
