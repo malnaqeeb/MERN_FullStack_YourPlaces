@@ -44,7 +44,7 @@ const NavLinks = (props) => {
                 />
               )}
             </div>
-            {drawerOpen && <UserProfileNav setDrawerOpen={setDrawerOpen} />}
+            {drawerOpen && <UserProfileNav setDrawerOpen={setDrawerOpen} drawerOpen={drawerOpen}/>}
           </li>
           <li className="mobile-submenu">
             <div className="avatar-holder">

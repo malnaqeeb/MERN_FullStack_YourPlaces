@@ -18,6 +18,9 @@
   background-color: #ff0055;
   position: absolute;
 }
+.dropdown-hidden{
+  display: none;
+}
 .dropdown-content a{
   border-bottom: 1px solid white;
   margin-bottom: 0;
