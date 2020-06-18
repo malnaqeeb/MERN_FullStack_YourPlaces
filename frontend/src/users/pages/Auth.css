@@ -41,3 +41,48 @@
 a.button.button--default.undefined.undefined {
   margin-top: 1rem !important;
 }
+/* welcome page style */
+.background {
+  background-image: url("/images/image11.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.left-div {
+  text-align: center;
+  color: white;
+  z-index: 3;
+}
+
+.left-div p{
+  text-align: left;
+  margin-left: 50px;
+}
+.rigt-div{
+  align-items: center;
+}
+.about {
+  border-radius: 5px;
+  overflow: hidden;
+  color: white;
+  padding: 1rem;
+}
+
+p {
+  margin: 10px;
+  padding-top: 20px;
+}
+
+.about-line__avatar {
+  margin: 10px;
+}
